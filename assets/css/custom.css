@@ -1,0 +1,48 @@
+:root {
+  --bg: #fff8ec;
+  --ink: #1f1147;
+}
+html, body { background: var(--bg); color: var(--ink); }
+body {
+  font-family: 'Nunito', system-ui, sans-serif;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(255, 200, 87, .25) 0, transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(120, 200, 255, .25) 0, transparent 35%),
+    radial-gradient(circle at 80% 90%, rgba(255, 130, 160, .22) 0, transparent 35%),
+    radial-gradient(circle at 15% 85%, rgba(150, 230, 170, .25) 0, transparent 35%);
+}
+.display { font-family: 'Fredoka', system-ui, sans-serif; letter-spacing: -0.02em; }
+.card {
+  border: 3px solid var(--ink);
+  border-radius: 28px;
+  box-shadow: 6px 6px 0 0 var(--ink);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 10px 10px 0 0 var(--ink);
+}
+.card:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--ink);
+}
+.pill {
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 0 var(--ink);
+}
+.badge {
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 3px 3px 0 0 var(--ink);
+}
+.floaty { animation: floaty 6s ease-in-out infinite; }
+.floaty.delay-1 { animation-delay: -2s; }
+.floaty.delay-2 { animation-delay: -4s; }
+@keyframes floaty {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(-12px) rotate(var(--r, 0deg)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .floaty { animation: none; }
+}

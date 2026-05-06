@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Remove-Item -Recurse -Force \"D:\\\\G-Drive\\\\projects\\\\active\\\\kids-zone\\\\src\")",
+      "Bash(Remove-Item -Recurse -Force \"D:\\\\G-Drive\\\\projects\\\\active\\\\kids-zone\\\\dist\")",
+      "Bash(\"/d/SimFive/web-projects/_tools/tailwindcss.exe\" -i assets/css/input.css -o assets/css/tailwind.min.css --minify)",
+      "Bash(\"/d/SimFive/web-projects/_tools/tailwindcss.exe\" -i assets/css/input.css -o assets/_tmp/tailwind.min.css --minify)",
+      "Bash(identify \"D:/G-Drive/projects/active/kidslab/assets/img/spot-difference/1.jpg\")"
+    ]
+  }
+}

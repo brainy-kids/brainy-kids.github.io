@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wortsuche — Kinderspiele 🎈</title>
+<meta name="description" content="Wortsuche-Rätsel erstellen und ausdrucken." />
+<link rel="stylesheet" href="../assets/css/tailwind.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #fff8ec; --ink: #1f1147; }
+html, body { background: var(--bg); color: var(--ink); }
+body {
+  font-family: 'Nunito', system-ui, sans-serif;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(255,200,87,.25) 0, transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(120,200,255,.25) 0, transparent 35%),
+    radial-gradient(circle at 80% 90%, rgba(255,130,160,.22) 0, transparent 35%),
+    radial-gradient(circle at 15% 85%, rgba(150,230,170,.25) 0, transparent 35%);
+}
+.display { font-family: 'Fredoka', system-ui, sans-serif; letter-spacing: -0.02em; }
+.card { border: 3px solid var(--ink); border-radius: 28px; box-shadow: 6px 6px 0 0 var(--ink); }
+.pill { border: 2px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 0 var(--ink); display: inline-block; }
+.btn-main {
+  border: 3px solid var(--ink); border-radius: 999px; padding: 8px 22px;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem;
+  cursor: pointer; box-shadow: 4px 4px 0 0 var(--ink); transition: transform .1s, box-shadow .1s;
+}
+.btn-main:hover  { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--ink); }
+.btn-main:active { transform: translate(2px,2px);   box-shadow: 1px 1px 0 0 var(--ink); }
+.dir-toggle {
+  border: 2px solid var(--ink); border-radius: 12px; padding: 5px 14px;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.8rem;
+  cursor: pointer; box-shadow: 3px 3px 0 0 var(--ink); transition: .1s;
+}
+.dir-toggle.on  { background: var(--ink); color: var(--bg); }
+.dir-toggle.off { background: white; color: var(--ink); }
+#grid-table { border-collapse: collapse; margin: 0 auto; font-family: 'Fredoka', sans-serif; font-weight: 600; }
+#grid-table td {
+  border: 1.5px solid rgba(31,17,71,.18); text-align: center; vertical-align: middle;
+  font-size: 1.2rem; transition: background .2s; cursor: default;
+  user-select: none; -webkit-user-select: none;
+}
+.word-list-item {
+  display: inline-block; border: 2px solid var(--ink); border-radius: 8px;
+  padding: 3px 10px; font-weight: 800; font-size: 0.9rem; margin: 3px;
+  box-shadow: 2px 2px 0 0 var(--ink); font-family: 'Fredoka', sans-serif; letter-spacing: .04em;
+}
+.word-list-item.found { text-decoration: line-through; opacity: .5; }
+textarea {
+  font-family: 'Nunito', sans-serif; font-weight: 700; resize: vertical;
+  background: white; border: 3px solid var(--ink); border-radius: 16px;
+  outline: none; padding: 10px 14px; box-shadow: 4px 4px 0 0 var(--ink); width: 100%;
+}
+textarea:focus { box-shadow: 6px 6px 0 0 var(--ink); }
+input[type=range] { accent-color: var(--ink); }
+@media print {
+  body { background: white !important; background-image: none !important; color: black; font-size: 13pt; }
+  .no-print { display: none !important; }
+  #grid-section { display: block !important; }
+  #grid-table td { border: 1px solid #888; font-weight: 700; padding: 0 !important; text-align: center !important; vertical-align: middle !important; }
+  .word-list-item { border: 1px solid #888; box-shadow: none; font-size: 11pt; }
+  h1 { font-size: 22pt; }
+  .print-title { display: block !important; }
+  #grid-table td[style] { background: white !important; }
+}
+</style>
+</head>
+<body class="min-h-screen">
+
+<main class="relative max-w-3xl mx-auto px-4 py-8 md:py-12">
+
+  <div class="flex items-center justify-between mb-6 no-print">
+    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Zurück</a>
+    <div>
+      <a href="../word-search.html" class="pill bg-white px-3 py-1 text-xs font-bold">EN</a>
+      <strong class="pill bg-[color:var(--ink)] text-[#fff8ec] px-3 py-1 text-xs font-bold ml-1">DE</strong>
+      <a href="../sq/word-search.html" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">SQ</a>
+    </div>
+  </div>
+
+  <header class="text-center mb-8 no-print">
+    <h1 class="display text-4xl md:text-6xl font-bold mb-2">Wortsuche</h1>
+    <p class="font-semibold opacity-70 text-lg">Rätsel erstellen, dann drucken und spielen!</p>
+  </header>
+
+  <div class="card bg-amber-50 p-6 mb-8 no-print">
+    <div class="grid sm:grid-cols-2 gap-6">
+
+      <div>
+        <label class="display text-xl font-bold block mb-2">Wörter (eines pro Zeile)</label>
+        <textarea id="words-input" rows="8" spellcheck="false">KATZE
+HUND
+SONNE
+VOGEL
+FISCH
+BAUM
+STERN
+MOND
+FROSCH
+ENTE</textarea>
+      </div>
+
+      <div class="flex flex-col gap-5">
+        <div>
+          <label class="display text-xl font-bold block mb-1">
+            Rastergröße: <span id="size-val">12</span>
+          </label>
+          <input type="range" id="grid-size" min="8" max="15" value="12" class="w-full"
+            oninput="document.getElementById('size-val').textContent=this.value" />
+        </div>
+
+        <div>
+          <p class="display text-xl font-bold mb-2">Richtungen</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="dir-toggle on" data-dir="lr">→ Rechts</button>
+            <button class="dir-toggle on" data-dir="rl">← Links</button>
+            <button class="dir-toggle on" data-dir="tb">↓ Unten</button>
+            <button class="dir-toggle on" data-dir="bt">↑ Oben</button>
+            <button class="dir-toggle on" data-dir="d1">↘ Diag</button>
+            <button class="dir-toggle off" data-dir="d2">↙ Diag</button>
+            <button class="dir-toggle off" data-dir="d3">↖ Diag</button>
+            <button class="dir-toggle off" data-dir="d4">↗ Diag</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-3 mt-6">
+      <button class="btn-main bg-emerald-300" onclick="generate()">Erstellen ✦</button>
+      <button class="btn-main bg-sky-200"     onclick="toggleSolution()" id="sol-btn">Lösung zeigen</button>
+      <button class="btn-main bg-pink-200"    onclick="window.print()">Drucken 🖨</button>
+    </div>
+  </div>
+
+  <div id="grid-section" class="text-center">
+    <p class="print-title hidden display text-3xl font-bold mb-6">Wortsuche-Rätsel</p>
+    <div id="grid-wrap" class="overflow-x-auto mb-6"></div>
+    <div id="word-list" class="mb-4"></div>
+    <p id="skipped-msg" class="text-sm opacity-60 font-semibold mt-2"></p>
+  </div>
+
+  <footer class="mt-16 text-center pb-6 no-print">
+    <p class="font-semibold opacity-50 text-sm">Mit ❤️ für Kinder gemacht</p>
+    <p class="mt-2 text-xs opacity-40 font-semibold">Designed by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a></p>
+  </footer>
+
+</main>
+
+<script>
+const DIR_MAP = { lr:[0,1], rl:[0,-1], tb:[1,0], bt:[-1,0], d1:[1,1], d2:[1,-1], d3:[-1,-1], d4:[-1,1] };
+const FILL_LETTERS = 'ABCDEFGHIJKLMNOPRSTUVWYZ';
+
+document.querySelectorAll('.dir-toggle').forEach(btn => {
+  btn.addEventListener('click', () => { btn.classList.toggle('on'); btn.classList.toggle('off'); });
+});
+
+let currentGrid = null, currentSolMap = null, currentWords = [], showSol = false;
+
+const WORD_COLORS = [
+  'rgba(251,191,36,.5)','rgba(134,239,172,.5)','rgba(147,197,253,.5)','rgba(249,168,212,.5)',
+  'rgba(196,181,253,.5)','rgba(253,186,116,.5)','rgba(165,243,252,.5)','rgba(187,247,208,.5)',
+];
+
+function getActiveDirs() {
+  return [...document.querySelectorAll('.dir-toggle.on')].map(b => DIR_MAP[b.dataset.dir]).filter(Boolean);
+}
+
+function generate() {
+  showSol = false;
+  document.getElementById('sol-btn').textContent = 'Lösung zeigen';
+  const rawWords = document.getElementById('words-input').value
+    .split('\n').map(w => w.trim().toUpperCase().replace(/[^A-ZÇËÄÖÜ]/g, '')).filter(w => w.length >= 2);
+  if (!rawWords.length) { alert('Bitte mindestens ein Wort eingeben.'); return; }
+  const size = parseInt(document.getElementById('grid-size').value, 10);
+  const dirs = getActiveDirs();
+  if (!dirs.length) { alert('Bitte mindestens eine Richtung aktivieren.'); return; }
+  const result = buildPuzzle(rawWords, size, dirs);
+  currentGrid = result.grid; currentSolMap = result.solMap; currentWords = result.placed;
+  renderGrid(); renderWordList();
+  const skipped = rawWords.filter(w => !result.placed.includes(w));
+  document.getElementById('skipped-msg').textContent = skipped.length
+    ? `⚠ Konnte nicht platzieren: ${skipped.join(', ')} — versuche ein größeres Raster oder weniger Richtungen.`
+    : '';
+}
+
+function buildPuzzle(words, size, dirs) {
+  const grid   = Array.from({length: size}, () => Array(size).fill(''));
+  const solMap = Array.from({length: size}, () => Array(size).fill(-1));
+  const placed = [];
+  for (let wi = 0; wi < words.length; wi++) {
+    const word = words[wi]; let ok = false;
+    for (let attempt = 0; attempt < 300 && !ok; attempt++) {
+      const [dr, dc] = dirs[Math.floor(Math.random() * dirs.length)];
+      const row = Math.floor(Math.random() * size), col = Math.floor(Math.random() * size);
+      if (canPlace(grid, word, row, col, dr, dc, size)) { placeWord(grid, solMap, word, row, col, dr, dc, wi); placed.push(word); ok = true; }
+    }
+  }
+  for (let r = 0; r < size; r++)
+    for (let c = 0; c < size; c++)
+      if (!grid[r][c]) grid[r][c] = FILL_LETTERS[Math.floor(Math.random() * FILL_LETTERS.length)];
+  return { grid, solMap, placed };
+}
+
+function canPlace(grid, word, row, col, dr, dc, size) {
+  for (let i = 0; i < word.length; i++) {
+    const r = row + dr * i, c = col + dc * i;
+    if (r < 0 || r >= size || c < 0 || c >= size) return false;
+    if (grid[r][c] && grid[r][c] !== word[i]) return false;
+  }
+  return true;
+}
+
+function placeWord(grid, solMap, word, row, col, dr, dc, wordIdx) {
+  for (let i = 0; i < word.length; i++) {
+    const r = row + dr * i, c = col + dc * i;
+    grid[r][c] = word[i]; if (solMap[r][c] === -1) solMap[r][c] = wordIdx;
+  }
+}
+
+function renderGrid() {
+  if (!currentGrid) return;
+  const size = currentGrid.length;
+  const cellPx = Math.max(22, Math.min(44, Math.floor(560 / size)));
+  const printPx = Math.floor(660 / size);
+  const printFs = Math.max(12, Math.floor(printPx * 0.58));
+  let ps = document.getElementById('print-cell-style');
+  if (!ps) { ps = document.createElement('style'); ps.id = 'print-cell-style'; document.head.appendChild(ps); }
+  ps.textContent = `@media print { #grid-table td { width:${printPx}px !important; height:${printPx}px !important; font-size:${printFs}px !important; line-height:${printPx}px !important; } }`;
+  const table = document.createElement('table'); table.id = 'grid-table';
+  for (let r = 0; r < size; r++) {
+    const tr = document.createElement('tr');
+    for (let c = 0; c < size; c++) {
+      const td = document.createElement('td');
+      td.textContent = currentGrid[r][c]; td.dataset.r = r; td.dataset.c = c;
+      td.style.width = cellPx + 'px'; td.style.height = cellPx + 'px';
+      td.style.fontSize = Math.max(11, cellPx * 0.55) + 'px';
+      if (showSol && currentSolMap[r][c] >= 0) {
+        td.style.background = WORD_COLORS[currentSolMap[r][c] % WORD_COLORS.length];
+        td.style.borderRadius = '6px';
+      }
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+  const wrap = document.getElementById('grid-wrap'); wrap.innerHTML = ''; wrap.appendChild(table);
+}
+
+function renderWordList() {
+  document.getElementById('word-list').innerHTML =
+    currentWords.map(w => `<span class="word-list-item">${w}</span>`).join('');
+}
+
+function toggleSolution() {
+  if (!currentGrid) return;
+  showSol = !showSol;
+  document.getElementById('sol-btn').textContent = showSol ? 'Lösung verbergen' : 'Lösung zeigen';
+  renderGrid();
+}
+
+generate();
+</script>
+</body>
+</html>

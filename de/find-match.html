@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Finde das Gleiche — Kinderspiele 🎈</title>
+<meta name="description" content="Finde das Emoji, das in beiden Kreisen vorkommt!" />
+<link rel="stylesheet" href="../assets/css/tailwind.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #fff8ec; --ink: #1f1147; }
+html, body { background: var(--bg); color: var(--ink); }
+body {
+  font-family: 'Nunito', system-ui, sans-serif;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(255,200,87,.25) 0, transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(120,200,255,.25) 0, transparent 35%),
+    radial-gradient(circle at 80% 90%, rgba(255,130,160,.22) 0, transparent 35%),
+    radial-gradient(circle at 15% 85%, rgba(150,230,170,.25) 0, transparent 35%);
+}
+.display { font-family: 'Fredoka', system-ui, sans-serif; letter-spacing: -0.02em; }
+.card { border: 3px solid var(--ink); border-radius: 28px; box-shadow: 6px 6px 0 0 var(--ink); }
+.pill { border: 2px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 0 var(--ink); display: inline-block; }
+.circle-wrap {
+  position: relative; border: 4px solid var(--ink); border-radius: 50%;
+  box-shadow: 6px 6px 0 0 var(--ink); width: 270px; height: 270px;
+  flex-shrink: 0; overflow: hidden;
+}
+@media (max-width: 360px) { .circle-wrap { width: 220px; height: 220px; } }
+.emoji-btn {
+  position: absolute; transform: translate(-50%, -50%);
+  background: none; border: none; cursor: pointer; line-height: 1;
+  padding: 6px; min-width: 44px; min-height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; transition: transform .1s;
+  touch-action: manipulation; user-select: none; -webkit-user-select: none;
+}
+.emoji-btn:hover  { transform: translate(-50%,-50%) scale(1.2); }
+.emoji-btn:active { transform: translate(-50%,-50%) scale(0.85); }
+@keyframes shake {
+  0%,100% { transform: translate(-50%,-50%); }
+  20% { transform: translate(calc(-50% + 8px),-50%) rotate(-10deg); }
+  40% { transform: translate(calc(-50% - 8px),-50%) rotate(10deg); }
+  60% { transform: translate(calc(-50% + 5px),-50%) rotate(-5deg); }
+  80% { transform: translate(calc(-50% - 5px),-50%) rotate(5deg); }
+}
+.shake { animation: shake .4s ease; }
+@keyframes pop {
+  0%   { transform: translate(-50%,-50%) scale(1); }
+  40%  { transform: translate(-50%,-50%) scale(1.6); }
+  70%  { transform: translate(-50%,-50%) scale(1.3); }
+  100% { transform: translate(-50%,-50%) scale(1); }
+}
+.pop { animation: pop .35s ease forwards; }
+@keyframes ring-flash {
+  0%,100% { box-shadow: 6px 6px 0 0 var(--ink); }
+  50%     { box-shadow: 6px 6px 0 0 var(--ink), 0 0 0 8px rgba(74,222,128,.55); }
+}
+.ring-flash { animation: ring-flash .45s ease; }
+.seg-btn {
+  border: 2px solid var(--ink); border-radius: 999px; padding: 5px 14px;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.82rem;
+  cursor: pointer; box-shadow: 3px 3px 0 0 var(--ink); transition: transform .1s, box-shadow .1s;
+}
+.seg-btn:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 0 var(--ink); }
+.seg-btn.active { background: var(--ink); color: var(--bg); }
+.seg-btn:not(.active) { background: white; color: var(--ink); }
+#win-overlay {
+  position: fixed; inset: 0; z-index: 100; background: rgba(31,17,71,.82);
+  display: none; align-items: center; justify-content: center;
+}
+#win-overlay.show { display: flex; }
+@keyframes win-pop {
+  0%   { transform: scale(.6); opacity: 0; }
+  60%  { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+#win-card { animation: win-pop .4s ease forwards; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<main class="relative max-w-3xl mx-auto px-4 py-8 md:py-12">
+
+  <div class="flex items-center justify-between mb-6">
+    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Zurück</a>
+    <div>
+      <a href="../find-match.html" class="pill bg-white px-3 py-1 text-xs font-bold">EN</a>
+      <strong class="pill bg-[color:var(--ink)] text-[#fff8ec] px-3 py-1 text-xs font-bold ml-1">DE</strong>
+      <a href="../sq/find-match.html" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">SQ</a>
+    </div>
+  </div>
+
+  <header class="text-center mb-6">
+    <h1 class="display text-4xl md:text-6xl font-bold mb-2">Finde das Gleiche</h1>
+    <p class="font-semibold opacity-70 text-lg">Finde das Emoji, das in <em>beiden</em> Kreisen erscheint!</p>
+  </header>
+
+  <div class="flex justify-center gap-2 mb-5">
+    <button class="seg-btn active" data-mode="solo"  onclick="setMode('solo')">Solo</button>
+    <button class="seg-btn"        data-mode="pvp"   onclick="setMode('pvp')">2 Spieler</button>
+    <button class="seg-btn"        data-mode="robot" onclick="setMode('robot')">vs Roboter 🤖</button>
+  </div>
+
+  <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+
+    <div id="score-solo" class="card bg-white px-5 py-3 flex items-center gap-3">
+      <span class="display text-xl font-bold">Punkte</span>
+      <span id="score" class="display text-3xl font-bold" style="color:#16a34a">0</span>
+    </div>
+
+    <div id="score-pvp" style="display:none" class="flex items-center gap-3">
+      <div class="card px-4 py-2 text-center" style="background:#dbeafe;min-width:80px">
+        <div class="display text-sm font-bold" style="color:#2563eb">Spieler 1</div>
+        <div id="score-p1" class="display text-3xl font-bold" style="color:#2563eb">0</div>
+        <div class="text-xs font-bold opacity-40">/ 10</div>
+      </div>
+      <div class="display text-2xl font-bold opacity-30">vs</div>
+      <div class="card px-4 py-2 text-center" style="background:#fce7f3;min-width:80px">
+        <div id="p2-label" class="display text-sm font-bold" style="color:#dc2626">Spieler 2</div>
+        <div id="score-p2" class="display text-3xl font-bold" style="color:#dc2626">0</div>
+        <div class="text-xs font-bold opacity-40">/ 10</div>
+      </div>
+    </div>
+
+    <div class="flex gap-2">
+      <button class="seg-btn active" data-diff="4" onclick="setDiff(this,4)">Leicht</button>
+      <button class="seg-btn"        data-diff="6" onclick="setDiff(this,6)">Mittel</button>
+      <button class="seg-btn"        data-diff="8" onclick="setDiff(this,8)">Schwer</button>
+    </div>
+
+    <button onclick="newRound()"
+      class="pill bg-amber-300 px-5 py-2 font-bold text-sm hover:bg-amber-400 transition-colors">
+      Neue Runde ↺
+    </button>
+  </div>
+
+  <div id="player-labels" style="display:none" class="flex justify-around mb-2">
+    <span class="display text-sm font-bold" style="color:#2563eb">👈 Spieler 1</span>
+    <span id="p2-circle-label" class="display text-sm font-bold" style="color:#dc2626">Spieler 2 👉</span>
+  </div>
+
+  <div class="flex flex-col sm:flex-row gap-8 items-center justify-center">
+    <div id="circle-a" class="circle-wrap" style="background:#dbeafe"></div>
+    <div class="display text-5xl font-bold opacity-30 select-none">&amp;</div>
+    <div id="circle-b" class="circle-wrap" style="background:#fce7f3"></div>
+  </div>
+
+  <div id="msg" class="text-center mt-6 h-10">
+    <span class="display text-2xl font-bold"></span>
+  </div>
+
+  <footer class="mt-16 text-center pb-6">
+    <p class="font-semibold opacity-50 text-sm">Mit ❤️ für Kinder gemacht</p>
+    <p class="mt-2 text-xs opacity-40 font-semibold">Designed by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a></p>
+  </footer>
+
+</main>
+
+<div id="win-overlay">
+  <div id="win-card" class="card bg-yellow-300 p-8 md:p-12 text-center" style="max-width:320px;width:90%">
+    <div id="win-emoji" class="text-7xl mb-3">🏆</div>
+    <h2 id="win-msg" class="display text-4xl font-bold mb-6">Spieler 1 gewinnt!</h2>
+    <button onclick="resetGame()"
+      style="border:3px solid var(--ink);border-radius:999px;padding:10px 28px;font-family:'Nunito',sans-serif;font-weight:800;font-size:1.05rem;cursor:pointer;box-shadow:4px 4px 0 0 var(--ink);background:#6ee7b7;transition:transform .1s,box-shadow .1s"
+      onmouseover="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='6px 6px 0 0 var(--ink)'"
+      onmouseout="this.style.transform='';this.style.boxShadow='4px 4px 0 0 var(--ink)'"
+    >Nochmal ↺</button>
+  </div>
+</div>
+
+<script>
+const POOL = [
+  '🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯',
+  '🦁','🐮','🐷','🐸','🐵','🐔','🐧','🦆','🦉','🦋',
+  '🐛','🦀','🐙','🍎','🍊','🍋','🍇','🍓','🍒','🍑',
+  '🥝','🍕','🌟','⚽','🎈','🎀','🎸','🚀','🌈','🍦',
+  '🏆','🎯','🌻','🦄','🍄','🌺','🧁','🍭','🎠','🪄'
+];
+
+let soloScore = 0, pvpScores = [0, 0], numIcons = 4;
+let roundActive = true, gameMode = 'solo', currentMatch = null, robotTimer = null;
+const WIN_SCORE = 10;
+const ROBOT_DELAY = { 4: 3500, 6: 2500, 8: 1500 };
+
+function setMode(mode) {
+  gameMode = mode;
+  document.querySelectorAll('[data-mode]').forEach(b =>
+    b.classList.toggle('active', b.dataset.mode === mode));
+  resetGame();
+}
+
+function setDiff(btn, n) {
+  numIcons = n;
+  document.querySelectorAll('[data-diff]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  newRound();
+}
+
+function resetGame() {
+  if (robotTimer) { clearTimeout(robotTimer); robotTimer = null; }
+  soloScore = 0; pvpScores = [0, 0];
+  document.getElementById('score').textContent    = '0';
+  document.getElementById('score-p1').textContent = '0';
+  document.getElementById('score-p2').textContent = '0';
+
+  const isPvp = gameMode !== 'solo';
+  document.getElementById('score-solo').style.display    = isPvp ? 'none' : '';
+  document.getElementById('score-pvp').style.display     = isPvp ? 'flex' : 'none';
+  document.getElementById('player-labels').style.display = isPvp ? 'flex' : 'none';
+
+  if (gameMode === 'robot') {
+    document.getElementById('p2-label').textContent        = 'Roboter 🤖';
+    document.getElementById('p2-circle-label').textContent = 'Roboter 🤖';
+  } else {
+    document.getElementById('p2-label').textContent        = 'Spieler 2';
+    document.getElementById('p2-circle-label').textContent = 'Spieler 2 👉';
+  }
+
+  document.getElementById('win-overlay').classList.remove('show');
+  newRound();
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function placeIcons(containerId, icons, matchEmoji, owner) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  const size = container.getBoundingClientRect().width || 270;
+  const r = size / 2, margin = 38;
+  const minDist  = numIcons <= 4 ? 72 : numIcons <= 6 ? 60 : 50;
+  const fontSize = numIcons <= 4 ? '2.4rem' : numIcons <= 6 ? '2rem' : '1.65rem';
+  const placed   = [];
+
+  for (const emoji of icons) {
+    let x, y, tries = 0;
+    do {
+      const angle = Math.random() * 2 * Math.PI;
+      const dist  = margin + Math.random() * (r - margin * 1.8);
+      x = r + dist * Math.cos(angle);
+      y = r + dist * Math.sin(angle);
+      tries++;
+    } while (tries < 80 && placed.some(p => Math.hypot(p.x - x, p.y - y) < minDist));
+    placed.push({ x, y });
+
+    const btn = document.createElement('button');
+    btn.className = 'emoji-btn';
+    btn.style.left = x + 'px'; btn.style.top = y + 'px';
+    btn.style.fontSize = fontSize; btn.textContent = emoji;
+    btn.setAttribute('aria-label', emoji);
+    btn.addEventListener('click', () => handleClick(btn, emoji === matchEmoji, owner));
+    container.appendChild(btn);
+  }
+}
+
+function newRound() {
+  if (robotTimer) { clearTimeout(robotTimer); robotTimer = null; }
+  roundActive = true; setMsg('');
+  const pool   = shuffle(POOL);
+  const iconsA = pool.slice(0, numIcons);
+  currentMatch = iconsA[Math.floor(Math.random() * numIcons)];
+  const rest   = pool.filter(e => !iconsA.includes(e));
+  const iconsB = shuffle([currentMatch, ...rest.slice(0, numIcons - 1)]);
+  const ownerA = gameMode !== 'solo' ? 1 : 0;
+  const ownerB = gameMode !== 'solo' ? 2 : 0;
+  placeIcons('circle-a', shuffle(iconsA), currentMatch, ownerA);
+  placeIcons('circle-b', iconsB,          currentMatch, ownerB);
+  if (gameMode === 'robot') {
+    robotTimer = setTimeout(robotMove, ROBOT_DELAY[numIcons] ?? 2500);
+  }
+}
+
+function handleClick(btn, isMatch, owner) {
+  if (!roundActive) return;
+  if (isMatch) {
+    roundActive = false;
+    if (robotTimer) { clearTimeout(robotTimer); robotTimer = null; }
+    btn.classList.add('pop');
+    ['circle-a','circle-b'].forEach(id => {
+      const el = document.getElementById(id);
+      el.classList.add('ring-flash');
+      setTimeout(() => el.classList.remove('ring-flash'), 500);
+    });
+    if (gameMode === 'solo') {
+      soloScore++;
+      document.getElementById('score').textContent = soloScore;
+      setMsg('✅ Gut gemacht!');
+      setTimeout(() => { btn.classList.remove('pop'); newRound(); }, 750);
+    } else {
+      const idx = owner - 1;
+      pvpScores[idx]++;
+      document.getElementById('score-p1').textContent = pvpScores[0];
+      document.getElementById('score-p2').textContent = pvpScores[1];
+      const pName = owner === 1 ? 'Spieler 1' : gameMode === 'robot' ? 'Roboter 🤖' : 'Spieler 2';
+      setMsg(`✅ ${pName} punktet!`);
+      if (pvpScores[idx] >= WIN_SCORE) {
+        setTimeout(() => showWin(idx), 750);
+      } else {
+        setTimeout(() => { btn.classList.remove('pop'); newRound(); }, 900);
+      }
+    }
+  } else {
+    btn.classList.add('shake');
+    setMsg('❌ Nochmal!');
+    setTimeout(() => { btn.classList.remove('shake'); setMsg(''); }, 500);
+  }
+}
+
+function robotMove() {
+  if (!roundActive) return;
+  document.getElementById('circle-b').querySelectorAll('.emoji-btn').forEach(btn => {
+    if (btn.textContent === currentMatch) handleClick(btn, true, 2);
+  });
+}
+
+function setMsg(text) { document.querySelector('#msg span').textContent = text; }
+
+function showWin(idx) {
+  if (robotTimer) { clearTimeout(robotTimer); robotTimer = null; }
+  const isRobot = gameMode === 'robot' && idx === 1;
+  document.getElementById('win-emoji').textContent = isRobot ? '🤖' : '🏆';
+  const name = idx === 0 ? 'Spieler 1' : (isRobot ? 'Roboter' : 'Spieler 2');
+  document.getElementById('win-msg').textContent = `${name} gewinnt!`;
+  const card = document.getElementById('win-card');
+  card.style.animation = 'none'; card.offsetHeight; card.style.animation = '';
+  document.getElementById('win-overlay').classList.add('show');
+}
+
+resetGame();
+</script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tic-Tac-Toe — Lojëra për Fëmijë 🎈</title>
+<meta name="description" content="Tic-Tac-Toe — 2 lojtarë ose kundër kompjuterit." />
+<link rel="stylesheet" href="../assets/css/tailwind.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #fff8ec; --ink: #1f1147; }
+html, body { background: var(--bg); color: var(--ink); }
+body {
+  font-family: 'Nunito', system-ui, sans-serif;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(255,200,87,.25) 0, transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(120,200,255,.25) 0, transparent 35%),
+    radial-gradient(circle at 80% 90%, rgba(255,130,160,.22) 0, transparent 35%),
+    radial-gradient(circle at 15% 85%, rgba(150,230,170,.25) 0, transparent 35%);
+}
+.display { font-family: 'Fredoka', system-ui, sans-serif; letter-spacing: -0.02em; }
+.card { border: 3px solid var(--ink); border-radius: 28px; box-shadow: 6px 6px 0 0 var(--ink); }
+.pill { border: 2px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 0 var(--ink); display: inline-block; }
+.btn-main {
+  border: 3px solid var(--ink); border-radius: 999px; padding: 10px 26px;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
+  cursor: pointer; box-shadow: 4px 4px 0 0 var(--ink); transition: transform .1s, box-shadow .1s;
+}
+.btn-main:hover  { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--ink); }
+.btn-main:active { transform: translate(2px,2px);   box-shadow: 1px 1px 0 0 var(--ink); }
+.seg-btn {
+  border: 2px solid var(--ink); border-radius: 999px; padding: 6px 16px;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.82rem;
+  cursor: pointer; box-shadow: 3px 3px 0 0 var(--ink); transition: transform .1s, box-shadow .1s;
+}
+.seg-btn.active      { background: var(--ink); color: var(--bg); }
+.seg-btn:not(.active){ background: white; color: var(--ink); }
+#board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 300px; margin: 0 auto; }
+.cell {
+  aspect-ratio: 1 / 1; border: 3px solid var(--ink); border-radius: 20px;
+  box-shadow: 4px 4px 0 0 var(--ink); background: white;
+  font-family: 'Fredoka', sans-serif; font-size: clamp(2rem, 12vw, 3.5rem); font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: transform .1s, box-shadow .1s, background .15s;
+  user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.cell:hover:not(.taken) { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--ink); }
+.cell.taken  { cursor: default; }
+.cell.x-cell { color: #2563eb; }
+.cell.o-cell { color: #e11d48; }
+.cell.win-cell { background: #fef08a; animation: win-pop .35s ease; }
+@keyframes win-pop { 0% { transform: scale(.85); } 55% { transform: scale(1.1); } 100% { transform: scale(1); } }
+.score-box { border: 3px solid var(--ink); border-radius: 16px; box-shadow: 4px 4px 0 0 var(--ink); padding: 10px 18px; min-width: 72px; text-align: center; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<main class="relative max-w-sm mx-auto px-4 py-8 md:py-12">
+
+  <div class="flex items-center justify-between mb-6">
+    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Kthehu</a>
+    <div>
+      <a href="../tic-tac-toe.html" class="pill bg-white px-3 py-1 text-xs font-bold">EN</a>
+      <a href="../de/tic-tac-toe.html" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">DE</a>
+      <strong class="pill bg-[color:var(--ink)] text-[#fff8ec] px-3 py-1 text-xs font-bold ml-1">SQ</strong>
+    </div>
+  </div>
+
+  <header class="text-center mb-6">
+    <h1 class="display text-5xl md:text-6xl font-bold mb-1">Tic-Tac-Toe</h1>
+    <p class="font-semibold opacity-70">X kundër O — kush fiton?</p>
+  </header>
+
+  <div class="flex justify-center gap-3 mb-6">
+    <button class="seg-btn active" data-mode="pvp" onclick="setMode('pvp')">👫 2 Lojtarë</button>
+    <button class="seg-btn" data-mode="ai" onclick="setMode('ai')">🤖 Kompjuteri</button>
+  </div>
+
+  <div class="flex items-center justify-center gap-4 mb-6">
+    <div class="score-box" style="background:#dbeafe">
+      <div class="display text-xs font-bold mb-1" style="opacity:.6">X</div>
+      <div class="display text-3xl font-bold" id="score-x">0</div>
+    </div>
+    <div class="score-box" style="background:white">
+      <div class="display text-xs font-bold mb-1" style="opacity:.6">Barazim</div>
+      <div class="display text-3xl font-bold" id="score-d">0</div>
+    </div>
+    <div class="score-box" style="background:#fce7f3">
+      <div class="display text-xs font-bold mb-1" style="opacity:.6">O</div>
+      <div class="display text-3xl font-bold" id="score-o">0</div>
+    </div>
+  </div>
+
+  <div class="text-center mb-5" style="min-height:2.2rem">
+    <span id="status" class="display text-2xl font-bold"></span>
+  </div>
+
+  <div id="board"></div>
+
+  <div class="flex justify-center gap-3 mt-8">
+    <button class="btn-main bg-emerald-300" onclick="newGame()">Lojë e Re ↺</button>
+    <button class="btn-main" style="background:white" onclick="resetAll()">Reset Pikët</button>
+  </div>
+
+  <footer class="mt-16 text-center pb-6">
+    <p class="font-semibold opacity-50 text-sm">Bërë me ❤️ për fëmijët</p>
+    <p class="mt-2 text-xs opacity-40 font-semibold">Designed by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a></p>
+  </footer>
+
+</main>
+
+<script>
+const WINS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+let board = Array(9).fill(''), current = 'X', gameOver = false;
+let gameMode = 'pvp', scores = { X: 0, O: 0, D: 0 };
+
+function setMode(mode) {
+  gameMode = mode;
+  document.querySelectorAll('[data-mode]').forEach(b =>
+    b.classList.toggle('active', b.dataset.mode === mode));
+  scores = { X: 0, O: 0, D: 0 }; updateScoreUI(); newGame();
+}
+
+function newGame() {
+  board = Array(9).fill(''); current = 'X'; gameOver = false;
+  renderBoard(); setStatus('turn');
+}
+
+function resetAll() { scores = { X: 0, O: 0, D: 0 }; updateScoreUI(); newGame(); }
+
+function renderBoard() {
+  const el = document.getElementById('board'); el.innerHTML = '';
+  board.forEach((val, i) => {
+    const cell = document.createElement('div');
+    cell.className = ['cell', val ? 'taken' : '', val ? val.toLowerCase() + '-cell' : ''].filter(Boolean).join(' ');
+    cell.textContent = val;
+    cell.addEventListener('click', () => handleClick(i));
+    el.appendChild(cell);
+  });
+}
+
+function handleClick(i) {
+  if (gameOver || board[i]) return;
+  if (gameMode === 'ai' && current === 'O') return;
+  makeMove(i);
+  if (!gameOver && gameMode === 'ai' && current === 'O') setTimeout(aiMove, 420);
+}
+
+function makeMove(i) {
+  board[i] = current;
+  const winLine = checkWin(current);
+  if (winLine) {
+    gameOver = true; scores[current]++; updateScoreUI();
+    renderBoard(); highlightWin(winLine); setStatus('win');
+  } else if (board.every(v => v)) {
+    gameOver = true; scores.D++; updateScoreUI();
+    renderBoard(); setStatus('draw');
+  } else {
+    current = current === 'X' ? 'O' : 'X'; renderBoard(); setStatus('turn');
+  }
+}
+
+function checkWin(player) {
+  return WINS.find(line => line.every(i => board[i] === player)) || null;
+}
+
+function highlightWin(line) {
+  const cells = document.getElementById('board').children;
+  line.forEach(i => cells[i].classList.add('win-cell'));
+}
+
+function colorSym(s) {
+  return s === 'X'
+    ? '<span style="color:#2563eb">X</span>'
+    : '<span style="color:#e11d48">O</span>';
+}
+
+function setStatus(state) {
+  const el = document.getElementById('status');
+  if (state === 'win') {
+    const isAI = gameMode === 'ai' && current === 'O';
+    el.innerHTML = isAI ? '🤖 Kompjuteri fitoi!' : `${colorSym(current)} fitoi! 🎉`;
+  } else if (state === 'draw') {
+    el.innerHTML = 'Barazim! 🤝';
+  } else {
+    if (gameMode === 'ai') {
+      el.innerHTML = current === 'O' ? '🤖 Kompjuteri mendon…' : `Radha jote (${colorSym('X')})`;
+    } else {
+      el.innerHTML = `Radha e ${colorSym(current)}`;
+    }
+  }
+}
+
+function aiMove() { makeMove(bestMove()); }
+
+function bestMove() {
+  for (const line of WINS) { const m = winningCell(line, 'O'); if (m >= 0) return m; }
+  for (const line of WINS) { const m = winningCell(line, 'X'); if (m >= 0) return m; }
+  if (!board[4]) return 4;
+  const corners = [0,2,6,8].filter(i => !board[i]);
+  if (corners.length) return corners[Math.floor(Math.random() * corners.length)];
+  const free = board.map((v,i) => v ? -1 : i).filter(i => i >= 0);
+  return free[Math.floor(Math.random() * free.length)];
+}
+
+function winningCell(line, player) {
+  const opp = player === 'O' ? 'X' : 'O';
+  const vals = line.map(i => board[i]);
+  if (vals.filter(v => v === player).length === 2 && !vals.includes(opp)) {
+    const idx = line.find(i => board[i] === '');
+    return idx !== undefined ? idx : -1;
+  }
+  return -1;
+}
+
+function updateScoreUI() {
+  document.getElementById('score-x').textContent = scores.X;
+  document.getElementById('score-o').textContent = scores.O;
+  document.getElementById('score-d').textContent = scores.D;
+}
+
+newGame();
+</script>
+</body>
+</html>
