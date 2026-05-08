@@ -95,6 +95,7 @@ body {
 
 <main class="relative max-w-3xl mx-auto px-4 py-8 md:py-12">
 
+  <!-- · Nav · -->
   <div class="flex items-center justify-between mb-6">
     <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Zurück</a>
     <div>
@@ -104,6 +105,7 @@ body {
     </div>
   </div>
 
+  <!-- · Header · -->
   <header class="text-center mb-6">
     <h1 class="display text-4xl md:text-6xl font-bold mb-2">Finde das Gleiche</h1>
     <p class="font-semibold opacity-70 text-lg">Finde das Emoji, das in <em>beiden</em> Kreisen erscheint!</p>
@@ -118,9 +120,11 @@ body {
 
   <!-- · Difficulty · -->
   <div class="flex flex-wrap justify-center gap-2 mb-4">
-    <button class="seg-btn active" data-diff="4" onclick="setDiff(this,4)">Leicht</button>
-    <button class="seg-btn"        data-diff="6" onclick="setDiff(this,6)">Mittel</button>
-    <button class="seg-btn"        data-diff="8" onclick="setDiff(this,8)">Schwer</button>
+    <button class="seg-btn active" data-diff="4"  onclick="setDiff(this,4)">Leicht</button>
+    <button class="seg-btn"        data-diff="6"  onclick="setDiff(this,6)">Mittel</button>
+    <button class="seg-btn"        data-diff="8"  onclick="setDiff(this,8)">Schwer</button>
+    <button class="seg-btn"        data-diff="10" onclick="setDiff(this,10)">Expert</button>
+    <button class="seg-btn"        data-diff="12" onclick="setDiff(this,12)">Master</button>
   </div>
 
   <div id="player-labels" style="display:none" class="flex justify-around mb-2">
@@ -171,6 +175,7 @@ body {
     <div id="circle-b" class="circle-wrap" style="background:#fce7f3"></div>
   </div>
 
+  <!-- · Feedback · -->
   <div id="msg" class="text-center mt-6 h-10">
     <span class="display text-2xl font-bold"></span>
   </div>
@@ -182,6 +187,7 @@ body {
 
 </main>
 
+<!-- · Win overlay · -->
 <div id="win-overlay">
   <div id="win-card" class="card bg-yellow-300 p-8 md:p-12 text-center" style="max-width:320px;width:90%">
     <div id="win-emoji" class="text-7xl mb-3">🏆</div>
@@ -206,7 +212,7 @@ const POOL = [
 let soloScore = 0, pvpScores = [0, 0], numIcons = 4;
 let roundActive = true, gameMode = 'solo', currentMatch = null, robotTimer = null;
 const WIN_SCORE = 10;
-const ROBOT_DELAY = { 4: 3500, 6: 2500, 8: 1500 };
+const ROBOT_DELAY = { 4: 3500, 6: 2500, 8: 1500, 10: 1000, 12: 700 };
 
 function setMode(mode) {
   gameMode = mode;

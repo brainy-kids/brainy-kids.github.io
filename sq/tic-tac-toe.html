@@ -95,6 +95,7 @@ body {
 
 <main class="relative max-w-sm mx-auto px-4 py-8 md:py-12">
 
+  <!-- · Nav · -->
   <div class="flex items-center justify-between mb-6">
     <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Back</a>
     <div>
@@ -109,11 +110,13 @@ body {
     <p class="font-semibold opacity-70">X vs O — who wins?</p>
   </header>
 
+  <!-- · Mode selector · -->
   <div class="flex justify-center gap-3 mb-6">
     <button class="seg-btn active" data-mode="pvp" onclick="setMode('pvp')">👫 2 Players</button>
     <button class="seg-btn" data-mode="ai" onclick="setMode('ai')">🤖 Computer</button>
   </div>
 
+  <!-- · Score row · -->
   <div class="flex items-center justify-center gap-4 mb-6">
     <div class="score-box" style="background:#dbeafe">
       <div class="display text-xs font-bold mb-1" style="opacity:.6">X</div>
@@ -129,12 +132,15 @@ body {
     </div>
   </div>
 
+  <!-- · Status · -->
   <div class="text-center mb-5" style="min-height:2.2rem">
     <span id="status" class="display text-2xl font-bold"></span>
   </div>
 
+  <!-- · Board · -->
   <div id="board"></div>
 
+  <!-- · Buttons · -->
   <div class="flex justify-center gap-3 mt-8">
     <button class="btn-main bg-emerald-300" onclick="newGame()">New Game ↺</button>
     <button class="btn-main" style="background:white" onclick="resetAll()">Reset Scores</button>

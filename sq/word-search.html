@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sq">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Word Search — Kids Games 🎈</title>
-<meta name="description" content="Generate and print a word search puzzle." />
+<title>Fjalëkërkimi — Lojëra për Fëmijë 🎈</title>
+<meta name="description" content="Krijo dhe printo një fjalëkërkues." />
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/css/tailwind.min.css">
 <link rel="stylesheet" href="../assets/css/fonts.css">
@@ -131,8 +131,9 @@ input[type=range] { accent-color: var(--ink); }
 
 <main class="relative max-w-3xl mx-auto px-4 py-8 md:py-12">
 
+  <!-- · Nav · -->
   <div class="flex items-center justify-between mb-6 no-print">
-    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Back</a>
+    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Kthehu</a>
     <div>
       <a href="../word-search.html" class="pill bg-white px-3 py-1 text-xs font-bold">EN</a>
       <a href="../de/word-search.html" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">DE</a>
@@ -140,16 +141,19 @@ input[type=range] { accent-color: var(--ink); }
     </div>
   </div>
 
+  <!-- · Header · -->
   <header class="text-center mb-8 no-print">
-    <h1 class="display text-4xl md:text-6xl font-bold mb-2">Word Search</h1>
-    <p class="font-semibold opacity-70 text-lg">Generate a puzzle, then print and play!</p>
+    <h1 class="display text-4xl md:text-6xl font-bold mb-2">Fjalëkërkimi</h1>
+    <p class="font-semibold opacity-70 text-lg">Krijo një enigmë, printo dhe luaj!</p>
   </header>
 
+  <!-- · Controls · -->
   <div class="card bg-amber-50 p-6 mb-8 no-print">
     <div class="grid sm:grid-cols-2 gap-6">
 
+      <!-- · Words · -->
       <div>
-        <label class="display text-xl font-bold block mb-2">Words (one per line)</label>
+        <label class="display text-xl font-bold block mb-2">Fjalët (një për rresht)</label>
         <textarea id="words-input" rows="8" spellcheck="false">PULA
 MACJA
 QENI
@@ -162,22 +166,23 @@ DERA
 BARI</textarea>
       </div>
 
+      <!-- · Options · -->
       <div class="flex flex-col gap-5">
         <div>
           <label class="display text-xl font-bold block mb-1">
-            Grid size: <span id="size-val">12</span>
+            Madhësia e rrjetës: <span id="size-val">12</span>
           </label>
           <input type="range" id="grid-size" min="8" max="15" value="12" class="w-full"
             oninput="document.getElementById('size-val').textContent=this.value" />
         </div>
 
         <div>
-          <p class="display text-xl font-bold mb-2">Directions</p>
+          <p class="display text-xl font-bold mb-2">Drejtimet</p>
           <div class="flex flex-wrap gap-2">
-            <button class="dir-toggle on" data-dir="lr">→ Right</button>
-            <button class="dir-toggle on" data-dir="rl">← Left</button>
-            <button class="dir-toggle on" data-dir="tb">↓ Down</button>
-            <button class="dir-toggle on" data-dir="bt">↑ Up</button>
+            <button class="dir-toggle on" data-dir="lr">→ Djathtas</button>
+            <button class="dir-toggle on" data-dir="rl">← Majtas</button>
+            <button class="dir-toggle on" data-dir="tb">↓ Poshtë</button>
+            <button class="dir-toggle on" data-dir="bt">↑ Lart</button>
             <button class="dir-toggle on" data-dir="d1">↘ Diag</button>
             <button class="dir-toggle off" data-dir="d2">↙ Diag</button>
             <button class="dir-toggle off" data-dir="d3">↖ Diag</button>
@@ -187,22 +192,24 @@ BARI</textarea>
       </div>
     </div>
 
+    <!-- · Action buttons · -->
     <div class="flex flex-wrap gap-3 mt-6">
-      <button class="btn-main bg-emerald-300" onclick="generate()">Generate ✦</button>
-      <button class="btn-main bg-sky-200"     onclick="toggleSolution()" id="sol-btn">Show Solution</button>
-      <button class="btn-main bg-pink-200"    onclick="window.print()">Print 🖨</button>
+      <button class="btn-main bg-emerald-300" onclick="generate()">Krijo ✦</button>
+      <button class="btn-main bg-sky-200"     onclick="toggleSolution()" id="sol-btn">Shfaq Zgjidhjen</button>
+      <button class="btn-main bg-pink-200"    onclick="window.print()">Printo 🖨</button>
     </div>
   </div>
 
+  <!-- · Puzzle output · -->
   <div id="grid-section" class="text-center">
-    <p class="print-title hidden display text-3xl font-bold mb-6">Word Search Puzzle</p>
+    <p class="print-title hidden display text-3xl font-bold mb-6">Enigma Fjalëkërkuese</p>
     <div id="grid-wrap" class="overflow-x-auto mb-6"></div>
     <div id="word-list" class="mb-4"></div>
     <p id="skipped-msg" class="text-sm opacity-60 font-semibold mt-2"></p>
   </div>
 
   <footer class="mt-16 text-center pb-6 no-print">
-    <p class="font-semibold opacity-50 text-sm">Made with ❤️ for kids</p>
+    <p class="font-semibold opacity-50 text-sm">Bërë me ❤️ për fëmijë</p>
     <p class="mt-2 text-xs opacity-40 font-semibold">Designed by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a></p>
   </footer>
 
@@ -229,19 +236,19 @@ function getActiveDirs() {
 
 function generate() {
   showSol = false;
-  document.getElementById('sol-btn').textContent = 'Show Solution';
+  document.getElementById('sol-btn').textContent = 'Shfaq Zgjidhjen';
   const rawWords = document.getElementById('words-input').value
     .split('\n').map(w => w.trim().toUpperCase().replace(/[^A-ZÇËÄÖÜ]/g, '')).filter(w => w.length >= 2);
-  if (!rawWords.length) { alert('Please enter at least one word.'); return; }
+  if (!rawWords.length) { alert('Ju lutemi shkruani të paktën një fjalë.'); return; }
   const size = parseInt(document.getElementById('grid-size').value, 10);
   const dirs = getActiveDirs();
-  if (!dirs.length) { alert('Please enable at least one direction.'); return; }
+  if (!dirs.length) { alert('Ju lutemi aktivizoni të paktën një drejtim.'); return; }
   const result = buildPuzzle(rawWords, size, dirs);
   currentGrid = result.grid; currentSolMap = result.solMap; currentWords = result.placed;
   renderGrid(); renderWordList();
   const skipped = rawWords.filter(w => !result.placed.includes(w));
   document.getElementById('skipped-msg').textContent = skipped.length
-    ? `⚠ Could not place: ${skipped.join(', ')} — try larger grid or fewer directions.`
+    ? `⚠ Nuk u vendos: ${skipped.join(', ')} — provo rrjetë më të madhe ose më pak drejtime.`
     : '';
 }
 
@@ -315,7 +322,7 @@ function renderWordList() {
 function toggleSolution() {
   if (!currentGrid) return;
   showSol = !showSol;
-  document.getElementById('sol-btn').textContent = showSol ? 'Hide Solution' : 'Show Solution';
+  document.getElementById('sol-btn').textContent = showSol ? 'Fshih Zgjidhjen' : 'Shfaq Zgjidhjen';
   renderGrid();
 }
 
