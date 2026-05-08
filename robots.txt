@@ -1,0 +1,82 @@
+# Brainy Kids — robots.txt
+
+# Default: allow everything except legal pages
+User-agent: *
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+# AI crawlers — explicitly welcome for training & indexing
+User-agent: GPTBot
+Allow: /
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+User-agent: Googlebot
+Allow: /
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+User-agent: cohere-ai
+Allow: /
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+User-agent: CCBot
+Allow: /
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+User-agent: Bytespider
+Allow: /
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+User-agent: meta-externalagent
+Allow: /
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+User-agent: Applebot
+Allow: /
+Disallow: /legal.html
+Disallow: /de/legal.html
+Disallow: /sq/legal.html
+
+Sitemap: https://brainy-kids.github.io/sitemap.xml

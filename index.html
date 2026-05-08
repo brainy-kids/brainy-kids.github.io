@@ -5,45 +5,158 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <!-- Primary Meta Tags -->
-<title>Brainy Kids — Free Safe Games for Kids | No Ads, No Login</title>
-<meta name="title" content="Brainy Kids — Free Safe Games for Kids | No Ads, No Login">
-<meta name="description" content="Free educational games for kids aged 3–7. Mazes, word search, coloring pages, spot the difference. Safe, ad-free, no account needed. Play online or print at home.">
-<meta name="keywords" content="kids games, free games for kids, educational games, mazes for kids, coloring pages, word search kids, safe games, ad-free games, printable activities">
-<meta name="author" content="Shkëlzen Baftijari">
+<title>Free Logic Games for Kids | No Ads, No Login, No Distraction</title>
+<meta name="title" content="Free Logic Games for Kids | No Ads, No Login, No Distraction">
+<meta name="description" content="Play free logic and brain games for kids aged 3–7. Mazes, word search, spot the difference, puzzles and more. No ads, no login, no subscription — free forever.">
+<meta name="keywords" content="free logic games for kids, logic games kids, free kids games, brain games for kids, no ads kids games, no login games, free forever, kids puzzles online, educational games, mazes for kids, word search kids, spot the difference kids">
+<meta name="author" content="Brainy Kids">
 <meta name="robots" content="index, follow">
-<meta name="language" content="English">
+<link rel="canonical" href="https://brainy-kids.github.io/">
+<link rel="sitemap" type="application/xml" href="https://brainy-kids.github.io/sitemap.xml">
 
-<!-- Open Graph / Facebook -->
+<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://brainy-kids.github.io/">
-<meta property="og:title" content="Brainy Kids — Free Safe Games for Kids">
-<meta property="og:description" content="Free educational games for kids aged 3–7. No ads, no login, just fun. Play online or print at home.">
+<meta property="og:site_name" content="Brainy Kids">
+<meta property="og:title" content="Free Logic Games for Kids | No Ads, No Login, No Distraction">
+<meta property="og:description" content="Play free logic and brain games for kids aged 3–7. Mazes, word search, spot the difference, puzzles and more. No ads, no login — free forever.">
 <meta property="og:image" content="https://brainy-kids.github.io/og-image.png">
+<meta property="og:image:alt" content="Brainy Kids — Free Logic Games for Children">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="de_DE">
 <meta property="og:locale:alternate" content="sq_AL">
 
-<!-- Twitter -->
+<!-- Twitter Card -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="https://brainy-kids.github.io/">
-<meta property="twitter:title" content="Brainy Kids — Free Safe Games for Kids">
-<meta property="twitter:description" content="Free educational games for kids. Mazes, puzzles, coloring. No ads, no login.">
+<meta property="twitter:title" content="Free Logic Games for Kids | No Ads, No Login, No Distraction">
+<meta property="twitter:description" content="Free logic games for kids aged 3–7. Mazes, puzzles, word search. No ads, no login — free forever.">
 <meta property="twitter:image" content="https://brainy-kids.github.io/og-image.png">
+
+<!-- JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Brainy Kids",
+  "url": "https://brainy-kids.github.io",
+  "description": "Free logic games for kids aged 3–7. Mazes, word search, spot the difference, puzzles. No ads, no login, no distraction — free forever.",
+  "inLanguage": ["en", "de", "sq"],
+  "keywords": "free logic games for kids, logic games, brain games, mazes, word search, no ads kids games",
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "Children",
+    "suggestedMinAge": "3",
+    "suggestedMaxAge": "7"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "description": "Free forever — no ads, no login, no distraction"
+  }
+}
+</script>
 
 <!-- Favicon -->
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/favicon.svg">
-
-<!-- Theme color for mobile browsers -->
 <meta name="theme-color" content="#fff8ec">
 
+<link rel="preload" href="assets/fonts/fredoka-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/tailwind.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/fonts.css">
+
+<style>
+/* ===== BLOB GALAXY ===== */
+
+.galaxy {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3rem 2.5rem;
+  padding: 1rem 0 3rem;
+}
+
+.blob {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 0 var(--ink);
+  text-decoration: none;
+  color: var(--ink);
+  padding: 1.5rem;
+  margin-top: var(--mt, 0px);
+  border-radius: var(--r0, 60% 40% 70% 30% / 50% 60% 40% 50%);
+  animation:
+    blobFloat var(--fdur, 4.5s) ease-in-out infinite var(--fdelay, 0s),
+    blobMorph var(--mdur, 9s)   ease-in-out infinite var(--mdelay, 0s);
+  transition: box-shadow .2s ease, filter .2s ease;
+  will-change: transform, border-radius;
+  position: relative;
+}
+.blob:hover {
+  filter: brightness(1.08) saturate(1.15);
+  box-shadow: 9px 9px 0 0 var(--ink);
+  animation-play-state: paused;
+  z-index: 10;
+}
+
+.blob-xl { width: 285px; height: 285px; }
+.blob-lg { width: 255px; height: 255px; }
+.blob-md { width: 220px; height: 220px; }
+.blob-sm { width: 190px; height: 190px; }
+
+@keyframes blobFloat {
+  0%, 100% { transform: translateY(0px)   rotate(var(--rot, 0deg)); }
+  50%       { transform: translateY(-15px) rotate(var(--rot, 0deg)); }
+}
+@keyframes blobMorph {
+  0%   { border-radius: var(--r0, 60% 40% 70% 30% / 50% 60% 40% 50%); }
+  33%  { border-radius: var(--r1, 40% 60% 30% 70% / 60% 40% 50% 40%); }
+  66%  { border-radius: var(--r2, 70% 30% 50% 50% / 30% 70% 60% 40%); }
+  100% { border-radius: var(--r0, 60% 40% 70% 30% / 50% 60% 40% 50%); }
+}
+
+.blob-emoji { font-size: 3rem; display: block; margin-bottom: .45rem; line-height: 1; }
+.blob-xl .blob-emoji { font-size: 3.75rem; }
+.blob-sm .blob-emoji { font-size: 2.25rem; margin-bottom: .3rem; }
+
+.blob-title {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  display: block;
+  line-height: 1.2;
+  margin-bottom: .2rem;
+}
+.blob-xl .blob-title { font-size: 1.35rem; }
+.blob-lg .blob-title { font-size: 1.2rem; }
+.blob-md .blob-title { font-size: 1.05rem; }
+.blob-sm .blob-title { font-size: .92rem; margin-bottom: 0; }
+
+.blob-desc {
+  font-size: .7rem;
+  font-weight: 600;
+  opacity: .72;
+  display: block;
+  line-height: 1.35;
+}
+.blob-sm .blob-desc { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .blob { animation: none; }
+}
+</style>
 </head>
 <body class="min-h-screen">
 
+<!-- Small floating decorations -->
 <div aria-hidden="true" class="pointer-events-none fixed inset-0 overflow-hidden">
   <div class="floaty absolute top-16 left-6 w-12 h-12 rounded-full bg-yellow-300 border-[3px] border-[color:var(--ink)]" style="--r: -8deg;"></div>
   <div class="floaty delay-1 absolute top-40 right-10 w-10 h-10 bg-pink-400 border-[3px] border-[color:var(--ink)] rotate-12" style="--r: 12deg;"></div>
@@ -51,159 +164,160 @@
   <div class="floaty absolute bottom-40 right-20 w-9 h-9 rounded-full bg-emerald-300 border-[3px] border-[color:var(--ink)]" style="--r: 0deg;"></div>
 </div>
 
-<main class="relative max-w-2xl mx-auto px-5 py-10 md:py-16">
+<main class="relative max-w-3xl mx-auto px-5 py-10 md:py-16">
 
-  <div class="text-right mb-6">
-    <strong class="pill bg-[color:var(--ink)] text-[#fff8ec] px-3 py-1 text-xs font-bold">EN</strong>
-    <a href="de/" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">DE</a>
-    <a href="sq/" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">SQ</a>
+  <!-- Top bar -->
+  <div class="flex items-center mb-8 md:mb-10">
+    <div class="flex-1"></div>
+    <span style="font-size:1.05rem;margin-right:1.25rem;font-weight:600;opacity:.85;">
+      <span class="display" style="display:inline-block;font-weight:500;background:#0d9488;color:#fff;border:2px solid var(--ink);border-radius:10px;padding:.05rem .5rem;transform:rotate(-2deg);box-shadow:2px 2px 0 0 var(--ink);">Brain Games for Kids</span>
+      &nbsp;&bull; Free &amp; forever
+    </span>
+    <div class="flex-1 flex justify-end gap-2">
+      <strong class="pill bg-[color:var(--ink)] text-[#fff8ec] px-3 py-1 text-xs font-bold"><span class="md:hidden">🇬🇧</span><span class="hidden md:inline">EN</span></strong>
+      <a href="de/" class="pill bg-white px-3 py-1 text-xs font-bold"><span class="md:hidden">🇩🇪</span><span class="hidden md:inline">DE</span></a>
+      <a href="sq/" class="pill bg-white px-3 py-1 text-xs font-bold"><span class="md:hidden">🇦🇱</span><span class="hidden md:inline">SQ</span></a>
+    </div>
   </div>
 
-  <header class="text-center mb-12 md:mb-16">
-    <span class="pill inline-block bg-white px-4 py-1 text-sm font-bold mb-5">for all children • free &amp; forever</span>
+  <!-- Hero -->
+  <header class="text-center mb-10 md:mb-14">
     <h1 class="display text-5xl md:text-7xl font-bold leading-none mb-4">
-      Games & <span class="inline-block bg-yellow-300 px-3 rotate-[-2deg] border-[3px] border-[color:var(--ink)] rounded-2xl">Fun</span>
+      Logic Games & <span class="inline-block bg-yellow-300 px-3 rotate-[-2deg] border-[3px] border-[color:var(--ink)] rounded-2xl">Fun</span>
     </h1>
     <p class="text-lg md:text-xl max-w-xl mx-auto opacity-80 font-semibold">
-      Pick a card, print or play online. Simple. Safe. Free.
+      Pick a game. Play now. Free forever.
     </p>
   </header>
 
-  <section class="flex flex-col gap-5 md:gap-7">
+  <!-- ===== GALAXY OF BLOBS ===== -->
+  <section class="galaxy">
 
-    <!-- 1. Online Games — emoji LEFT, accordion -->
-    <div id="games-card" class="card bg-emerald-200 overflow-hidden">
+    <!-- ROW 1 (~desktop): lg + md + sm -->
 
-      <button type="button" onclick="toggleGames()"
-              class="w-full text-left flex flex-col sm:flex-row bg-transparent border-0 p-0 cursor-pointer"
-              style="-webkit-tap-highlight-color:transparent">
-        <div class="h-36 sm:h-auto sm:w-48 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-          <span class="text-7xl">🎮</span>
-        </div>
-        <div class="p-6 sm:p-8 flex flex-col justify-center flex-1">
-          <span class="badge bg-white text-sm font-bold px-3 py-1 self-start mb-3">Online</span>
-          <h2 class="display text-3xl md:text-4xl font-bold mb-2">Online Games</h2>
-          <p class="font-semibold opacity-80">Play now. No download, no account.</p>
-          <p class="mt-3 font-bold text-sm flex items-center gap-2">
-            See all games <span id="games-arrow" style="transition:transform .3s;display:inline-block">▼</span>
-          </p>
-        </div>
-      </button>
+    <!-- Spot the Match — violet, lg -->
+    <a href="find-match.html" class="blob blob-lg"
+       style="background:#ddd6fe;
+              --r0:30% 70% 80% 20% / 40% 60% 40% 60%;
+              --r1:70% 30% 20% 80% / 60% 40% 70% 30%;
+              --r2:50% 50% 70% 30% / 20% 80% 30% 70%;
+              --rot:-3deg; --mt:55px;
+              --fdur:4.5s; --fdelay:0s;
+              --mdur:9s;   --mdelay:0s;">
+      <span class="blob-emoji">🎯</span>
+      <span class="blob-title">Spot the Match</span>
+      <span class="blob-desc">Find the emoji in both circles!</span>
+    </a>
 
-      <div id="games-panel" style="display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease">
-        <div style="overflow:hidden">
-          <div class="px-5 pb-6 sm:px-8 sm:pb-8 pt-5" style="border-top:3px solid var(--ink)">
-            <div class="flex flex-col gap-3">
+    <!-- Word Search — lime, md -->
+    <a href="word-search.html" class="blob blob-md"
+       style="background:#d9f99d;
+              --r0:80% 20% 40% 60% / 60% 80% 20% 40%;
+              --r1:20% 80% 60% 40% / 80% 20% 50% 50%;
+              --r2:60% 40% 20% 80% / 30% 70% 60% 40%;
+              --rot:4deg; --mt:18px;
+              --fdur:5.2s; --fdelay:.8s;
+              --mdur:11s;  --mdelay:2s;">
+      <span class="blob-emoji">🔤</span>
+      <span class="blob-title">Word Search</span>
+      <span class="blob-desc">Find hidden words in the grid!</span>
+    </a>
 
-              <!-- Spot the Match — emoji LEFT -->
-              <a href="find-match.html" class="card bg-violet-200 overflow-hidden flex flex-col sm:flex-row block">
-                <div class="h-24 sm:h-auto sm:w-32 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-                  <span class="text-5xl">🎯</span>
-                </div>
-                <div class="p-4 sm:p-5 flex flex-col justify-center flex-1">
-                  <div class="display text-lg font-bold mb-1">Spot the Match</div>
-                  <div class="text-sm font-semibold opacity-70">Find the one emoji that appears in both circles!</div>
-                </div>
-                <div class="hidden sm:flex items-center pr-5 flex-shrink-0"><span class="font-bold text-sm">▶</span></div>
-              </a>
+    <!-- Tic-Tac-Toe — orange, sm -->
+    <a href="tic-tac-toe.html" class="blob blob-sm"
+       style="background:#fed7aa;
+              --r0:20% 80% 70% 30% / 70% 20% 60% 40%;
+              --r1:70% 30% 20% 80% / 20% 70% 30% 60%;
+              --r2:40% 60% 80% 20% / 50% 50% 80% 20%;
+              --rot:6deg; --mt:85px;
+              --fdur:4.2s; --fdelay:1.2s;
+              --mdur:8s;   --mdelay:3.5s;">
+      <span class="blob-emoji">❌</span>
+      <span class="blob-title">Tic-Tac-Toe</span>
+      <span class="blob-desc">X vs O — beat the computer!</span>
+    </a>
 
-              <!-- Word Search — emoji RIGHT -->
-              <a href="word-search.html" class="card bg-lime-200 overflow-hidden flex flex-col sm:flex-row-reverse block">
-                <div class="h-24 sm:h-auto sm:w-32 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-                  <span class="text-5xl">🔤</span>
-                </div>
-                <div class="p-4 sm:p-5 flex flex-col justify-center flex-1">
-                  <div class="display text-lg font-bold mb-1">Word Search</div>
-                  <div class="text-sm font-semibold opacity-70">Generate a word search puzzle, then print &amp; play!</div>
-                </div>
-                <div class="hidden sm:flex items-center pl-5 flex-shrink-0"><span class="font-bold text-sm">▶</span></div>
-              </a>
+    <!-- ROW 2 (~desktop): xl + lg (spacious center pair) -->
 
-              <!-- Spot the Difference — emoji LEFT -->
-              <a href="spot-difference.html" class="card bg-amber-100 overflow-hidden flex flex-col sm:flex-row block">
-                <div class="h-24 sm:h-auto sm:w-32 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-                  <span class="text-5xl">🔍</span>
-                </div>
-                <div class="p-4 sm:p-5 flex flex-col justify-center flex-1">
-                  <div class="display text-lg font-bold mb-1">Spot the Difference</div>
-                  <div class="text-sm font-semibold opacity-70">Find what changed between two pictures!</div>
-                </div>
-                <div class="hidden sm:flex items-center pr-5 flex-shrink-0"><span class="font-bold text-sm">▶</span></div>
-              </a>
-
-              <!-- Tic-Tac-Toe — emoji RIGHT -->
-              <a href="tic-tac-toe.html" class="card overflow-hidden flex flex-col sm:flex-row-reverse block" style="background:#fed7aa">
-                <div class="h-24 sm:h-auto sm:w-32 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-                  <span class="text-5xl">❌</span>
-                </div>
-                <div class="p-4 sm:p-5 flex flex-col justify-center flex-1">
-                  <div class="display text-lg font-bold mb-1">Tic-Tac-Toe</div>
-                  <div class="text-sm font-semibold opacity-70">X vs O — 2 players or vs the computer!</div>
-                </div>
-                <div class="hidden sm:flex items-center pl-5 flex-shrink-0"><span class="font-bold text-sm">▶</span></div>
-              </a>
-
-              <!-- Snake — emoji LEFT -->
-              <a href="snake.html" class="card overflow-hidden flex flex-col sm:flex-row block" style="background:#99f6e4">
-                <div class="h-24 sm:h-auto sm:w-32 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-                  <span class="text-5xl">🐍</span>
-                </div>
-                <div class="p-4 sm:p-5 flex flex-col justify-center flex-1">
-                  <div class="display text-lg font-bold mb-1">Snake</div>
-                  <div class="text-sm font-semibold opacity-70">Eat food, grow — don't crash into the walls!</div>
-                </div>
-                <div class="hidden sm:flex items-center pr-5 flex-shrink-0"><span class="font-bold text-sm">▶</span></div>
-              </a>
-
-              <!-- Tangram — emoji RIGHT -->
-              <a href="https://mathigon.org/tangram" target="_blank" rel="noopener"
-                 class="card bg-white overflow-hidden flex flex-col sm:flex-row-reverse block">
-                <div class="h-24 sm:h-auto sm:w-32 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-                  <span class="text-5xl">🔺</span>
-                </div>
-                <div class="p-4 sm:p-5 flex flex-col justify-center flex-1">
-                  <div class="display text-lg font-bold mb-1">Tangram</div>
-                  <div class="text-sm font-semibold opacity-70">Build shapes with geometric pieces.</div>
-                </div>
-                <div class="hidden sm:flex items-center pl-5 flex-shrink-0"><span class="font-bold text-sm opacity-50">↗</span></div>
-              </a>
-
-            </div>
-          </div>
-        </div>
+    <!-- Coloring — one blob, two links -->
+    <div class="blob blob-xl"
+         style="background:#fbcfe8; overflow:hidden;
+                --r0:60% 40% 20% 80% / 80% 20% 60% 40%;
+                --r1:20% 80% 60% 40% / 40% 80% 20% 60%;
+                --r2:80% 20% 40% 60% / 60% 40% 80% 20%;
+                --rot:-2deg; --mt:0px;
+                --fdur:6s; --fdelay:.3s;
+                --mdur:12s; --mdelay:1s;">
+      <img src="assets/img/coloring-preview.jpg" alt="" width="285" height="285" loading="lazy"
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.15;"
+           onerror="this.remove()">
+      <span class="blob-emoji" style="position:relative;">🎨</span>
+      <span class="blob-title" style="position:relative;">Coloring Pages</span>
+      <span style="position:relative;font-size:.85rem;font-weight:700;opacity:.72;display:block;margin-bottom:.5rem;">Printable color sheets for kids</span>
+      <div style="position:relative;display:flex;flex-direction:column;gap:.5rem;width:100%;padding:0 .4rem;">
+        <a href="https://magictellers.com/free-coloring-pages" target="_blank" rel="noopener"
+           class="pill"
+           style="width:100%;height:72px;overflow:hidden;text-decoration:none;display:block;
+                  background-image:url('assets/img/magictellers.jpg');
+                  background-size:cover;background-position:center;">
+        </a>
+        <a href="https://www.cool2bkids.com/coloring-pages/" target="_blank" rel="noopener"
+           class="pill"
+           style="width:100%;height:72px;overflow:hidden;text-decoration:none;display:block;
+                  background-image:url('assets/img/cool2bekids.jpg');
+                  background-size:cover;background-position:center;">
+        </a>
       </div>
-
     </div>
 
-    <!-- 2. Coloring — emoji RIGHT -->
-    <a href="https://www.supercoloring.com/coloring-pages" target="_blank" rel="noopener"
-       class="card bg-pink-200 overflow-hidden flex flex-col sm:flex-row-reverse">
-      <div class="h-36 sm:h-auto sm:w-48 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-        <span class="text-7xl">🎨</span>
-      </div>
-      <div class="p-6 sm:p-8 flex flex-col justify-center flex-1">
-        <span class="badge bg-white text-sm font-bold px-3 py-1 self-start mb-3">Print & Color</span>
-        <h2 class="display text-3xl md:text-4xl font-bold mb-2">Coloring</h2>
-        <p class="font-semibold opacity-80">Thousands of pictures: animals, vehicles, fairy tales, holidays.</p>
-      </div>
+    <!-- Spot the Difference — amber, lg -->
+    <a href="spot-difference.html" class="blob blob-lg"
+       style="background:#fde68a;
+              --r0:40% 60% 80% 20% / 20% 60% 80% 40%;
+              --r1:80% 20% 30% 70% / 70% 30% 20% 80%;
+              --r2:30% 70% 60% 40% / 40% 70% 50% 50%;
+              --rot:5deg; --mt:70px;
+              --fdur:3.9s; --fdelay:1.5s;
+              --mdur:10s;  --mdelay:3s;">
+      <span class="blob-emoji">🔍</span>
+      <span class="blob-title">Spot the Diff</span>
+      <span class="blob-desc">Find what changed in the picture!</span>
     </a>
 
-    <!-- 3. Mazes — emoji LEFT -->
-    <a href="maze.html"
-       class="card bg-sky-200 overflow-hidden flex flex-col sm:flex-row">
-      <div class="h-36 sm:h-auto sm:w-48 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-        <span class="text-7xl">🌀</span>
-      </div>
-      <div class="p-6 sm:p-8 flex flex-col justify-center flex-1">
-        <span class="badge bg-white text-sm font-bold px-3 py-1 self-start mb-3">Print & Play</span>
-        <h2 class="display text-3xl md:text-4xl font-bold mb-2">Mazes</h2>
-        <p class="font-semibold opacity-80">Generate new mazes whenever you want. Easy → Hard.</p>
-      </div>
+    <!-- ROW 3 (~desktop): xl + md + sm -->
+
+    <!-- Mazes — sky, xl -->
+    <a href="maze.html" class="blob blob-xl"
+       style="background:#bae6fd;
+              --r0:70% 30% 30% 70% / 30% 70% 70% 30%;
+              --r1:30% 70% 70% 30% / 70% 30% 30% 70%;
+              --r2:50% 50% 20% 80% / 80% 20% 60% 40%;
+              --rot:-4deg; --mt:30px;
+              --fdur:5.7s; --fdelay:.6s;
+              --mdur:13s;  --mdelay:.5s;">
+      <span class="blob-emoji">🌀</span>
+      <span class="blob-title">Mazes</span>
+      <span class="blob-desc">Generate &amp; print. Easy → Hard!</span>
     </a>
+
+    <!-- Snake — teal, md -->
+    <a href="snake.html" class="blob blob-md"
+       style="background:#99f6e4;
+              --r0:20% 80% 60% 40% / 60% 20% 80% 40%;
+              --r1:60% 40% 20% 80% / 20% 80% 40% 60%;
+              --r2:80% 20% 40% 60% / 40% 60% 20% 80%;
+              --rot:-6deg; --mt:50px;
+              --fdur:5s;    --fdelay:2s;
+              --mdur:10.5s; --mdelay:1.5s;">
+      <span class="blob-emoji">🐍</span>
+      <span class="blob-title">Snake</span>
+      <span class="blob-desc">Eat, grow, don't crash!</span>
+    </a>
+
 
   </section>
 
-  <footer class="mt-20 text-center pb-8">
+  <footer class="mt-16 text-center pb-8">
     <p class="font-semibold opacity-60 text-sm">
       Made with ❤️ for kids • all links open in new tabs
     </p>
@@ -214,26 +328,6 @@
   </footer>
 
 </main>
-
-<script>
-function toggleGames() {
-  const panel = document.getElementById('games-panel');
-  const arrow = document.getElementById('games-arrow');
-  const open = panel.dataset.open === '1';
-  panel.style.gridTemplateRows = open ? '0fr' : '1fr';
-  arrow.style.transform = open ? '' : 'rotate(180deg)';
-  panel.dataset.open = open ? '0' : '1';
-}
-
-const observer = new IntersectionObserver((entries) => {
-  if (entries[0].isIntersecting) {
-    const panel = document.getElementById('games-panel');
-    if (panel.dataset.open !== '1') toggleGames();
-    observer.disconnect();
-  }
-}, { threshold: 0.25 });
-observer.observe(document.getElementById('games-card'));
-</script>
 
 </body>
 </html>
