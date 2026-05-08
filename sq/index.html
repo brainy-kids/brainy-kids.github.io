@@ -3,16 +3,158 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Lojëra për Fëmijë 🎈</title>
-<meta name="description" content="Faqe me lojëra, labirinte dhe ngjyrosje për fëmijë." />
+
+<!-- · Primary Meta Tags · -->
+<title>Lojëra Falas për Fëmijë | Pa Reklama, Pa Regjistrim</title>
+<meta name="title" content="Lojëra Falas për Fëmijë | Pa Reklama, Pa Regjistrim">
+<meta name="description" content="Lojëra mendore dhe logjike falas për fëmijë 3–7 vjeç. Labirinte, kërkim fjalësh, gjej ndryshimet, puzzle dhe më shumë. Pa reklama, pa regjistrim — falas për gjithmonë.">
+<meta name="keywords" content="lojëra falas fëmijë, lojëra logjike fëmijë, lojëra mendore fëmijë, pa reklama lojëra, labirinte fëmijë, kërkim fjalësh fëmijë, gjej ndryshimet fëmijë">
+<meta name="author" content="Brainy Kids">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://brainy-kids.github.io/sq/">
+<link rel="sitemap" type="application/xml" href="https://brainy-kids.github.io/sitemap.xml">
+
+<!-- · Open Graph · -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://brainy-kids.github.io/sq/">
+<meta property="og:site_name" content="Brainy Kids">
+<meta property="og:title" content="Lojëra Falas për Fëmijë | Pa Reklama, Pa Regjistrim">
+<meta property="og:description" content="Lojëra mendore falas për fëmijë 3–7 vjeç. Labirinte, kërkim fjalësh, gjej ndryshimet. Pa reklama, pa regjistrim — falas për gjithmonë.">
+<meta property="og:image" content="https://brainy-kids.github.io/og-image.png">
+<meta property="og:image:alt" content="Brainy Kids — Lojëra Falas për Fëmijë">
+<meta property="og:locale" content="sq_AL">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="de_DE">
+
+<!-- · Twitter Card · -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://brainy-kids.github.io/sq/">
+<meta property="twitter:title" content="Lojëra Falas për Fëmijë | Pa Reklama, Pa Regjistrim">
+<meta property="twitter:description" content="Lojëra mendore falas për fëmijë 3–7 vjeç. Labirinte, puzzle, kërkim fjalësh. Pa reklama, pa regjistrim — falas për gjithmonë.">
+<meta property="twitter:image" content="https://brainy-kids.github.io/og-image.png">
+
+<!-- · JSON-LD · -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Brainy Kids",
+  "url": "https://brainy-kids.github.io/sq",
+  "description": "Lojëra mendore falas për fëmijë 3–7 vjeç. Labirinte, kërkim fjalësh, gjej ndryshimet, puzzle. Pa reklama, pa regjistrim — falas për gjithmonë.",
+  "inLanguage": ["sq", "en", "de"],
+  "keywords": "lojëra falas fëmijë, lojëra logjike, labirinte, kërkim fjalësh, pa reklama lojëra",
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "Children",
+    "suggestedMinAge": "3",
+    "suggestedMaxAge": "7"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR",
+    "availability": "https://schema.org/InStock",
+    "description": "Falas për gjithmonë — pa reklama, pa regjistrim, pa shpërqendrim"
+  }
+}
+</script>
+
+<!-- · Favicon · -->
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/img/favicon.svg">
+<meta name="theme-color" content="#fff8ec">
+
 <link rel="stylesheet" href="../assets/css/tailwind.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/fonts.css">
+
+<style>
+/* ===== BLOB GALAXY ===== */
+
+.galaxy {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3rem 2.5rem;
+  padding: 1rem 0 3rem;
+}
+
+.blob {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 0 var(--ink);
+  text-decoration: none;
+  color: var(--ink);
+  padding: 1.5rem;
+  margin-top: var(--mt, 0px);
+  border-radius: var(--r0, 60% 40% 70% 30% / 50% 60% 40% 50%);
+  animation:
+    blobFloat var(--fdur, 4.5s) ease-in-out infinite var(--fdelay, 0s),
+    blobMorph var(--mdur, 9s)   ease-in-out infinite var(--mdelay, 0s);
+  transition: box-shadow .2s ease, filter .2s ease;
+  will-change: transform, border-radius;
+  position: relative;
+}
+.blob:hover {
+  filter: brightness(1.08) saturate(1.15);
+  box-shadow: 9px 9px 0 0 var(--ink);
+  animation-play-state: paused;
+  z-index: 10;
+}
+
+.blob-xl { width: 285px; height: 285px; }
+.blob-lg { width: 255px; height: 255px; }
+.blob-md { width: 220px; height: 220px; }
+.blob-sm { width: 190px; height: 190px; }
+
+@keyframes blobFloat {
+  0%, 100% { transform: translateY(0px)   rotate(var(--rot, 0deg)); }
+  50%       { transform: translateY(-15px) rotate(var(--rot, 0deg)); }
+}
+@keyframes blobMorph {
+  0%   { border-radius: var(--r0, 60% 40% 70% 30% / 50% 60% 40% 50%); }
+  33%  { border-radius: var(--r1, 40% 60% 30% 70% / 60% 40% 50% 40%); }
+  66%  { border-radius: var(--r2, 70% 30% 50% 50% / 30% 70% 60% 40%); }
+  100% { border-radius: var(--r0, 60% 40% 70% 30% / 50% 60% 40% 50%); }
+}
+
+.blob-emoji { font-size: 3rem; display: block; margin-bottom: .45rem; line-height: 1; }
+.blob-xl .blob-emoji { font-size: 3.75rem; }
+.blob-sm .blob-emoji { font-size: 2.25rem; margin-bottom: .3rem; }
+
+.blob-title {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  display: block;
+  line-height: 1.2;
+  margin-bottom: .2rem;
+}
+.blob-xl .blob-title { font-size: 1.35rem; }
+.blob-lg .blob-title { font-size: 1.2rem; }
+.blob-md .blob-title { font-size: 1.05rem; }
+.blob-sm .blob-title { font-size: .92rem; margin-bottom: 0; }
+
+.blob-desc {
+  font-size: .7rem;
+  font-weight: 600;
+  opacity: .72;
+  display: block;
+  line-height: 1.35;
+}
+.blob-sm .blob-desc { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .blob { animation: none; }
+}
+</style>
 </head>
 <body class="min-h-screen">
 
+<!-- · Floating decorations · -->
 <div aria-hidden="true" class="pointer-events-none fixed inset-0 overflow-hidden">
   <div class="floaty absolute top-16 left-6 w-12 h-12 rounded-full bg-yellow-300 border-[3px] border-[color:var(--ink)]" style="--r: -8deg;"></div>
   <div class="floaty delay-1 absolute top-40 right-10 w-10 h-10 bg-pink-400 border-[3px] border-[color:var(--ink)] rotate-12" style="--r: 12deg;"></div>
@@ -20,186 +162,167 @@
   <div class="floaty absolute bottom-40 right-20 w-9 h-9 rounded-full bg-emerald-300 border-[3px] border-[color:var(--ink)]" style="--r: 0deg;"></div>
 </div>
 
-<main class="relative max-w-2xl mx-auto px-5 py-10 md:py-16">
+<main class="relative max-w-3xl mx-auto px-5 py-10 md:py-16">
 
-  <div class="text-right mb-6">
-    <a href="../" class="pill bg-white px-3 py-1 text-xs font-bold">EN</a>
-    <a href="../de/" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">DE</a>
-    <strong class="pill bg-[color:var(--ink)] text-[#fff8ec] px-3 py-1 text-xs font-bold ml-1">SQ</strong>
+  <!-- · Top bar · -->
+  <div class="flex items-center mb-8 md:mb-10">
+    <div class="flex-1"></div>
+    <span style="font-size:1.05rem;margin-right:1.25rem;font-weight:600;opacity:.85;">
+      <span class="display" style="display:inline-block;font-weight:500;background:#0d9488;color:#fff;border:2px solid var(--ink);border-radius:10px;padding:.05rem .5rem;transform:rotate(-2deg);box-shadow:2px 2px 0 0 var(--ink);">Lojëra Logjike për Fëmijë</span>
+      &nbsp;&bull; Falas &amp; për gjithmonë
+    </span>
+    <div class="flex-1 flex justify-end gap-2">
+      <a href="../" class="pill bg-white px-3 py-1 text-xs font-bold"><span class="md:hidden">🇬🇧</span><span class="hidden md:inline">EN</span></a>
+      <a href="../de/" class="pill bg-white px-3 py-1 text-xs font-bold"><span class="md:hidden">🇩🇪</span><span class="hidden md:inline">DE</span></a>
+      <strong class="pill bg-[color:var(--ink)] text-[#fff8ec] px-3 py-1 text-xs font-bold"><span class="md:hidden">🇦🇱</span><span class="hidden md:inline">SQ</span></strong>
+    </div>
   </div>
 
-  <header class="text-center mb-12 md:mb-16">
-    <span class="pill inline-block bg-white px-4 py-1 text-sm font-bold mb-5">për të gjithë fëmijët • falas &amp; përgjithmonë</span>
+  <!-- · Hero · -->
+  <header class="text-center mb-10 md:mb-14">
     <h1 class="display text-5xl md:text-7xl font-bold leading-none mb-4">
-      Lojëra & <span class="inline-block bg-yellow-300 px-3 rotate-[-2deg] border-[3px] border-[color:var(--ink)] rounded-2xl">Argëtim</span>
+      Lojëra Logjike & <span class="inline-block bg-yellow-300 px-3 rotate-[-2deg] border-[3px] border-[color:var(--ink)] rounded-2xl">Argëtim</span>
     </h1>
     <p class="text-lg md:text-xl max-w-xl mx-auto opacity-80 font-semibold">
-      Zgjidh një kartë, printo ose luaj online. E thjeshtë. E sigurt. Falas.
+      Zgjidh një lojë. Luaj tani. Falas për gjithmonë.
     </p>
   </header>
 
-  <section class="flex flex-col gap-5 md:gap-7">
+  <!-- ===== GALAXY OF BLOBS ===== -->
+  <section class="galaxy">
 
-    <!-- 1. Labirinte — emoji LEFT -->
-    <a href="https://www.mazegenerator.net/" target="_blank" rel="noopener"
-       class="card bg-sky-200 overflow-hidden flex flex-col sm:flex-row">
-      <div class="h-36 sm:h-auto sm:w-48 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-        <span class="text-7xl">🌀</span>
-      </div>
-      <div class="p-6 sm:p-8 flex flex-col justify-center flex-1">
-        <span class="badge bg-white text-sm font-bold px-3 py-1 self-start mb-3">Printo & Luaj</span>
-        <h2 class="display text-3xl md:text-4xl font-bold mb-2">Labirinte</h2>
-        <p class="font-semibold opacity-80">Gjenero labirinte të reja sa herë të duash. Lehtë → e vështirë.</p>
-      </div>
+    <!-- · Gjej Çiftin · -->
+    <a href="find-match.html" class="blob blob-lg"
+       style="background:#ddd6fe; overflow:hidden;
+              --r0:30% 70% 80% 20% / 40% 60% 40% 60%;
+              --r1:70% 30% 20% 80% / 60% 40% 70% 30%;
+              --r2:50% 50% 70% 30% / 20% 80% 30% 70%;
+              --rot:-3deg; --mt:55px;
+              --fdur:4.5s; --fdelay:0s;
+              --mdur:9s;   --mdelay:0s;">
+      <img src="../assets/img/find-it.png" alt="" width="255" height="255" loading="lazy"
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
+      <span class="blob-title" style="position:relative;">Gjej Çiftin</span>
+      <span class="blob-desc" style="position:relative;">Gjej çiftin që përputhet!</span>
     </a>
 
-    <!-- 2. Ngjyrosje — emoji RIGHT -->
-    <a href="https://www.supercoloring.com/coloring-pages" target="_blank" rel="noopener"
-       class="card bg-pink-200 overflow-hidden flex flex-col sm:flex-row-reverse">
-      <div class="h-36 sm:h-auto sm:w-48 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-        <span class="text-7xl">🎨</span>
-      </div>
-      <div class="p-6 sm:p-8 flex flex-col justify-center flex-1">
-        <span class="badge bg-white text-sm font-bold px-3 py-1 self-start mb-3">Printo & Ngjyros</span>
-        <h2 class="display text-3xl md:text-4xl font-bold mb-2">Ngjyrosje</h2>
-        <p class="font-semibold opacity-80">Mijëra figura: kafshë, makina, përralla, festa.</p>
-      </div>
+    <!-- · Kërko Fjalë · -->
+    <a href="word-search.html" class="blob blob-md"
+       style="background:#d9f99d; overflow:hidden;
+              --r0:80% 20% 40% 60% / 60% 80% 20% 40%;
+              --r1:20% 80% 60% 40% / 80% 20% 50% 50%;
+              --r2:60% 40% 20% 80% / 30% 70% 60% 40%;
+              --rot:4deg; --mt:18px;
+              --fdur:5.2s; --fdelay:.8s;
+              --mdur:11s;  --mdelay:2s;">
+      <img src="../assets/img/word-Arman-Mal.png" alt="" width="220" height="220" loading="lazy"
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
+      <span class="blob-title" style="position:relative;">Kërko Fjalë</span>
+      <span class="blob-desc" style="position:relative;">Gjej fjalët e fshehura!</span>
     </a>
 
-    <!-- 3. Fletë Pune — emoji LEFT -->
-    <a href="https://www.activityvillage.co.uk/" target="_blank" rel="noopener"
-       class="card bg-amber-200 overflow-hidden flex flex-col sm:flex-row">
-      <div class="h-36 sm:h-auto sm:w-48 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-        <span class="text-7xl">✏️</span>
-      </div>
-      <div class="p-6 sm:p-8 flex flex-col justify-center flex-1">
-        <span class="badge bg-white text-sm font-bold px-3 py-1 self-start mb-3">Aktivitete</span>
-        <h2 class="display text-3xl md:text-4xl font-bold mb-2">Fletë Pune</h2>
-        <p class="font-semibold opacity-80">Lidh pikat, gjej dallimet, ushtrime shkronjash.</p>
-      </div>
+    <!-- · Gjej Ndryshimin · -->
+    <a href="../spot-difference.html" class="blob blob-lg"
+       style="background:#fde68a; overflow:hidden;
+              --r0:40% 60% 80% 20% / 20% 60% 80% 40%;
+              --r1:80% 20% 30% 70% / 70% 30% 20% 80%;
+              --r2:30% 70% 60% 40% / 40% 70% 50% 50%;
+              --rot:5deg; --mt:70px;
+              --fdur:3.9s; --fdelay:1.5s;
+              --mdur:10s;  --mdelay:3s;">
+      <img src="../assets/img/find-differences.png" alt="" width="255" height="255" loading="lazy"
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
+      <span class="blob-title" style="position:relative;">Gjej Ndryshimin</span>
+      <span class="blob-desc" style="position:relative;">Gjej çfarë ndryshoi!</span>
     </a>
 
-    <!-- 4. Lojëra Online — emoji RIGHT, accordion -->
-    <div class="card bg-emerald-200 overflow-hidden">
+    <!-- · Labirinte · -->
+    <a href="../maze.html" class="blob blob-xl"
+       style="background:#bae6fd; overflow:hidden;
+              --r0:70% 30% 30% 70% / 30% 70% 70% 30%;
+              --r1:30% 70% 70% 30% / 70% 30% 30% 70%;
+              --r2:50% 50% 20% 80% / 80% 20% 60% 40%;
+              --rot:-4deg; --mt:30px;
+              --fdur:5.7s; --fdelay:.6s;
+              --mdur:13s;  --mdelay:.5s;">
+      <img src="../assets/img/maze.png" alt="" width="285" height="285" loading="lazy"
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.2;" onerror="this.remove()">
+      <span class="blob-title" style="position:relative;">Labirinte</span>
+      <span class="blob-desc" style="position:relative;">Krijo &amp; zgjidh!</span>
+    </a>
 
-      <button type="button" onclick="toggleGames()"
-              class="w-full text-left flex flex-col sm:flex-row-reverse bg-transparent border-0 p-0 cursor-pointer"
-              style="-webkit-tap-highlight-color:transparent">
-        <div class="h-36 sm:h-auto sm:w-48 flex-shrink-0 flex items-center justify-center" style="background:rgba(0,0,0,.07)">
-          <span class="text-7xl">🎮</span>
-        </div>
-        <div class="p-6 sm:p-8 flex flex-col justify-center flex-1">
-          <span class="badge bg-white text-sm font-bold px-3 py-1 self-start mb-3">Online</span>
-          <h2 class="display text-3xl md:text-4xl font-bold mb-2">Lojëra Online</h2>
-          <p class="font-semibold opacity-80">Gjej të Njëjtën, Snake, Tic-Tac-Toe, Fjalëkryq + më shumë.</p>
-          <p class="mt-3 font-bold text-sm flex items-center gap-2">
-            Shfaq të gjitha lojrat <span id="games-arrow" style="transition:transform .3s;display:inline-block">▼</span>
-          </p>
-        </div>
-      </button>
+    <!-- · Tic-Tac-Toe · -->
+    <a href="tic-tac-toe.html" class="blob blob-sm"
+       style="background:#fed7aa; overflow:hidden;
+              --r0:20% 80% 70% 30% / 70% 20% 60% 40%;
+              --r1:70% 30% 20% 80% / 20% 70% 30% 60%;
+              --r2:40% 60% 80% 20% / 50% 50% 80% 20%;
+              --rot:6deg; --mt:85px;
+              --fdur:4.2s; --fdelay:1.2s;
+              --mdur:8s;   --mdelay:3.5s;">
+      <img src="../assets/img/tic-tac.png" alt="" width="190" height="190" loading="lazy"
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
+      <span class="blob-title" style="position:relative;">Tic-Tac-Toe</span>
+      <span class="blob-desc" style="position:relative;">Munde kompjuterin!</span>
+    </a>
 
-      <div id="games-panel" style="display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease">
-        <div style="overflow:hidden">
-          <div class="px-5 pb-6 sm:px-8 sm:pb-8 pt-5" style="border-top:3px solid var(--ink)">
-            <div class="grid gap-3 sm:grid-cols-2">
+    <!-- · Faqe Ngjyrosjeje · -->
+    <div class="blob blob-xl"
+         style="background:#fbcfe8; overflow:hidden;
+                --r0:60% 40% 20% 80% / 80% 20% 60% 40%;
+                --r1:20% 80% 60% 40% / 40% 80% 20% 60%;
+                --r2:80% 20% 40% 60% / 60% 40% 80% 20%;
+                --rot:-2deg; --mt:0px;
+                --fdur:6s; --fdelay:.3s;
+                --mdur:12s; --mdelay:1s;">
 
-              <a href="find-match.html" class="card bg-violet-200 p-4 flex items-center gap-4 block">
-                <span class="text-4xl flex-shrink-0">🎯</span>
-                <div class="flex-1 min-w-0">
-                  <div class="display text-base font-bold">Gjej të Njëjtën</div>
-                  <div class="text-xs font-semibold opacity-70">Cila ikonë shfaqet në të dy rrethet?</div>
-                </div>
-                <span class="font-bold flex-shrink-0 text-sm">▶</span>
-              </a>
-
-              <a href="word-search.html" class="card bg-lime-200 p-4 flex items-center gap-4 block">
-                <span class="text-4xl flex-shrink-0">🔤</span>
-                <div class="flex-1 min-w-0">
-                  <div class="display text-base font-bold">Fjalëkryq</div>
-                  <div class="text-xs font-semibold opacity-70">Gjenero, printo &amp; luaj!</div>
-                </div>
-                <span class="font-bold flex-shrink-0 text-sm">▶</span>
-              </a>
-
-              <a href="tic-tac-toe.html" class="card p-4 flex items-center gap-4 block" style="background:#fed7aa">
-                <span class="text-4xl flex-shrink-0">❌</span>
-                <div class="flex-1 min-w-0">
-                  <div class="display text-base font-bold">Tic-Tac-Toe</div>
-                  <div class="text-xs font-semibold opacity-70">2 lojtarë ose kundër kompjuterit!</div>
-                </div>
-                <span class="font-bold flex-shrink-0 text-sm">▶</span>
-              </a>
-
-              <a href="snake.html" class="card p-4 flex items-center gap-4 block" style="background:#99f6e4">
-                <span class="text-4xl flex-shrink-0">🐍</span>
-                <div class="flex-1 min-w-0">
-                  <div class="display text-base font-bold">Snake</div>
-                  <div class="text-xs font-semibold opacity-70">Ha, rritu, mos u prek!</div>
-                </div>
-                <span class="font-bold flex-shrink-0 text-sm">▶</span>
-              </a>
-
-              <a href="https://mathigon.org/tangram" target="_blank" rel="noopener"
-                 class="card bg-white p-4 flex items-center gap-4 block">
-                <span class="text-4xl flex-shrink-0">🔺</span>
-                <div class="flex-1 min-w-0">
-                  <div class="display text-base font-bold">Tangram</div>
-                  <div class="text-xs font-semibold opacity-70">Forma &amp; hapësirë</div>
-                </div>
-                <span class="font-bold flex-shrink-0 text-sm opacity-50">↗</span>
-              </a>
-
-              <a href="https://www.helpfulgames.com/sections/memory.html" target="_blank" rel="noopener"
-                 class="card bg-white p-4 flex items-center gap-4 block">
-                <span class="text-4xl flex-shrink-0">🃏</span>
-                <div class="flex-1 min-w-0">
-                  <div class="display text-base font-bold">Memory</div>
-                  <div class="text-xs font-semibold opacity-70">Kujtesa vizuale</div>
-                </div>
-                <span class="font-bold flex-shrink-0 text-sm opacity-50">↗</span>
-              </a>
-
-              <a href="https://krazydad.com/sudoku/kids/" target="_blank" rel="noopener"
-                 class="card bg-white p-4 flex items-center gap-4 block">
-                <span class="text-4xl flex-shrink-0">🔢</span>
-                <div class="flex-1 min-w-0">
-                  <div class="display text-base font-bold">Sudoku Kids</div>
-                  <div class="text-xs font-semibold opacity-70">Logjikë e thjeshtë</div>
-                </div>
-                <span class="font-bold flex-shrink-0 text-sm opacity-50">↗</span>
-              </a>
-
-            </div>
-          </div>
-        </div>
+      <span class="blob-title" style="position:relative;">Faqe Ngjyrosjeje</span>
+      <span class="blob-desc" style="position:relative;margin-bottom:.4rem;">Shtyp &amp; ngjyros falas!</span>
+      <div style="position:relative;display:flex;flex-direction:column;gap:.5rem;width:100%;padding:0 .4rem;">
+        <a href="https://magictellers.com/free-coloring-pages" target="_blank" rel="noopener"
+           class="pill"
+           style="width:100%;height:72px;overflow:hidden;text-decoration:none;display:block;
+                  background-image:url('../assets/img/magictellers.jpg');
+                  background-size:cover;background-position:center;">
+        </a>
+        <a href="https://www.cool2bkids.com/coloring-pages/" target="_blank" rel="noopener"
+           class="pill"
+           style="width:100%;height:72px;overflow:hidden;text-decoration:none;display:block;
+                  background-image:url('../assets/img/cool2bekids.jpg');
+                  background-size:cover;background-position:center;">
+        </a>
       </div>
-
     </div>
+
+    <!-- · Gjarpri · -->
+    <a href="snake.html" class="blob blob-md"
+       style="background:#99f6e4; overflow:hidden;
+              --r0:20% 80% 60% 40% / 60% 20% 80% 40%;
+              --r1:60% 40% 20% 80% / 20% 80% 40% 60%;
+              --r2:80% 20% 40% 60% / 40% 60% 20% 80%;
+              --rot:-6deg; --mt:50px;
+              --fdur:5s;    --fdelay:2s;
+              --mdur:10.5s; --mdelay:1.5s;">
+      <img src="../assets/img/snake-game.png" alt="" width="220" height="220" loading="lazy"
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
+      <span class="blob-title" style="position:relative;">Gjarpri</span>
+      <span class="blob-desc" style="position:relative;">Ha, rrit, mos u rrëzë!</span>
+    </a>
+
 
   </section>
 
-  <footer class="mt-20 text-center pb-8">
+  <footer class="mt-16 text-center pb-8">
     <p class="font-semibold opacity-60 text-sm">
-      Bërë me ❤️ për fëmijët • të gjitha lidhjet hapen në faqe të tjera
+      Bërë me ❤️ për fëmijë • të gjitha lidhjet hapen në skeda të reja
     </p>
     <p class="mt-3 text-xs opacity-40 font-semibold">
-      <a href="legal.html" class="underline hover:opacity-80">Privatësia &amp; Kontakt</a>
+      <a href="legal.html" class="underline hover:opacity-80">Njoftim Ligjor &amp; Privatësi</a>
     </p>
     <p class="mt-2 text-xs opacity-40 font-semibold">Designed by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a></p>
   </footer>
 
 </main>
-
-<script>
-function toggleGames() {
-  const panel = document.getElementById('games-panel');
-  const arrow = document.getElementById('games-arrow');
-  const open = panel.dataset.open === '1';
-  panel.style.gridTemplateRows = open ? '0fr' : '1fr';
-  arrow.style.transform = open ? '' : 'rotate(180deg)';
-  panel.dataset.open = open ? '0' : '1';
-}
-</script>
 
 </body>
 </html>

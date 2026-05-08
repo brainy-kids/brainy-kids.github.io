@@ -3,13 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Gjej të Njëjtën — Lojëra për Fëmijë 🎈</title>
-<meta name="description" content="Gjej emojin që shfaqet në të dy rrethet!" />
+<title>Gjej Çiftin — Lojëra për Fëmijë 🎈</title>
+<meta name="description" content="Gjej emoji-n që shfaqet në të dy rrethet!" />
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/css/tailwind.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/fonts.css">
 <style>
 :root { --bg: #fff8ec; --ink: #1f1147; }
 html, body { background: var(--bg); color: var(--ink); }
@@ -22,30 +20,54 @@ body {
     radial-gradient(circle at 15% 85%, rgba(150,230,170,.25) 0, transparent 35%);
 }
 .display { font-family: 'Fredoka', system-ui, sans-serif; letter-spacing: -0.02em; }
-.card { border: 3px solid var(--ink); border-radius: 28px; box-shadow: 6px 6px 0 0 var(--ink); }
-.pill { border: 2px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 0 var(--ink); display: inline-block; }
-.circle-wrap {
-  position: relative; border: 4px solid var(--ink); border-radius: 50%;
-  box-shadow: 6px 6px 0 0 var(--ink); width: 270px; height: 270px;
-  flex-shrink: 0; overflow: hidden;
+.card {
+  border: 3px solid var(--ink);
+  border-radius: 28px;
+  box-shadow: 6px 6px 0 0 var(--ink);
 }
-@media (max-width: 360px) { .circle-wrap { width: 220px; height: 220px; } }
+.pill {
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 0 var(--ink);
+  display: inline-block;
+}
+.circle-wrap {
+  position: relative;
+  border: 4px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 6px 6px 0 0 var(--ink);
+  width: 310px; height: 310px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+@media (max-width: 360px) { .circle-wrap { width: 240px; height: 240px; } }
 .emoji-btn {
-  position: absolute; transform: translate(-50%, -50%);
-  background: none; border: none; cursor: pointer; line-height: 1;
-  padding: 6px; min-width: 44px; min-height: 44px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%; transition: transform .1s;
-  touch-action: manipulation; user-select: none; -webkit-user-select: none;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  padding: 6px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform .1s;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .emoji-btn:hover  { transform: translate(-50%,-50%) scale(1.2); }
 .emoji-btn:active { transform: translate(-50%,-50%) scale(0.85); }
 @keyframes shake {
   0%,100% { transform: translate(-50%,-50%); }
-  20% { transform: translate(calc(-50% + 8px),-50%) rotate(-10deg); }
-  40% { transform: translate(calc(-50% - 8px),-50%) rotate(10deg); }
-  60% { transform: translate(calc(-50% + 5px),-50%) rotate(-5deg); }
-  80% { transform: translate(calc(-50% - 5px),-50%) rotate(5deg); }
+  20%      { transform: translate(calc(-50% + 8px),-50%) rotate(-10deg); }
+  40%      { transform: translate(calc(-50% - 8px),-50%) rotate(10deg); }
+  60%      { transform: translate(calc(-50% + 5px),-50%) rotate(-5deg); }
+  80%      { transform: translate(calc(-50% - 5px),-50%) rotate(5deg); }
 }
 .shake { animation: shake .4s ease; }
 @keyframes pop {
@@ -57,20 +79,41 @@ body {
 .pop { animation: pop .35s ease forwards; }
 @keyframes ring-flash {
   0%,100% { box-shadow: 6px 6px 0 0 var(--ink); }
-  50%     { box-shadow: 6px 6px 0 0 var(--ink), 0 0 0 8px rgba(74,222,128,.55); }
+  50%      { box-shadow: 6px 6px 0 0 var(--ink), 0 0 0 8px rgba(74,222,128,.55); }
 }
 .ring-flash { animation: ring-flash .45s ease; }
 .seg-btn {
-  border: 2px solid var(--ink); border-radius: 999px; padding: 5px 14px;
-  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.82rem;
-  cursor: pointer; box-shadow: 3px 3px 0 0 var(--ink); transition: transform .1s, box-shadow .1s;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.82rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 0 var(--ink);
+  transition: transform .1s, box-shadow .1s;
 }
 .seg-btn:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 0 var(--ink); }
 .seg-btn.active { background: var(--ink); color: var(--bg); }
 .seg-btn:not(.active) { background: white; color: var(--ink); }
+/* middle controls: column on desktop, row on mobile */
+@media (min-width: 640px) {
+  #mid-controls {
+    flex-direction: column;
+    align-self: stretch;
+    justify-content: space-between;
+    align-items: center;
+    width: auto;
+    padding: 1.25rem 0.5rem;
+    gap: 0;
+  }
+}
 #win-overlay {
-  position: fixed; inset: 0; z-index: 100; background: rgba(31,17,71,.82);
-  display: none; align-items: center; justify-content: center;
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(31,17,71,.82);
+  display: none;
+  align-items: center;
+  justify-content: center;
 }
 #win-overlay.show { display: flex; }
 @keyframes win-pop {
@@ -86,7 +129,7 @@ body {
 <main class="relative max-w-3xl mx-auto px-4 py-8 md:py-12">
 
   <div class="flex items-center justify-between mb-6">
-    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Kthehu</a>
+    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Back</a>
     <div>
       <a href="../find-match.html" class="pill bg-white px-3 py-1 text-xs font-bold">EN</a>
       <a href="../de/find-match.html" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">DE</a>
@@ -95,58 +138,73 @@ body {
   </div>
 
   <header class="text-center mb-6">
-    <h1 class="display text-4xl md:text-6xl font-bold mb-2">Gjej të Njëjtën</h1>
-    <p class="font-semibold opacity-70 text-lg">Gjej emojin që shfaqet në <em>të dy</em> rrethet!</p>
+    <h1 class="display text-4xl md:text-6xl font-bold mb-2">Gjej Çiftin</h1>
+    <p class="font-semibold opacity-70 text-lg">Gjej emoji-n që shfaqet në <em>të dy</em> rrethet!</p>
   </header>
 
-  <div class="flex justify-center gap-2 mb-5">
+  <!-- · Mode selector · -->
+  <div class="flex justify-center gap-2 mb-3">
     <button class="seg-btn active" data-mode="solo"  onclick="setMode('solo')">Solo</button>
     <button class="seg-btn"        data-mode="pvp"   onclick="setMode('pvp')">2 Lojtarë</button>
-    <button class="seg-btn"        data-mode="robot" onclick="setMode('robot')">kundër Robotit 🤖</button>
+    <button class="seg-btn"        data-mode="robot" onclick="setMode('robot')">vs Robot 🤖</button>
   </div>
 
-  <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-
-    <div id="score-solo" class="card bg-white px-5 py-3 flex items-center gap-3">
-      <span class="display text-xl font-bold">Pikë</span>
-      <span id="score" class="display text-3xl font-bold" style="color:#16a34a">0</span>
-    </div>
-
-    <div id="score-pvp" style="display:none" class="flex items-center gap-3">
-      <div class="card px-4 py-2 text-center" style="background:#dbeafe;min-width:80px">
-        <div class="display text-sm font-bold" style="color:#2563eb">Lojtari 1</div>
-        <div id="score-p1" class="display text-3xl font-bold" style="color:#2563eb">0</div>
-        <div class="text-xs font-bold opacity-40">/ 10</div>
-      </div>
-      <div class="display text-2xl font-bold opacity-30">vs</div>
-      <div class="card px-4 py-2 text-center" style="background:#fce7f3;min-width:80px">
-        <div id="p2-label" class="display text-sm font-bold" style="color:#dc2626">Lojtari 2</div>
-        <div id="score-p2" class="display text-3xl font-bold" style="color:#dc2626">0</div>
-        <div class="text-xs font-bold opacity-40">/ 10</div>
-      </div>
-    </div>
-
-    <div class="flex gap-2">
-      <button class="seg-btn active" data-diff="4" onclick="setDiff(this,4)">E lehtë</button>
-      <button class="seg-btn"        data-diff="6" onclick="setDiff(this,6)">Mesatare</button>
-      <button class="seg-btn"        data-diff="8" onclick="setDiff(this,8)">E vështirë</button>
-    </div>
-
-    <button onclick="newRound()"
-      class="pill bg-amber-300 px-5 py-2 font-bold text-sm hover:bg-amber-400 transition-colors">
-      Raund i Ri ↺
-    </button>
+  <!-- · Difficulty · -->
+  <div class="flex flex-wrap justify-center gap-2 mb-4">
+    <button class="seg-btn active" data-diff="4"  onclick="setDiff(this,4)">Lehtë</button>
+    <button class="seg-btn"        data-diff="6"  onclick="setDiff(this,6)">Mesatar</button>
+    <button class="seg-btn"        data-diff="8"  onclick="setDiff(this,8)">Vështirë</button>
+    <button class="seg-btn"        data-diff="10" onclick="setDiff(this,10)">Expert</button>
+    <button class="seg-btn"        data-diff="12" onclick="setDiff(this,12)">Master</button>
   </div>
 
+  <!-- · Player labels · -->
   <div id="player-labels" style="display:none" class="flex justify-around mb-2">
     <span class="display text-sm font-bold" style="color:#2563eb">👈 Lojtari 1</span>
     <span id="p2-circle-label" class="display text-sm font-bold" style="color:#dc2626">Lojtari 2 👉</span>
   </div>
 
-  <div class="flex flex-col sm:flex-row gap-8 items-center justify-center">
-    <div id="circle-a" class="circle-wrap" style="background:#dbeafe"></div>
-    <div class="display text-5xl font-bold opacity-30 select-none">&amp;</div>
-    <div id="circle-b" class="circle-wrap" style="background:#fce7f3"></div>
+  <!-- · Game area · -->
+  <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-2">
+    <div id="circle-a" class="circle-wrap bg-sky-100"></div>
+
+    <!-- · Mid controls · -->
+    <div id="mid-controls" class="flex flex-row items-center justify-between gap-x-3 w-full sm:w-auto py-2 sm:py-0 px-2 sm:px-0">
+
+      <!-- · Solo score · -->
+      <div id="score-solo" class="shrink-0 card bg-white px-3 py-1.5 flex items-center justify-center gap-1.5">
+        <span class="display text-sm font-bold">Pikë</span>
+        <span id="score" class="display text-xl font-bold" style="color:#16a34a">0</span>
+      </div>
+
+      <!-- · 2P score · -->
+      <div id="score-pvp" style="display:none" class="shrink-0 flex items-center justify-center gap-1.5">
+        <div class="card bg-sky-100 px-2 py-1 text-center">
+          <div class="display text-xs font-bold" style="color:#2563eb">L1</div>
+          <div id="score-p1" class="display text-xl font-bold" style="color:#2563eb">0</div>
+          <div class="text-xs font-bold opacity-40">/10</div>
+        </div>
+        <div class="display text-sm font-bold opacity-30">vs</div>
+        <div class="card bg-pink-100 px-2 py-1 text-center">
+          <div id="p2-label" class="display text-xs font-bold" style="color:#dc2626">L2</div>
+          <div id="score-p2" class="display text-xl font-bold" style="color:#dc2626">0</div>
+          <div class="text-xs font-bold opacity-40">/10</div>
+        </div>
+      </div>
+
+      <!-- · & · -->
+      <div class="shrink-0 display text-3xl font-bold opacity-30 select-none">&amp;</div>
+
+      <!-- · Rund i Ri · -->
+      <button onclick="newRound()"
+        class="shrink-0 pill bg-amber-300 px-4 py-2 font-bold text-sm hover:bg-amber-400 transition-colors"
+        style="white-space: nowrap">
+        Rund i Ri ↺
+      </button>
+
+    </div>
+
+    <div id="circle-b" class="circle-wrap bg-pink-100"></div>
   </div>
 
   <div id="msg" class="text-center mt-6 h-10">
@@ -154,7 +212,7 @@ body {
   </div>
 
   <footer class="mt-16 text-center pb-6">
-    <p class="font-semibold opacity-50 text-sm">Bërë me ❤️ për fëmijët</p>
+    <p class="font-semibold opacity-50 text-sm">Bërë me ❤️ për fëmijë</p>
     <p class="mt-2 text-xs opacity-40 font-semibold">Designed by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a></p>
   </footer>
 
@@ -168,7 +226,7 @@ body {
       style="border:3px solid var(--ink);border-radius:999px;padding:10px 28px;font-family:'Nunito',sans-serif;font-weight:800;font-size:1.05rem;cursor:pointer;box-shadow:4px 4px 0 0 var(--ink);background:#6ee7b7;transition:transform .1s,box-shadow .1s"
       onmouseover="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='6px 6px 0 0 var(--ink)'"
       onmouseout="this.style.transform='';this.style.boxShadow='4px 4px 0 0 var(--ink)'"
-    >Luaj Prap ↺</button>
+    >Luaj Sërish ↺</button>
   </div>
 </div>
 
@@ -181,15 +239,22 @@ const POOL = [
   '🏆','🎯','🌻','🦄','🍄','🌺','🧁','🍭','🎠','🪄'
 ];
 
-let soloScore = 0, pvpScores = [0, 0], numIcons = 4;
-let roundActive = true, gameMode = 'solo', currentMatch = null, robotTimer = null;
+let soloScore  = 0;
+let pvpScores  = [0, 0];
+let numIcons   = 4;
+let roundActive = true;
+let gameMode   = 'solo';
+let currentMatch = null;
+let robotTimer = null;
+
 const WIN_SCORE = 10;
-const ROBOT_DELAY = { 4: 3500, 6: 2500, 8: 1500 };
+const ROBOT_DELAY = { 4: 3500, 6: 2500, 8: 1500, 10: 1000, 12: 700 };
 
 function setMode(mode) {
   gameMode = mode;
   document.querySelectorAll('[data-mode]').forEach(b =>
-    b.classList.toggle('active', b.dataset.mode === mode));
+    b.classList.toggle('active', b.dataset.mode === mode)
+  );
   resetGame();
 }
 
@@ -202,21 +267,22 @@ function setDiff(btn, n) {
 
 function resetGame() {
   if (robotTimer) { clearTimeout(robotTimer); robotTimer = null; }
-  soloScore = 0; pvpScores = [0, 0];
+  soloScore = 0;
+  pvpScores = [0, 0];
   document.getElementById('score').textContent    = '0';
   document.getElementById('score-p1').textContent = '0';
   document.getElementById('score-p2').textContent = '0';
 
   const isPvp = gameMode !== 'solo';
-  document.getElementById('score-solo').style.display    = isPvp ? 'none' : '';
-  document.getElementById('score-pvp').style.display     = isPvp ? 'flex' : 'none';
+  document.getElementById('score-solo').style.display = isPvp ? 'none'  : '';
+  document.getElementById('score-pvp').style.display  = isPvp ? 'flex'  : 'none';
   document.getElementById('player-labels').style.display = isPvp ? 'flex' : 'none';
 
   if (gameMode === 'robot') {
-    document.getElementById('p2-label').textContent        = 'Roboti 🤖';
-    document.getElementById('p2-circle-label').textContent = 'Roboti 🤖';
+    document.getElementById('p2-label').textContent        = 'Robot 🤖';
+    document.getElementById('p2-circle-label').textContent = 'Robot 🤖';
   } else {
-    document.getElementById('p2-label').textContent        = 'Lojtari 2';
+    document.getElementById('p2-label').textContent        = 'L2';
     document.getElementById('p2-circle-label').textContent = 'Lojtari 2 👉';
   }
 
@@ -236,11 +302,12 @@ function shuffle(arr) {
 function placeIcons(containerId, icons, matchEmoji, owner) {
   const container = document.getElementById(containerId);
   container.innerHTML = '';
-  const size = container.getBoundingClientRect().width || 270;
-  const r = size / 2, margin = 38;
-  const minDist  = numIcons <= 4 ? 72 : numIcons <= 6 ? 60 : 50;
-  const fontSize = numIcons <= 4 ? '2.4rem' : numIcons <= 6 ? '2rem' : '1.65rem';
-  const placed   = [];
+  const size    = container.getBoundingClientRect().width || 310;
+  const r       = size / 2;
+  const margin  = 38;
+  const minDist = numIcons <= 4 ? 90 : numIcons <= 6 ? 78 : numIcons <= 8 ? 66 : numIcons <= 10 ? 56 : 48;
+  const fontSize = numIcons <= 4 ? '3.2rem' : numIcons <= 6 ? '2.6rem' : numIcons <= 8 ? '2.1rem' : numIcons <= 10 ? '1.8rem' : '1.5rem';
+  const placed  = [];
 
   for (const emoji of icons) {
     let x, y, tries = 0;
@@ -255,8 +322,10 @@ function placeIcons(containerId, icons, matchEmoji, owner) {
 
     const btn = document.createElement('button');
     btn.className = 'emoji-btn';
-    btn.style.left = x + 'px'; btn.style.top = y + 'px';
-    btn.style.fontSize = fontSize; btn.textContent = emoji;
+    btn.style.left     = x + 'px';
+    btn.style.top      = y + 'px';
+    btn.style.fontSize = fontSize;
+    btn.textContent    = emoji;
     btn.setAttribute('aria-label', emoji);
     btn.addEventListener('click', () => handleClick(btn, emoji === matchEmoji, owner));
     container.appendChild(btn);
@@ -265,53 +334,67 @@ function placeIcons(containerId, icons, matchEmoji, owner) {
 
 function newRound() {
   if (robotTimer) { clearTimeout(robotTimer); robotTimer = null; }
-  roundActive = true; setMsg('');
+  roundActive = true;
+  setMsg('');
+
   const pool   = shuffle(POOL);
   const iconsA = pool.slice(0, numIcons);
   currentMatch = iconsA[Math.floor(Math.random() * numIcons)];
   const rest   = pool.filter(e => !iconsA.includes(e));
   const iconsB = shuffle([currentMatch, ...rest.slice(0, numIcons - 1)]);
+
   const ownerA = gameMode !== 'solo' ? 1 : 0;
   const ownerB = gameMode !== 'solo' ? 2 : 0;
   placeIcons('circle-a', shuffle(iconsA), currentMatch, ownerA);
   placeIcons('circle-b', iconsB,          currentMatch, ownerB);
+
   if (gameMode === 'robot') {
-    robotTimer = setTimeout(robotMove, ROBOT_DELAY[numIcons] ?? 2500);
+    const delay = ROBOT_DELAY[numIcons] ?? 2500;
+    robotTimer = setTimeout(robotMove, delay);
   }
 }
 
 function handleClick(btn, isMatch, owner) {
   if (!roundActive) return;
+
   if (isMatch) {
     roundActive = false;
     if (robotTimer) { clearTimeout(robotTimer); robotTimer = null; }
+
     btn.classList.add('pop');
-    ['circle-a','circle-b'].forEach(id => {
+    ['circle-a', 'circle-b'].forEach(id => {
       const el = document.getElementById(id);
       el.classList.add('ring-flash');
       setTimeout(() => el.classList.remove('ring-flash'), 500);
     });
+
     if (gameMode === 'solo') {
       soloScore++;
       document.getElementById('score').textContent = soloScore;
-      setMsg('✅ E gjete!');
+      setMsg('✅ Gjetur!');
       setTimeout(() => { btn.classList.remove('pop'); newRound(); }, 750);
+
     } else {
       const idx = owner - 1;
       pvpScores[idx]++;
       document.getElementById('score-p1').textContent = pvpScores[0];
       document.getElementById('score-p2').textContent = pvpScores[1];
-      const pName = owner === 1 ? 'Lojtari 1' : gameMode === 'robot' ? 'Roboti 🤖' : 'Lojtari 2';
-      setMsg(`✅ ${pName} pikë!`);
+
+      const pName = owner === 1 ? 'Lojtari 1'
+                  : gameMode === 'robot' ? 'Robot 🤖'
+                  : 'Lojtari 2';
+      setMsg(`✅ ${pName} shënoi!`);
+
       if (pvpScores[idx] >= WIN_SCORE) {
         setTimeout(() => showWin(idx), 750);
       } else {
         setTimeout(() => { btn.classList.remove('pop'); newRound(); }, 900);
       }
     }
+
   } else {
     btn.classList.add('shake');
-    setMsg('❌ Provo prap!');
+    setMsg('❌ Provo sërish!');
     setTimeout(() => { btn.classList.remove('shake'); setMsg(''); }, 500);
   }
 }
@@ -323,7 +406,9 @@ function robotMove() {
   });
 }
 
-function setMsg(text) { document.querySelector('#msg span').textContent = text; }
+function setMsg(text) {
+  document.querySelector('#msg span').textContent = text;
+}
 
 function showWin(idx) {
   if (robotTimer) { clearTimeout(robotTimer); robotTimer = null; }
@@ -331,8 +416,12 @@ function showWin(idx) {
   document.getElementById('win-emoji').textContent = isRobot ? '🤖' : '🏆';
   const name = idx === 0 ? 'Lojtari 1' : (isRobot ? 'Roboti' : 'Lojtari 2');
   document.getElementById('win-msg').textContent = `${name} Fitoi!`;
+
   const card = document.getElementById('win-card');
-  card.style.animation = 'none'; card.offsetHeight; card.style.animation = '';
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = '';
+
   document.getElementById('win-overlay').classList.add('show');
 }
 

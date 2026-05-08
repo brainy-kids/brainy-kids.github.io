@@ -7,9 +7,7 @@
 <meta name="description" content="Find the difference between two pictures!" />
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/css/tailwind.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/fonts.css">
 <script src="assets/img/spot-difference/data-01.js"></script>
 <!-- <script src="assets/img/spot-difference/data-02.js"></script> -->
 <!-- <script src="assets/img/spot-difference/data-03.js"></script> -->
@@ -156,7 +154,7 @@ body {
 <body class="min-h-screen">
 <main class="relative max-w-4xl mx-auto px-4 py-8 md:py-12">
 
-  <!-- Nav -->
+  <!-- · Nav · -->
   <div class="flex items-center justify-between mb-6">
     <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold hover:bg-[color:var(--ink)] hover:text-[#fff8ec] transition-colors">← Back</a>
     <div>
@@ -166,13 +164,13 @@ body {
     </div>
   </div>
 
-  <!-- Header -->
+  <!-- · Header · -->
   <header class="text-center mb-6">
     <h1 class="display text-4xl md:text-6xl font-bold mb-2">🔍 Spot the Difference</h1>
     <p class="font-semibold opacity-70 text-lg">Find what changed between the two pictures!</p>
   </header>
 
-  <!-- Score + progress -->
+  <!-- · Score & progress · -->
   <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
     <div id="score-badge">0 / 8 found</div>
     <div class="flex items-center gap-3 flex-wrap">
@@ -184,7 +182,7 @@ body {
     </div>
   </div>
 
-  <!-- Game area -->
+  <!-- · Game area · -->
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
     <div class="flex flex-col gap-2">
@@ -205,7 +203,7 @@ body {
 
 </main>
 
-<!-- Win overlay -->
+<!-- · Win overlay · -->
 <div id="win-overlay">
   <div class="card bg-[#fff8ec] p-8 text-center mx-4 max-w-xs w-full">
     <div class="text-6xl mb-3">🎉</div>

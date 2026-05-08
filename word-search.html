@@ -7,9 +7,7 @@
 <meta name="description" content="Generate and print a word search puzzle." />
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/css/tailwind.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/fonts.css">
 <style>
 :root { --bg: #fff8ec; --ink: #1f1147; }
 html, body { background: var(--bg); color: var(--ink); }
@@ -136,7 +134,7 @@ input[type=range] { accent-color: var(--ink); }
 
 <main class="relative max-w-3xl mx-auto px-4 py-8 md:py-12">
 
-  <!-- Nav -->
+  <!-- · Nav · -->
   <div class="flex items-center justify-between mb-6 no-print">
     <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Back</a>
     <div>
@@ -151,11 +149,11 @@ input[type=range] { accent-color: var(--ink); }
     <p class="font-semibold opacity-70 text-lg">Generate a puzzle, then print and play!</p>
   </header>
 
-  <!-- Controls -->
+  <!-- · Controls · -->
   <div class="card bg-amber-50 p-6 mb-8 no-print">
     <div class="grid sm:grid-cols-2 gap-6">
 
-      <!-- Words -->
+      <!-- · Words · -->
       <div>
         <label class="display text-xl font-bold block mb-2">Words (one per line)</label>
         <textarea id="words-input" rows="8" spellcheck="false">CAT
@@ -170,7 +168,7 @@ FROG
 DUCK</textarea>
       </div>
 
-      <!-- Options -->
+      <!-- · Options · -->
       <div class="flex flex-col gap-5">
         <div>
           <label class="display text-xl font-bold block mb-1">
@@ -196,7 +194,7 @@ DUCK</textarea>
       </div>
     </div>
 
-    <!-- Action buttons -->
+    <!-- · Action buttons · -->
     <div class="flex flex-wrap gap-3 mt-6">
       <button class="btn-main bg-emerald-300" onclick="generate()">Generate ✦</button>
       <button class="btn-main bg-sky-200"     onclick="toggleSolution()" id="sol-btn">Show Solution</button>
@@ -204,7 +202,7 @@ DUCK</textarea>
     </div>
   </div>
 
-  <!-- Puzzle output -->
+  <!-- · Puzzle output · -->
   <div id="grid-section" class="text-center">
     <p class="print-title hidden display text-3xl font-bold mb-6">Word Search Puzzle</p>
     <div id="grid-wrap" class="overflow-x-auto mb-6"></div>

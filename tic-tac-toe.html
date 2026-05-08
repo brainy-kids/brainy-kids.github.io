@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="sq">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Tic-Tac-Toe — Lojëra për Fëmijë 🎈</title>
-<meta name="description" content="Tic-Tac-Toe lojë klasike — 2 lojtarë ose kundër kompjuterit." />
+<title>Tic-Tac-Toe — Kids Games 🎈</title>
+<meta name="description" content="Classic Tic-Tac-Toe — 2 players or vs the computer." />
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/css/tailwind.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/fonts.css">
 <style>
 :root { --bg: #fff8ec; --ink: #1f1147; }
 html, body { background: var(--bg); color: var(--ink); }
@@ -120,7 +118,7 @@ body {
 
 <main class="relative max-w-sm mx-auto px-4 py-8 md:py-12">
 
-  <!-- Nav -->
+  <!-- · Nav · -->
   <div class="flex items-center justify-between mb-6">
     <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Back</a>
     <div>
@@ -132,23 +130,23 @@ body {
 
   <header class="text-center mb-6">
     <h1 class="display text-5xl md:text-6xl font-bold mb-1">Tic-Tac-Toe</h1>
-    <p class="font-semibold opacity-70">X kundër O — kush fiton?</p>
+    <p class="font-semibold opacity-70">X vs O — who wins?</p>
   </header>
 
-  <!-- Mode selector -->
+  <!-- · Mode selector · -->
   <div class="flex justify-center gap-3 mb-6">
-    <button class="seg-btn active" data-mode="pvp" onclick="setMode('pvp')">👫 2 Lojtarë</button>
-    <button class="seg-btn" data-mode="ai" onclick="setMode('ai')">🤖 Kompjuteri</button>
+    <button class="seg-btn active" data-mode="pvp" onclick="setMode('pvp')">👫 2 Players</button>
+    <button class="seg-btn" data-mode="ai" onclick="setMode('ai')">🤖 Computer</button>
   </div>
 
-  <!-- Score row -->
+  <!-- · Score row · -->
   <div class="flex items-center justify-center gap-4 mb-6">
     <div class="score-box" style="background:#dbeafe">
       <div class="display text-xs font-bold mb-1" style="opacity:.6">X</div>
       <div class="display text-3xl font-bold" id="score-x">0</div>
     </div>
     <div class="score-box" style="background:white">
-      <div class="display text-xs font-bold mb-1" style="opacity:.6">Barazim</div>
+      <div class="display text-xs font-bold mb-1" style="opacity:.6">Draw</div>
       <div class="display text-3xl font-bold" id="score-d">0</div>
     </div>
     <div class="score-box" style="background:#fce7f3">
@@ -157,18 +155,18 @@ body {
     </div>
   </div>
 
-  <!-- Status -->
+  <!-- · Status · -->
   <div class="text-center mb-5" style="min-height:2.2rem">
     <span id="status" class="display text-2xl font-bold"></span>
   </div>
 
-  <!-- Board -->
+  <!-- · Board · -->
   <div id="board"></div>
 
-  <!-- Buttons -->
+  <!-- · Buttons · -->
   <div class="flex justify-center gap-3 mt-8">
-    <button class="btn-main bg-emerald-300" onclick="newGame()">Lojë e Re ↺</button>
-    <button class="btn-main" style="background:white" onclick="resetAll()">Reset Pikët</button>
+    <button class="btn-main bg-emerald-300" onclick="newGame()">New Game ↺</button>
+    <button class="btn-main" style="background:white" onclick="resetAll()">Reset Scores</button>
   </div>
 
   <footer class="mt-16 text-center pb-6">
@@ -275,14 +273,14 @@ function setStatus(state) {
   const el = document.getElementById('status');
   if (state === 'win') {
     const isAI = gameMode === 'ai' && current === 'O';
-    el.innerHTML = isAI ? '🤖 Kompjuteri fitoi!' : `${colorSym(current)} fitoi! 🎉`;
+    el.innerHTML = isAI ? '🤖 Computer wins!' : `${colorSym(current)} wins! 🎉`;
   } else if (state === 'draw') {
-    el.innerHTML = 'Barazim! 🤝';
+    el.innerHTML = 'Draw! 🤝';
   } else {
     if (gameMode === 'ai') {
-      el.innerHTML = current === 'O' ? '🤖 Kompjuteri mendon…' : `Radha jote (${colorSym('X')})`;
+      el.innerHTML = current === 'O' ? '🤖 Computer thinking…' : `Your turn (${colorSym('X')})`;
     } else {
-      el.innerHTML = `Radha e ${colorSym(current)}`;
+      el.innerHTML = `${colorSym(current)}'s turn`;
     }
   }
 }

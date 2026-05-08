@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="sq">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Fjalëkryq — Lojëra për Fëmijë 🎈</title>
-<meta name="description" content="Gjenero enigmën e fjalëve dhe printo." />
+<title>Word Search — Kids Games 🎈</title>
+<meta name="description" content="Generate and print a word search puzzle." />
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/css/tailwind.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/fonts.css">
 <style>
 :root { --bg: #fff8ec; --ink: #1f1147; }
 html, body { background: var(--bg); color: var(--ink); }
@@ -22,47 +20,107 @@ body {
     radial-gradient(circle at 15% 85%, rgba(150,230,170,.25) 0, transparent 35%);
 }
 .display { font-family: 'Fredoka', system-ui, sans-serif; letter-spacing: -0.02em; }
-.card { border: 3px solid var(--ink); border-radius: 28px; box-shadow: 6px 6px 0 0 var(--ink); }
-.pill { border: 2px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 0 var(--ink); display: inline-block; }
+.card {
+  border: 3px solid var(--ink);
+  border-radius: 28px;
+  box-shadow: 6px 6px 0 0 var(--ink);
+}
+.pill {
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 0 var(--ink);
+  display: inline-block;
+}
 .btn-main {
-  border: 3px solid var(--ink); border-radius: 999px; padding: 8px 22px;
-  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem;
-  cursor: pointer; box-shadow: 4px 4px 0 0 var(--ink); transition: transform .1s, box-shadow .1s;
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 8px 22px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 0 var(--ink);
+  transition: transform .1s, box-shadow .1s;
 }
 .btn-main:hover  { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--ink); }
 .btn-main:active { transform: translate(2px,2px);   box-shadow: 1px 1px 0 0 var(--ink); }
 .dir-toggle {
-  border: 2px solid var(--ink); border-radius: 12px; padding: 5px 14px;
-  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.8rem;
-  cursor: pointer; box-shadow: 3px 3px 0 0 var(--ink); transition: .1s;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 5px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.8rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 0 var(--ink);
+  transition: .1s;
 }
 .dir-toggle.on  { background: var(--ink); color: var(--bg); }
 .dir-toggle.off { background: white; color: var(--ink); }
-#grid-table { border-collapse: collapse; margin: 0 auto; font-family: 'Fredoka', sans-serif; font-weight: 600; }
+#grid-table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+}
 #grid-table td {
-  border: 1.5px solid rgba(31,17,71,.18); text-align: center; vertical-align: middle;
-  font-size: 1.2rem; transition: background .2s; cursor: default;
-  user-select: none; -webkit-user-select: none;
+  border: 1.5px solid rgba(31,17,71,.18);
+  text-align: center;
+  vertical-align: middle;
+  font-size: 1.2rem;
+  transition: background .2s;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .word-list-item {
-  display: inline-block; border: 2px solid var(--ink); border-radius: 8px;
-  padding: 3px 10px; font-weight: 800; font-size: 0.9rem; margin: 3px;
-  box-shadow: 2px 2px 0 0 var(--ink); font-family: 'Fredoka', sans-serif; letter-spacing: .04em;
+  display: inline-block;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 3px 10px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  margin: 3px;
+  box-shadow: 2px 2px 0 0 var(--ink);
+  font-family: 'Fredoka', sans-serif;
+  letter-spacing: .04em;
 }
 .word-list-item.found { text-decoration: line-through; opacity: .5; }
 textarea {
-  font-family: 'Nunito', sans-serif; font-weight: 700; resize: vertical;
-  background: white; border: 3px solid var(--ink); border-radius: 16px;
-  outline: none; padding: 10px 14px; box-shadow: 4px 4px 0 0 var(--ink); width: 100%;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  resize: vertical;
+  background: white;
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  outline: none;
+  padding: 10px 14px;
+  box-shadow: 4px 4px 0 0 var(--ink);
+  width: 100%;
 }
 textarea:focus { box-shadow: 6px 6px 0 0 var(--ink); }
 input[type=range] { accent-color: var(--ink); }
 @media print {
-  body { background: white !important; background-image: none !important; color: black; font-size: 13pt; }
+  body {
+    background: white !important;
+    background-image: none !important;
+    color: black;
+    font-size: 13pt;
+  }
   .no-print { display: none !important; }
   #grid-section { display: block !important; }
-  #grid-table td { border: 1px solid #888; font-weight: 700; padding: 0 !important; text-align: center !important; vertical-align: middle !important; }
-  .word-list-item { border: 1px solid #888; box-shadow: none; font-size: 11pt; }
+  #grid-table td {
+    border: 1px solid #888;
+    font-weight: 700;
+    padding: 0 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+  }
+  .word-list-item {
+    border: 1px solid #888;
+    box-shadow: none;
+    font-size: 11pt;
+  }
   h1 { font-size: 22pt; }
   .print-title { display: block !important; }
   #grid-table td[style] { background: white !important; }
@@ -74,7 +132,7 @@ input[type=range] { accent-color: var(--ink); }
 <main class="relative max-w-3xl mx-auto px-4 py-8 md:py-12">
 
   <div class="flex items-center justify-between mb-6 no-print">
-    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Kthehu</a>
+    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Back</a>
     <div>
       <a href="../word-search.html" class="pill bg-white px-3 py-1 text-xs font-bold">EN</a>
       <a href="../de/word-search.html" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">DE</a>
@@ -83,43 +141,43 @@ input[type=range] { accent-color: var(--ink); }
   </div>
 
   <header class="text-center mb-8 no-print">
-    <h1 class="display text-4xl md:text-6xl font-bold mb-2">Fjalëkryq</h1>
-    <p class="font-semibold opacity-70 text-lg">Gjenero enigmën, pastaj printo dhe luaj!</p>
+    <h1 class="display text-4xl md:text-6xl font-bold mb-2">Word Search</h1>
+    <p class="font-semibold opacity-70 text-lg">Generate a puzzle, then print and play!</p>
   </header>
 
   <div class="card bg-amber-50 p-6 mb-8 no-print">
     <div class="grid sm:grid-cols-2 gap-6">
 
       <div>
-        <label class="display text-xl font-bold block mb-2">Fjalët (një për rresht)</label>
-        <textarea id="words-input" rows="8" spellcheck="false">MACE
+        <label class="display text-xl font-bold block mb-2">Words (one per line)</label>
+        <textarea id="words-input" rows="8" spellcheck="false">PULA
+MACJA
 QENI
-ZOG
-PESHK
-DIELL
-HENA
+LOPA
+DETI
+MALI
 YLLI
-GURI
-BARI
-LUMI</textarea>
+LUMI
+DERA
+BARI</textarea>
       </div>
 
       <div class="flex flex-col gap-5">
         <div>
           <label class="display text-xl font-bold block mb-1">
-            Madhësia e rrjetit: <span id="size-val">12</span>
+            Grid size: <span id="size-val">12</span>
           </label>
           <input type="range" id="grid-size" min="8" max="15" value="12" class="w-full"
             oninput="document.getElementById('size-val').textContent=this.value" />
         </div>
 
         <div>
-          <p class="display text-xl font-bold mb-2">Drejtimet</p>
+          <p class="display text-xl font-bold mb-2">Directions</p>
           <div class="flex flex-wrap gap-2">
-            <button class="dir-toggle on" data-dir="lr">→ Djathtas</button>
-            <button class="dir-toggle on" data-dir="rl">← Majtas</button>
-            <button class="dir-toggle on" data-dir="tb">↓ Poshtë</button>
-            <button class="dir-toggle on" data-dir="bt">↑ Lart</button>
+            <button class="dir-toggle on" data-dir="lr">→ Right</button>
+            <button class="dir-toggle on" data-dir="rl">← Left</button>
+            <button class="dir-toggle on" data-dir="tb">↓ Down</button>
+            <button class="dir-toggle on" data-dir="bt">↑ Up</button>
             <button class="dir-toggle on" data-dir="d1">↘ Diag</button>
             <button class="dir-toggle off" data-dir="d2">↙ Diag</button>
             <button class="dir-toggle off" data-dir="d3">↖ Diag</button>
@@ -130,21 +188,21 @@ LUMI</textarea>
     </div>
 
     <div class="flex flex-wrap gap-3 mt-6">
-      <button class="btn-main bg-emerald-300" onclick="generate()">Gjenero ✦</button>
-      <button class="btn-main bg-sky-200"     onclick="toggleSolution()" id="sol-btn">Trego Zgjidhjen</button>
-      <button class="btn-main bg-pink-200"    onclick="window.print()">Printo 🖨</button>
+      <button class="btn-main bg-emerald-300" onclick="generate()">Generate ✦</button>
+      <button class="btn-main bg-sky-200"     onclick="toggleSolution()" id="sol-btn">Show Solution</button>
+      <button class="btn-main bg-pink-200"    onclick="window.print()">Print 🖨</button>
     </div>
   </div>
 
   <div id="grid-section" class="text-center">
-    <p class="print-title hidden display text-3xl font-bold mb-6">Enigmë Fjalësh</p>
+    <p class="print-title hidden display text-3xl font-bold mb-6">Word Search Puzzle</p>
     <div id="grid-wrap" class="overflow-x-auto mb-6"></div>
     <div id="word-list" class="mb-4"></div>
     <p id="skipped-msg" class="text-sm opacity-60 font-semibold mt-2"></p>
   </div>
 
   <footer class="mt-16 text-center pb-6 no-print">
-    <p class="font-semibold opacity-50 text-sm">Bërë me ❤️ për fëmijët</p>
+    <p class="font-semibold opacity-50 text-sm">Made with ❤️ for kids</p>
     <p class="mt-2 text-xs opacity-40 font-semibold">Designed by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a></p>
   </footer>
 
@@ -171,19 +229,19 @@ function getActiveDirs() {
 
 function generate() {
   showSol = false;
-  document.getElementById('sol-btn').textContent = 'Trego Zgjidhjen';
+  document.getElementById('sol-btn').textContent = 'Show Solution';
   const rawWords = document.getElementById('words-input').value
     .split('\n').map(w => w.trim().toUpperCase().replace(/[^A-ZÇËÄÖÜ]/g, '')).filter(w => w.length >= 2);
-  if (!rawWords.length) { alert('Shkruaj të paktën një fjalë.'); return; }
+  if (!rawWords.length) { alert('Please enter at least one word.'); return; }
   const size = parseInt(document.getElementById('grid-size').value, 10);
   const dirs = getActiveDirs();
-  if (!dirs.length) { alert('Aktivizo të paktën një drejtim.'); return; }
+  if (!dirs.length) { alert('Please enable at least one direction.'); return; }
   const result = buildPuzzle(rawWords, size, dirs);
   currentGrid = result.grid; currentSolMap = result.solMap; currentWords = result.placed;
   renderGrid(); renderWordList();
   const skipped = rawWords.filter(w => !result.placed.includes(w));
   document.getElementById('skipped-msg').textContent = skipped.length
-    ? `⚠ Nuk u vendos: ${skipped.join(', ')} — provo rrjet më të madh ose më pak drejtime.`
+    ? `⚠ Could not place: ${skipped.join(', ')} — try larger grid or fewer directions.`
     : '';
 }
 
@@ -257,7 +315,7 @@ function renderWordList() {
 function toggleSolution() {
   if (!currentGrid) return;
   showSol = !showSol;
-  document.getElementById('sol-btn').textContent = showSol ? 'Fshih Zgjidhjen' : 'Trego Zgjidhjen';
+  document.getElementById('sol-btn').textContent = showSol ? 'Hide Solution' : 'Show Solution';
   renderGrid();
 }
 

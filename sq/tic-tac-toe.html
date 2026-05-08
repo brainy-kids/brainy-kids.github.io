@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="sq">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Tic-Tac-Toe — Lojëra për Fëmijë 🎈</title>
-<meta name="description" content="Tic-Tac-Toe — 2 lojtarë ose kundër kompjuterit." />
+<title>Tic-Tac-Toe — Kids Games 🎈</title>
+<meta name="description" content="Classic Tic-Tac-Toe — 2 players or vs the computer." />
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/css/tailwind.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/fonts.css">
 <style>
 :root { --bg: #fff8ec; --ink: #1f1147; }
 html, body { background: var(--bg); color: var(--ink); }
@@ -22,30 +20,67 @@ body {
     radial-gradient(circle at 15% 85%, rgba(150,230,170,.25) 0, transparent 35%);
 }
 .display { font-family: 'Fredoka', system-ui, sans-serif; letter-spacing: -0.02em; }
-.card { border: 3px solid var(--ink); border-radius: 28px; box-shadow: 6px 6px 0 0 var(--ink); }
-.pill { border: 2px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 0 var(--ink); display: inline-block; }
+.card {
+  border: 3px solid var(--ink);
+  border-radius: 28px;
+  box-shadow: 6px 6px 0 0 var(--ink);
+}
+.pill {
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 0 var(--ink);
+  display: inline-block;
+}
 .btn-main {
-  border: 3px solid var(--ink); border-radius: 999px; padding: 10px 26px;
-  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
-  cursor: pointer; box-shadow: 4px 4px 0 0 var(--ink); transition: transform .1s, box-shadow .1s;
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 10px 26px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 0 var(--ink);
+  transition: transform .1s, box-shadow .1s;
 }
 .btn-main:hover  { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--ink); }
 .btn-main:active { transform: translate(2px,2px);   box-shadow: 1px 1px 0 0 var(--ink); }
 .seg-btn {
-  border: 2px solid var(--ink); border-radius: 999px; padding: 6px 16px;
-  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.82rem;
-  cursor: pointer; box-shadow: 3px 3px 0 0 var(--ink); transition: transform .1s, box-shadow .1s;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.82rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 0 var(--ink);
+  transition: transform .1s, box-shadow .1s;
 }
 .seg-btn.active      { background: var(--ink); color: var(--bg); }
 .seg-btn:not(.active){ background: white; color: var(--ink); }
-#board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 300px; margin: 0 auto; }
+#board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: 300px;
+  margin: 0 auto;
+}
 .cell {
-  aspect-ratio: 1 / 1; border: 3px solid var(--ink); border-radius: 20px;
-  box-shadow: 4px 4px 0 0 var(--ink); background: white;
-  font-family: 'Fredoka', sans-serif; font-size: clamp(2rem, 12vw, 3.5rem); font-weight: 700;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  aspect-ratio: 1 / 1;
+  border: 3px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 4px 4px 0 0 var(--ink);
+  background: white;
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(2rem, 12vw, 3.5rem);
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform .1s, box-shadow .1s, background .15s;
-  user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 .cell:hover:not(.taken) { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--ink); }
 .cell.taken  { cursor: default; }
@@ -61,7 +96,7 @@ body {
 <main class="relative max-w-sm mx-auto px-4 py-8 md:py-12">
 
   <div class="flex items-center justify-between mb-6">
-    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Kthehu</a>
+    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Back</a>
     <div>
       <a href="../tic-tac-toe.html" class="pill bg-white px-3 py-1 text-xs font-bold">EN</a>
       <a href="../de/tic-tac-toe.html" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">DE</a>
@@ -71,12 +106,12 @@ body {
 
   <header class="text-center mb-6">
     <h1 class="display text-5xl md:text-6xl font-bold mb-1">Tic-Tac-Toe</h1>
-    <p class="font-semibold opacity-70">X kundër O — kush fiton?</p>
+    <p class="font-semibold opacity-70">X vs O — who wins?</p>
   </header>
 
   <div class="flex justify-center gap-3 mb-6">
-    <button class="seg-btn active" data-mode="pvp" onclick="setMode('pvp')">👫 2 Lojtarë</button>
-    <button class="seg-btn" data-mode="ai" onclick="setMode('ai')">🤖 Kompjuteri</button>
+    <button class="seg-btn active" data-mode="pvp" onclick="setMode('pvp')">👫 2 Players</button>
+    <button class="seg-btn" data-mode="ai" onclick="setMode('ai')">🤖 Computer</button>
   </div>
 
   <div class="flex items-center justify-center gap-4 mb-6">
@@ -85,7 +120,7 @@ body {
       <div class="display text-3xl font-bold" id="score-x">0</div>
     </div>
     <div class="score-box" style="background:white">
-      <div class="display text-xs font-bold mb-1" style="opacity:.6">Barazim</div>
+      <div class="display text-xs font-bold mb-1" style="opacity:.6">Draw</div>
       <div class="display text-3xl font-bold" id="score-d">0</div>
     </div>
     <div class="score-box" style="background:#fce7f3">
@@ -101,12 +136,12 @@ body {
   <div id="board"></div>
 
   <div class="flex justify-center gap-3 mt-8">
-    <button class="btn-main bg-emerald-300" onclick="newGame()">Lojë e Re ↺</button>
-    <button class="btn-main" style="background:white" onclick="resetAll()">Reset Pikët</button>
+    <button class="btn-main bg-emerald-300" onclick="newGame()">New Game ↺</button>
+    <button class="btn-main" style="background:white" onclick="resetAll()">Reset Scores</button>
   </div>
 
   <footer class="mt-16 text-center pb-6">
-    <p class="font-semibold opacity-50 text-sm">Bërë me ❤️ për fëmijët</p>
+    <p class="font-semibold opacity-50 text-sm">Made with ❤️ for kids</p>
     <p class="mt-2 text-xs opacity-40 font-semibold">Designed by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a></p>
   </footer>
 
@@ -135,7 +170,9 @@ function renderBoard() {
   const el = document.getElementById('board'); el.innerHTML = '';
   board.forEach((val, i) => {
     const cell = document.createElement('div');
-    cell.className = ['cell', val ? 'taken' : '', val ? val.toLowerCase() + '-cell' : ''].filter(Boolean).join(' ');
+    const cls = ['cell'];
+    if (val) { cls.push('taken'); cls.push(val.toLowerCase() + '-cell'); }
+    cell.className = cls.join(' ');
     cell.textContent = val;
     cell.addEventListener('click', () => handleClick(i));
     el.appendChild(cell);
@@ -182,14 +219,14 @@ function setStatus(state) {
   const el = document.getElementById('status');
   if (state === 'win') {
     const isAI = gameMode === 'ai' && current === 'O';
-    el.innerHTML = isAI ? '🤖 Kompjuteri fitoi!' : `${colorSym(current)} fitoi! 🎉`;
+    el.innerHTML = isAI ? '🤖 Computer wins!' : `${colorSym(current)} wins! 🎉`;
   } else if (state === 'draw') {
-    el.innerHTML = 'Barazim! 🤝';
+    el.innerHTML = 'Draw! 🤝';
   } else {
     if (gameMode === 'ai') {
-      el.innerHTML = current === 'O' ? '🤖 Kompjuteri mendon…' : `Radha jote (${colorSym('X')})`;
+      el.innerHTML = current === 'O' ? '🤖 Computer thinking…' : `Your turn (${colorSym('X')})`;
     } else {
-      el.innerHTML = `Radha e ${colorSym(current)}`;
+      el.innerHTML = `${colorSym(current)}'s turn`;
     }
   }
 }

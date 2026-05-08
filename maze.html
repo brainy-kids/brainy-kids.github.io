@@ -7,9 +7,7 @@
 <meta name="description" content="Generate and print mazes for kids. Easy, Medium, Hard." />
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/css/tailwind.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/fonts.css">
 <style>
 :root { --bg: #fff8ec; --ink: #1f1147; }
 html, body { background: var(--bg); color: var(--ink); }
@@ -67,21 +65,21 @@ body {
     <p class="font-semibold opacity-70">Find the way from <span style="color:#16a34a">●</span> to <span style="color:#ea580c">★</span> — then print it!</p>
   </header>
 
-  <!-- Difficulty -->
+  <!-- · Difficulty · -->
   <div class="flex justify-center gap-3 mb-4">
     <button class="btn on" id="btn-easy"   onclick="setSize('easy')">Easy</button>
     <button class="btn"    id="btn-medium" onclick="setSize('medium')">Medium</button>
     <button class="btn"    id="btn-hard"   onclick="setSize('hard')">Hard</button>
   </div>
 
-  <!-- Actions -->
+  <!-- · Actions · -->
   <div class="flex justify-center gap-3 mb-5">
     <button class="btn" style="background:#bbf7d0" onclick="generate()">Generate ↻</button>
     <button class="btn" id="btn-sol" onclick="toggleSolution()">Solution 👁</button>
     <button class="btn" onclick="printMaze()">Print 🖨</button>
   </div>
 
-  <!-- Canvas -->
+  <!-- · Canvas · -->
   <div class="card overflow-hidden mb-6" style="background:white">
     <canvas id="maze-canvas"></canvas>
   </div>
@@ -93,7 +91,7 @@ body {
 
 </main>
 
-<!-- Print-only zone -->
+<!-- · Print zone · -->
 <div id="print-area">
   <canvas id="print-canvas"></canvas>
 </div>

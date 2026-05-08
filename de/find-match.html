@@ -7,9 +7,7 @@
 <meta name="description" content="Finde das Emoji, das in beiden Kreisen vorkommt!" />
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/css/tailwind.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/fonts.css">
 <style>
 :root { --bg: #fff8ec; --ink: #1f1147; }
 html, body { background: var(--bg); color: var(--ink); }
@@ -68,6 +66,18 @@ body {
 .seg-btn:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 0 var(--ink); }
 .seg-btn.active { background: var(--ink); color: var(--bg); }
 .seg-btn:not(.active) { background: white; color: var(--ink); }
+/* middle controls: column on desktop, row on mobile */
+@media (min-width: 640px) {
+  #mid-controls {
+    flex-direction: column;
+    align-self: stretch;
+    justify-content: space-between;
+    align-items: center;
+    width: auto;
+    padding: 1.25rem 0.5rem;
+    gap: 0;
+  }
+}
 #win-overlay {
   position: fixed; inset: 0; z-index: 100; background: rgba(31,17,71,.82);
   display: none; align-items: center; justify-content: center;
@@ -99,43 +109,18 @@ body {
     <p class="font-semibold opacity-70 text-lg">Finde das Emoji, das in <em>beiden</em> Kreisen erscheint!</p>
   </header>
 
-  <div class="flex justify-center gap-2 mb-5">
+  <!-- · Mode selector · -->
+  <div class="flex justify-center gap-2 mb-3">
     <button class="seg-btn active" data-mode="solo"  onclick="setMode('solo')">Solo</button>
     <button class="seg-btn"        data-mode="pvp"   onclick="setMode('pvp')">2 Spieler</button>
     <button class="seg-btn"        data-mode="robot" onclick="setMode('robot')">vs Roboter 🤖</button>
   </div>
 
-  <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-
-    <div id="score-solo" class="card bg-white px-5 py-3 flex items-center gap-3">
-      <span class="display text-xl font-bold">Punkte</span>
-      <span id="score" class="display text-3xl font-bold" style="color:#16a34a">0</span>
-    </div>
-
-    <div id="score-pvp" style="display:none" class="flex items-center gap-3">
-      <div class="card px-4 py-2 text-center" style="background:#dbeafe;min-width:80px">
-        <div class="display text-sm font-bold" style="color:#2563eb">Spieler 1</div>
-        <div id="score-p1" class="display text-3xl font-bold" style="color:#2563eb">0</div>
-        <div class="text-xs font-bold opacity-40">/ 10</div>
-      </div>
-      <div class="display text-2xl font-bold opacity-30">vs</div>
-      <div class="card px-4 py-2 text-center" style="background:#fce7f3;min-width:80px">
-        <div id="p2-label" class="display text-sm font-bold" style="color:#dc2626">Spieler 2</div>
-        <div id="score-p2" class="display text-3xl font-bold" style="color:#dc2626">0</div>
-        <div class="text-xs font-bold opacity-40">/ 10</div>
-      </div>
-    </div>
-
-    <div class="flex gap-2">
-      <button class="seg-btn active" data-diff="4" onclick="setDiff(this,4)">Leicht</button>
-      <button class="seg-btn"        data-diff="6" onclick="setDiff(this,6)">Mittel</button>
-      <button class="seg-btn"        data-diff="8" onclick="setDiff(this,8)">Schwer</button>
-    </div>
-
-    <button onclick="newRound()"
-      class="pill bg-amber-300 px-5 py-2 font-bold text-sm hover:bg-amber-400 transition-colors">
-      Neue Runde ↺
-    </button>
+  <!-- · Difficulty · -->
+  <div class="flex flex-wrap justify-center gap-2 mb-4">
+    <button class="seg-btn active" data-diff="4" onclick="setDiff(this,4)">Leicht</button>
+    <button class="seg-btn"        data-diff="6" onclick="setDiff(this,6)">Mittel</button>
+    <button class="seg-btn"        data-diff="8" onclick="setDiff(this,8)">Schwer</button>
   </div>
 
   <div id="player-labels" style="display:none" class="flex justify-around mb-2">
@@ -143,9 +128,46 @@ body {
     <span id="p2-circle-label" class="display text-sm font-bold" style="color:#dc2626">Spieler 2 👉</span>
   </div>
 
-  <div class="flex flex-col sm:flex-row gap-8 items-center justify-center">
+  <!-- · Game area · -->
+  <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-2">
     <div id="circle-a" class="circle-wrap" style="background:#dbeafe"></div>
-    <div class="display text-5xl font-bold opacity-30 select-none">&amp;</div>
+
+    <!-- · Mid controls · -->
+    <div id="mid-controls" class="flex flex-row items-center justify-between gap-x-3 w-full sm:w-auto py-2 sm:py-0 px-2 sm:px-0">
+
+      <!-- · Solo score · -->
+      <div id="score-solo" class="shrink-0 card bg-white px-3 py-1.5 flex items-center justify-center gap-1.5">
+        <span class="display text-sm font-bold">Punkte</span>
+        <span id="score" class="display text-xl font-bold" style="color:#16a34a">0</span>
+      </div>
+
+      <!-- · 2P score · -->
+      <div id="score-pvp" style="display:none" class="shrink-0 flex items-center justify-center gap-1.5">
+        <div class="card px-2 py-1 text-center" style="background:#dbeafe">
+          <div class="display text-xs font-bold" style="color:#2563eb">S1</div>
+          <div id="score-p1" class="display text-xl font-bold" style="color:#2563eb">0</div>
+          <div class="text-xs font-bold opacity-40">/10</div>
+        </div>
+        <div class="display text-sm font-bold opacity-30">vs</div>
+        <div class="card px-2 py-1 text-center" style="background:#fce7f3">
+          <div id="p2-label" class="display text-xs font-bold" style="color:#dc2626">S2</div>
+          <div id="score-p2" class="display text-xl font-bold" style="color:#dc2626">0</div>
+          <div class="text-xs font-bold opacity-40">/10</div>
+        </div>
+      </div>
+
+      <!-- · & · -->
+      <div class="shrink-0 display text-3xl font-bold opacity-30 select-none">&amp;</div>
+
+      <!-- · Neue Runde · -->
+      <button onclick="newRound()"
+        class="shrink-0 pill bg-amber-300 px-4 py-2 font-bold text-sm hover:bg-amber-400 transition-colors"
+        style="white-space: nowrap">
+        Neue Runde ↺
+      </button>
+
+    </div>
+
     <div id="circle-b" class="circle-wrap" style="background:#fce7f3"></div>
   </div>
 
@@ -238,8 +260,8 @@ function placeIcons(containerId, icons, matchEmoji, owner) {
   container.innerHTML = '';
   const size = container.getBoundingClientRect().width || 270;
   const r = size / 2, margin = 38;
-  const minDist  = numIcons <= 4 ? 72 : numIcons <= 6 ? 60 : 50;
-  const fontSize = numIcons <= 4 ? '2.4rem' : numIcons <= 6 ? '2rem' : '1.65rem';
+  const minDist  = numIcons <= 4 ? 84 : numIcons <= 6 ? 72 : 60;
+  const fontSize = numIcons <= 4 ? '3.2rem' : numIcons <= 6 ? '2.6rem' : '2.1rem';
   const placed   = [];
 
   for (const emoji of icons) {
