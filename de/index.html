@@ -68,6 +68,9 @@
 <link rel="stylesheet" href="../assets/css/fonts.css">
 
 <style>
+.topbar-badge { display: none; }
+@media (min-width: 768px) { .topbar-badge { display: inline; } }
+
 /* ===== BLOB GALAXY ===== */
 
 .galaxy {
@@ -167,7 +170,7 @@
   <!-- · Top bar · -->
   <div class="flex items-center mb-8 md:mb-10">
     <div class="flex-1"></div>
-    <span style="font-size:1.05rem;margin-right:1.25rem;font-weight:600;opacity:.85;">
+    <span class="topbar-badge" style="font-size:1.05rem;margin-right:1.25rem;font-weight:600;opacity:.85;">
       <span class="display" style="display:inline-block;font-weight:500;background:#0d9488;color:#fff;border:2px solid var(--ink);border-radius:10px;padding:.05rem .5rem;transform:rotate(-2deg);box-shadow:2px 2px 0 0 var(--ink);">Lernspiele für Kinder</span>
       &nbsp;&bull; Kostenlos &amp; für immer
     </span>
