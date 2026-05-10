@@ -159,10 +159,10 @@
 
 <!-- · Floating decorations · -->
 <div aria-hidden="true" class="pointer-events-none fixed inset-0 overflow-hidden">
-  <div class="floaty absolute top-16 left-6" style="--r: -8deg; font-size: 3rem; filter: drop-shadow(2px 3px 0 rgba(31,17,71,.22));">🎈</div>
-  <div class="floaty delay-1 absolute top-36 right-8" style="--r: 12deg; font-size: 2.4rem; filter: drop-shadow(2px 3px 0 rgba(31,17,71,.22));">⭐</div>
-  <div class="floaty delay-2 absolute bottom-28 left-10" style="--r: -5deg; font-size: 2.8rem; filter: drop-shadow(2px 3px 0 rgba(31,17,71,.22));">🌈</div>
-  <div class="floaty absolute bottom-44 right-16" style="--r: 5deg; font-size: 2rem; filter: drop-shadow(2px 3px 0 rgba(31,17,71,.22));">🎀</div>
+  <div class="floaty absolute top-16 left-6 w-12 h-12 rounded-full bg-yellow-300 border-[3px] border-[color:var(--ink)]" style="--r: -8deg;"></div>
+  <div class="floaty delay-1 absolute top-40 right-10 w-10 h-10 bg-pink-400 border-[3px] border-[color:var(--ink)] rotate-12" style="--r: 12deg;"></div>
+  <div class="floaty delay-2 absolute bottom-24 left-12 w-14 h-14 bg-sky-300 border-[3px] border-[color:var(--ink)]" style="--r: -6deg; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;"></div>
+  <div class="floaty absolute bottom-40 right-20 w-9 h-9 rounded-full bg-emerald-300 border-[3px] border-[color:var(--ink)]" style="--r: 0deg;"></div>
 </div>
 
 <main class="relative max-w-3xl mx-auto px-5 py-10 md:py-16">
@@ -196,7 +196,7 @@
 
     <!-- · Spot the Match · -->
     <a href="find-match.html" class="blob blob-lg"
-       style="background:#ddd6fe; overflow:hidden;
+       style="background:#fff; overflow:hidden;
               --r0:30% 70% 80% 20% / 40% 60% 40% 60%;
               --r1:70% 30% 20% 80% / 60% 40% 70% 30%;
               --r2:50% 50% 70% 30% / 20% 80% 30% 70%;
@@ -204,14 +204,12 @@
               --fdur:4.5s; --fdelay:0s;
               --mdur:9s;   --mdelay:0s;">
       <img src="assets/img/find-it.png" alt="" width="255" height="255" loading="lazy"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
-      <span class="blob-title" style="position:relative;">Spot the Match</span>
-      <span class="blob-desc" style="position:relative;">Find the matching pair!</span>
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
     </a>
 
     <!-- · Word Search · -->
     <a href="word-search.html" class="blob blob-md"
-       style="background:#d9f99d; overflow:hidden;
+       style="background:#fff; overflow:hidden;
               --r0:80% 20% 40% 60% / 60% 80% 20% 40%;
               --r1:20% 80% 60% 40% / 80% 20% 50% 50%;
               --r2:60% 40% 20% 80% / 30% 70% 60% 40%;
@@ -219,14 +217,12 @@
               --fdur:5.2s; --fdelay:.8s;
               --mdur:11s;  --mdelay:2s;">
       <img src="assets/img/word-Arman-Mal.png" alt="" width="220" height="220" loading="lazy"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
-      <span class="blob-title" style="position:relative;">Word Search</span>
-      <span class="blob-desc" style="position:relative;">Hunt hidden words!</span>
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
     </a>
 
     <!-- · Spot the Difference · -->
     <a href="spot-difference.html" class="blob blob-lg"
-       style="background:#fde68a; overflow:hidden;
+       style="background:#fff; overflow:hidden;
               --r0:40% 60% 80% 20% / 20% 60% 80% 40%;
               --r1:80% 20% 30% 70% / 70% 30% 20% 80%;
               --r2:30% 70% 60% 40% / 40% 70% 50% 50%;
@@ -234,14 +230,12 @@
               --fdur:3.9s; --fdelay:1.5s;
               --mdur:10s;  --mdelay:3s;">
       <img src="assets/img/find-differences.png" alt="" width="255" height="255" loading="lazy"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
-      <span class="blob-title" style="position:relative;">Spot the Diff</span>
-      <span class="blob-desc" style="position:relative;">Find what changed!</span>
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
     </a>
 
     <!-- · Mazes · -->
     <a href="maze.html" class="blob blob-xl"
-       style="background:#bae6fd; overflow:hidden;
+       style="background:#fff; overflow:hidden;
               --r0:70% 30% 30% 70% / 30% 70% 70% 30%;
               --r1:30% 70% 70% 30% / 70% 30% 30% 70%;
               --r2:50% 50% 20% 80% / 80% 20% 60% 40%;
@@ -249,14 +243,12 @@
               --fdur:5.7s; --fdelay:.6s;
               --mdur:13s;  --mdelay:.5s;">
       <img src="assets/img/maze.png" alt="" width="285" height="285" loading="lazy"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.2;" onerror="this.remove()">
-      <span class="blob-title" style="position:relative;">Mazes</span>
-      <span class="blob-desc" style="position:relative;">Generate &amp; solve!</span>
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
     </a>
 
     <!-- · Tic-Tac-Toe · -->
     <a href="tic-tac-toe.html" class="blob blob-sm"
-       style="background:#fed7aa; overflow:hidden;
+       style="background:#fff; overflow:hidden;
               --r0:20% 80% 70% 30% / 70% 20% 60% 40%;
               --r1:70% 30% 20% 80% / 20% 70% 30% 60%;
               --r2:40% 60% 80% 20% / 50% 50% 80% 20%;
@@ -264,14 +256,12 @@
               --fdur:4.2s; --fdelay:1.2s;
               --mdur:8s;   --mdelay:3.5s;">
       <img src="assets/img/tic-tac.png" alt="" width="190" height="190" loading="lazy"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
-      <span class="blob-title" style="position:relative;">Tic-Tac-Toe</span>
-      <span class="blob-desc" style="position:relative;">Beat the computer!</span>
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
     </a>
 
     <!-- · Coloring Pages · -->
     <div class="blob blob-xl"
-         style="background:#fbcfe8; overflow:hidden;
+         style="background:#fff; overflow:hidden;
                 --r0:60% 40% 20% 80% / 80% 20% 60% 40%;
                 --r1:20% 80% 60% 40% / 40% 80% 20% 60%;
                 --r2:80% 20% 40% 60% / 60% 40% 80% 20%;
@@ -299,7 +289,7 @@
 
     <!-- · Snake · -->
     <a href="snake.html" class="blob blob-md"
-       style="background:#99f6e4; overflow:hidden;
+       style="background:#fff; overflow:hidden;
               --r0:20% 80% 60% 40% / 60% 20% 80% 40%;
               --r1:60% 40% 20% 80% / 20% 80% 40% 60%;
               --r2:80% 20% 40% 60% / 40% 60% 20% 80%;
@@ -307,9 +297,7 @@
               --fdur:5s;    --fdelay:2s;
               --mdur:10.5s; --mdelay:1.5s;">
       <img src="assets/img/snake-game.png" alt="" width="220" height="220" loading="lazy"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
-      <span class="blob-title" style="position:relative;">Snake</span>
-      <span class="blob-desc" style="position:relative;">Eat, grow, don't crash!</span>
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
     </a>
 
 
