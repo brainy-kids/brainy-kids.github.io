@@ -68,8 +68,8 @@
 <link rel="stylesheet" href="../assets/css/fonts.css">
 
 <style>
-.topbar-badge { display: none; }
-@media (min-width: 768px) { .topbar-badge { display: inline; } }
+.free-forever { display: none; }
+@media (min-width: 768px) { .free-forever { display: inline; } }
 
 /* ===== BLOB GALAXY ===== */
 
@@ -172,7 +172,7 @@
     <div class="flex-1"></div>
     <span class="topbar-badge" style="font-size:1.05rem;margin-right:1.25rem;font-weight:600;opacity:.85;">
       <span class="display" style="display:inline-block;font-weight:500;background:#0d9488;color:#fff;border:2px solid var(--ink);border-radius:10px;padding:.05rem .5rem;transform:rotate(-2deg);box-shadow:2px 2px 0 0 var(--ink);">Lernspiele für Kinder</span>
-      &nbsp;&bull; Kostenlos &amp; für immer
+      <span class="free-forever">&nbsp;&bull; Kostenlos &amp; für immer</span>
     </span>
     <div class="flex-1 flex justify-end gap-2">
       <a href="../" class="pill bg-white px-3 py-1 text-xs font-bold"><span class="md:hidden" style="font-size:1.25rem;line-height:1">🇬🇧</span><span class="hidden md:inline">EN</span></a>
@@ -196,22 +196,20 @@
 
     <!-- · Paare finden · -->
     <a href="find-match.html" class="blob blob-lg"
-       style="background:#ddd6fe; overflow:hidden;
+       style="background:#fff; overflow:hidden;
               --r0:30% 70% 80% 20% / 40% 60% 40% 60%;
               --r1:70% 30% 20% 80% / 60% 40% 70% 30%;
               --r2:50% 50% 70% 30% / 20% 80% 30% 70%;
               --rot:-3deg; --mt:55px;
               --fdur:4.5s; --fdelay:0s;
               --mdur:9s;   --mdelay:0s;">
-      <img src="../assets/img/find-it.png" alt="" width="255" height="255" loading="lazy"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
-      <span class="blob-title" style="position:relative;">Paare finden</span>
-      <span class="blob-desc" style="position:relative;">Finde das passende Paar!</span>
+      <img src="../assets/img/find-it.jpg" alt="" width="255" height="255" loading="lazy"
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
     </a>
 
     <!-- · Wörtersuche · -->
     <a href="word-search.html" class="blob blob-md"
-       style="background:#d9f99d; overflow:hidden;
+       style="background:#fff; overflow:hidden;
               --r0:80% 20% 40% 60% / 60% 80% 20% 40%;
               --r1:20% 80% 60% 40% / 80% 20% 50% 50%;
               --r2:60% 40% 20% 80% / 30% 70% 60% 40%;
@@ -219,14 +217,12 @@
               --fdur:5.2s; --fdelay:.8s;
               --mdur:11s;  --mdelay:2s;">
       <img src="../assets/img/word-Arman-Mal.png" alt="" width="220" height="220" loading="lazy"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
-      <span class="blob-title" style="position:relative;">Wörtersuche</span>
-      <span class="blob-desc" style="position:relative;">Suche versteckte Wörter!</span>
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
     </a>
 
     <!-- · Fehler suchen · -->
     <a href="../spot-difference.html" class="blob blob-lg"
-       style="background:#fde68a; overflow:hidden;
+       style="background:#fff; overflow:hidden;
               --r0:40% 60% 80% 20% / 20% 60% 80% 40%;
               --r1:80% 20% 30% 70% / 70% 30% 20% 80%;
               --r2:30% 70% 60% 40% / 40% 70% 50% 50%;
@@ -234,14 +230,12 @@
               --fdur:3.9s; --fdelay:1.5s;
               --mdur:10s;  --mdelay:3s;">
       <img src="../assets/img/find-differences.png" alt="" width="255" height="255" loading="lazy"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
-      <span class="blob-title" style="position:relative;">Fehler suchen</span>
-      <span class="blob-desc" style="position:relative;">Finde die Unterschiede!</span>
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
     </a>
 
     <!-- · Labyrinthe · -->
     <a href="../maze.html" class="blob blob-xl"
-       style="background:#bae6fd; overflow:hidden;
+       style="background:#fff; overflow:hidden;
               --r0:70% 30% 30% 70% / 30% 70% 70% 30%;
               --r1:30% 70% 70% 30% / 70% 30% 30% 70%;
               --r2:50% 50% 20% 80% / 80% 20% 60% 40%;
@@ -249,14 +243,12 @@
               --fdur:5.7s; --fdelay:.6s;
               --mdur:13s;  --mdelay:.5s;">
       <img src="../assets/img/maze.png" alt="" width="285" height="285" loading="lazy"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.2;" onerror="this.remove()">
-      <span class="blob-title" style="position:relative;">Labyrinthe</span>
-      <span class="blob-desc" style="position:relative;">Erstelle &amp; löse!</span>
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
     </a>
 
     <!-- · Tic-Tac-Toe · -->
     <a href="tic-tac-toe.html" class="blob blob-sm"
-       style="background:#fed7aa; overflow:hidden;
+       style="background:#fff; overflow:hidden;
               --r0:20% 80% 70% 30% / 70% 20% 60% 40%;
               --r1:70% 30% 20% 80% / 20% 70% 30% 60%;
               --r2:40% 60% 80% 20% / 50% 50% 80% 20%;
@@ -264,14 +256,12 @@
               --fdur:4.2s; --fdelay:1.2s;
               --mdur:8s;   --mdelay:3.5s;">
       <img src="../assets/img/tic-tac.png" alt="" width="190" height="190" loading="lazy"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
-      <span class="blob-title" style="position:relative;">Tic-Tac-Toe</span>
-      <span class="blob-desc" style="position:relative;">Besiege den Computer!</span>
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
     </a>
 
     <!-- · Ausmalbilder · -->
     <div class="blob blob-xl"
-         style="background:#fbcfe8; overflow:hidden;
+         style="background:#fff; overflow:hidden;
                 --r0:60% 40% 20% 80% / 80% 20% 60% 40%;
                 --r1:20% 80% 60% 40% / 40% 80% 20% 60%;
                 --r2:80% 20% 40% 60% / 60% 40% 80% 20%;
@@ -299,7 +289,7 @@
 
     <!-- · Snake · -->
     <a href="snake.html" class="blob blob-md"
-       style="background:#99f6e4; overflow:hidden;
+       style="background:#fff; overflow:hidden;
               --r0:20% 80% 60% 40% / 60% 20% 80% 40%;
               --r1:60% 40% 20% 80% / 20% 80% 40% 60%;
               --r2:80% 20% 40% 60% / 40% 60% 20% 80%;
@@ -307,9 +297,7 @@
               --fdur:5s;    --fdelay:2s;
               --mdur:10.5s; --mdelay:1.5s;">
       <img src="../assets/img/snake-game.png" alt="" width="220" height="220" loading="lazy"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.25;" onerror="this.remove()">
-      <span class="blob-title" style="position:relative;">Snake</span>
-      <span class="blob-desc" style="position:relative;">Friss, wachse, nicht abstürzen!</span>
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
     </a>
 
 
