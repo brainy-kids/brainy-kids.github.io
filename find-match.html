@@ -285,10 +285,10 @@ function resetGame() {
   document.getElementById('player-labels').style.display = isPvp ? 'flex' : 'none';
 
   if (gameMode === 'robot') {
-    document.getElementById('p2-label').textContent        = 'Robot 🤖';
+    document.getElementById('p2-label').textContent        = '🤖';
     document.getElementById('p2-circle-label').textContent = 'Robot 🤖';
   } else {
-    document.getElementById('p2-label').textContent        = 'Player 2';
+    document.getElementById('p2-label').textContent        = 'P2';
     document.getElementById('p2-circle-label').textContent = 'Player 2 👉';
   }
 
@@ -312,19 +312,20 @@ function placeIcons(containerId, icons, matchEmoji, owner) {
   const size    = container.getBoundingClientRect().width || 310;
   const r       = size / 2;
   const margin  = 38;
-  const minDist = numIcons <= 4 ? 90 : numIcons <= 6 ? 78 : numIcons <= 8 ? 66 : numIcons <= 10 ? 56 : 48;
+  const minDist = r * (numIcons <= 4 ? 0.58 : numIcons <= 6 ? 0.50 : numIcons <= 8 ? 0.42 : numIcons <= 10 ? 0.36 : 0.30);
   const fontSize = numIcons <= 4 ? '3.2rem' : numIcons <= 6 ? '2.6rem' : numIcons <= 8 ? '2.1rem' : numIcons <= 10 ? '1.8rem' : '1.5rem';
   const placed  = [];
 
   for (const emoji of icons) {
-    let x, y, tries = 0;
+    let x, y, tries = 0, curDist = minDist;
     do {
+      if (tries > 0 && tries % 80 === 0) curDist = Math.max(curDist * 0.72, 28);
       const angle = Math.random() * 2 * Math.PI;
       const dist  = margin + Math.random() * (r - margin * 1.8);
       x = r + dist * Math.cos(angle);
       y = r + dist * Math.sin(angle);
       tries++;
-    } while (tries < 80 && placed.some(p => Math.hypot(p.x - x, p.y - y) < minDist));
+    } while (tries < 240 && placed.some(p => Math.hypot(p.x - x, p.y - y) < curDist));
     placed.push({ x, y });
 
     const btn = document.createElement('button');
