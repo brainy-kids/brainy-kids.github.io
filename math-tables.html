@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Math Practice — Kids Games 🎈</title>
+<meta name="description" content="Generate and print math practice worksheets for kids. Addition, subtraction, multiplication, division." />
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tailwind.min.css">
+<link rel="stylesheet" href="assets/css/fonts.css">
+<style>
+:root { --bg: #fff8ec; --ink: #1f1147; }
+html, body { background: var(--bg); color: var(--ink); }
+body {
+  font-family: 'Nunito', system-ui, sans-serif;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(255,200,87,.25) 0, transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(120,200,255,.25) 0, transparent 35%),
+    radial-gradient(circle at 80% 90%, rgba(255,130,160,.22) 0, transparent 35%),
+    radial-gradient(circle at 15% 85%, rgba(150,230,170,.25) 0, transparent 35%);
+}
+.display { font-family: 'Fredoka', system-ui, sans-serif; letter-spacing: -0.02em; }
+.card    { border: 3px solid var(--ink); border-radius: 28px; box-shadow: 6px 6px 0 0 var(--ink); }
+.pill    { border: 2px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 0 var(--ink); display: inline-block; }
+.btn {
+  border: 3px solid var(--ink); border-radius: 999px; padding: 9px 22px;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .9rem;
+  cursor: pointer; box-shadow: 4px 4px 0 0 var(--ink);
+  transition: transform .1s, box-shadow .1s; background: white; color: var(--ink);
+}
+.btn:hover  { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--ink); }
+.btn:active { transform: translate(2px,2px);   box-shadow: 1px 1px 0 0 var(--ink); }
+.btn.on { background: var(--ink); color: #fff8ec; }
+
+/* · number grid buttons · */
+.num-btn {
+  border: 2px solid var(--ink); border-radius: 12px; padding: 6px 0;
+  font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1rem;
+  cursor: pointer; background: white; color: var(--ink);
+  box-shadow: 3px 3px 0 0 var(--ink);
+  transition: transform .1s, box-shadow .1s;
+}
+.num-btn:hover  { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 0 var(--ink); }
+.num-btn:active { transform: translate(1px,1px);   box-shadow: 1px 1px 0 0 var(--ink); }
+.num-btn.on { background: var(--ink); color: #fff8ec; }
+
+/* · worksheet · */
+#worksheet { display: none; }
+.ws-header { margin-bottom: 18px; }
+.ws-meta { display: flex; gap: 24px; margin-bottom: 8px; font-size: .9rem; font-weight: 700; }
+.ws-meta span { border-bottom: 2px solid #333; min-width: 140px; padding-bottom: 2px; }
+.ws-title { font-family: 'Fredoka', sans-serif; font-size: 1.6rem; font-weight: 600; margin-bottom: 4px; }
+.problems-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 24px;
+}
+.problem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-bottom: 2px solid #aaa;
+  padding: 4px 0 2px;
+}
+.problem .num   { min-width: 28px; text-align: right; }
+.problem .op    { min-width: 20px; text-align: center; color: #555; }
+.problem .eq    { margin-left: auto; color: #888; }
+.problem .blank { min-width: 48px; border-bottom: 2px solid #333; margin-left: 4px; }
+.problem-idx    { font-size: .75rem; color: #bbb; min-width: 20px; text-align: right; font-family: 'Nunito', sans-serif; }
+
+@media print {
+  body > * { display: none !important; }
+  #print-area {
+    display: block !important;
+    position: fixed; inset: 0;
+    background: white;
+    padding: 12mm 14mm;
+    box-sizing: border-box;
+  }
+}
+#print-area { display: none; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<main class="relative max-w-lg mx-auto px-5 py-8 md:py-12">
+
+  <!-- · Nav · -->
+  <div class="flex items-center justify-between mb-6">
+    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Back</a>
+    <div>
+      <strong class="pill bg-[color:var(--ink)] text-[#fff8ec] px-3 py-1 text-xs font-bold">EN</strong>
+      <a href="de/math-tables.html" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">DE</a>
+      <a href="sq/math-tables.html" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">SQ</a>
+    </div>
+  </div>
+
+  <header class="text-center mb-6">
+    <h1 class="display text-5xl md:text-6xl font-bold mb-1">Math Practice ✏️</h1>
+    <p class="font-semibold opacity-70">Pick your settings, generate &amp; print!</p>
+  </header>
+
+  <!-- · Operation · -->
+  <div class="mb-5">
+    <p class="font-bold mb-2 opacity-60 text-sm uppercase tracking-wide">Operation</p>
+    <div class="flex gap-3 flex-wrap">
+      <button class="btn on" id="op-add" onclick="setOp('add')">+ Add</button>
+      <button class="btn"    id="op-sub" onclick="setOp('sub')">− Sub</button>
+      <button class="btn"    id="op-mul" onclick="setOp('mul')">× Mul</button>
+      <button class="btn"    id="op-div" onclick="setOp('div')">÷ Div</button>
+    </div>
+  </div>
+
+  <!-- · Number · -->
+  <div class="mb-5">
+    <p class="font-bold mb-2 opacity-60 text-sm uppercase tracking-wide">Number <span id="num-hint" class="normal-case font-normal opacity-80">(table of which number?)</span></p>
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;" class="mb-2">
+      <button class="num-btn on" onclick="setNum(0)" style="grid-column:span 2;">🎲 Random</button>
+      <button class="num-btn" onclick="setNum(1)">1</button>
+      <button class="num-btn" onclick="setNum(2)">2</button>
+      <button class="num-btn" onclick="setNum(3)">3</button>
+      <button class="num-btn" onclick="setNum(4)">4</button>
+      <button class="num-btn" onclick="setNum(5)">5</button>
+      <button class="num-btn" onclick="setNum(6)">6</button>
+      <button class="num-btn" onclick="setNum(7)">7</button>
+      <button class="num-btn" onclick="setNum(8)">8</button>
+      <button class="num-btn" onclick="setNum(9)">9</button>
+      <button class="num-btn" onclick="setNum(10)">10</button>
+    </div>
+  </div>
+
+  <!-- · Actions · -->
+  <div class="flex justify-center gap-3 mb-6">
+    <button class="btn" style="background:#bbf7d0" onclick="generate()">Generate ↻</button>
+    <button class="btn" onclick="printSheet()">Print 🖨</button>
+  </div>
+
+  <!-- · Worksheet preview · -->
+  <div id="worksheet" class="card bg-white p-6 mb-6">
+    <div class="ws-header">
+      <div class="ws-title" id="ws-title"></div>
+      <div class="ws-meta">
+        <span>Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span>Date: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      </div>
+    </div>
+    <div class="problems-grid" id="problems-grid"></div>
+  </div>
+
+  <footer class="mt-10 text-center pb-6">
+    <p class="font-semibold opacity-50 text-sm">Made with ❤️ for kids</p>
+    <p class="mt-2 text-xs opacity-40 font-semibold">Designed by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a></p>
+  </footer>
+
+</main>
+
+<!-- · Print zone · -->
+<div id="print-area"></div>
+
+<script>
+let op  = 'add';
+let num = 0;   // 0 = random
+const count = 20;
+
+const OP_LABELS = { add: 'Addition +', sub: 'Subtraction −', mul: 'Multiplication ×', div: 'Division ÷' };
+const OP_SYM    = { add: '+', sub: '−', mul: '×', div: '÷' };
+
+function setOp(o) {
+  op = o;
+  ['add','sub','mul','div'].forEach(k => document.getElementById('op-'+k).classList.toggle('on', k === o));
+  generate();
+}
+
+function setNum(n) {
+  num = n;
+  document.querySelectorAll('.num-btn').forEach(b => b.classList.remove('on'));
+  event.currentTarget.classList.add('on');
+  generate();
+}
+
+
+function rnd(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function makeProblem() {
+  let a, b;
+  if (op === 'add') {
+    a = num > 0 ? num : rnd(1, 10);
+    b = rnd(1, 10);
+    if (Math.random() < .5) [a, b] = [b, a]; // swap so "fixed" number appears on both sides sometimes
+    return { a, sym: '+', b, ans: a + b };
+  }
+  if (op === 'sub') {
+    // result always ≥ 0
+    b = num > 0 ? num : rnd(1, 10);
+    a = b + rnd(0, 10);
+    return { a, sym: '−', b, ans: a - b };
+  }
+  if (op === 'mul') {
+    a = num > 0 ? num : rnd(1, 10);
+    b = rnd(1, 10);
+    if (Math.random() < .5) [a, b] = [b, a];
+    return { a, sym: '×', b, ans: a * b };
+  }
+  if (op === 'div') {
+    // generate as mul then flip — no remainders
+    b = num > 0 ? num : rnd(1, 10);
+    const q = rnd(1, 10);
+    a = b * q;
+    return { a, sym: '÷', b, ans: q };
+  }
+}
+
+function numLabel() {
+  if (num === 0) return 'Random';
+  const suffix = op === 'mul' ? `Table of ${num}` : op === 'div' ? `÷ ${num}` : num;
+  if (op === 'add') return `+ ${num}`;
+  if (op === 'sub') return `− ${num}`;
+  return suffix;
+}
+
+function generate() {
+  const problems = Array.from({ length: count }, makeProblem);
+
+  document.getElementById('ws-title').textContent =
+    OP_LABELS[op] + (num > 0 ? ` — ${numLabel()}` : '');
+
+  const grid = document.getElementById('problems-grid');
+  grid.innerHTML = '';
+  problems.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'problem';
+    div.innerHTML =
+      `<span class="problem-idx">${i+1}.</span>` +
+      `<span class="num">${p.a}</span>` +
+      `<span class="op">${p.sym}</span>` +
+      `<span class="num">${p.b}</span>` +
+      `<span class="eq">=</span>` +
+      `<span class="blank"></span>`;
+    grid.appendChild(div);
+  });
+
+  document.getElementById('worksheet').style.display = 'block';
+}
+
+function printSheet() {
+  const ws = document.getElementById('worksheet');
+  if (ws.style.display === 'none') { generate(); }
+  const printArea = document.getElementById('print-area');
+  printArea.innerHTML = ws.innerHTML;
+  window.print();
+}
+
+// auto-generate on load
+generate();
+</script>
+</body>
+</html>
