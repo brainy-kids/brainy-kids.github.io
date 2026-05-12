@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8" />
@@ -111,7 +111,7 @@ body {
 
   <footer class="mt-16 text-center pb-6">
     <p class="font-semibold opacity-50 text-sm">Mit ❤️ für Kinder gemacht</p>
-    <p class="mt-2 text-xs opacity-40 font-semibold">Designed by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a></p>
+    <p class="mt-2 text-xs opacity-40 font-semibold">Designed &amp; built by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a> &middot; &copy; <span id="copy-yr"></span></p>
   </footer>
 
 </main>
@@ -228,5 +228,6 @@ function updateScoreUI() {
 
 newGame();
 </script>
+<script>document.getElementById("copy-yr").textContent=new Date().getFullYear();</script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="sq">
 <head>
 <meta charset="UTF-8" />
@@ -160,7 +160,7 @@ canvas { display: block; }
 
   <footer class="mt-16 text-center pb-6">
     <p class="font-semibold opacity-50 text-sm">Bërë me ❤️ për fëmijë</p>
-    <p class="mt-2 text-xs opacity-40 font-semibold">Designed by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a></p>
+    <p class="mt-2 text-xs opacity-40 font-semibold">Designed &amp; built by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a> &middot; &copy; <span id="copy-yr"></span></p>
   </footer>
 
 </main>
@@ -370,5 +370,6 @@ canvas.addEventListener('touchend', e => {
 
 resize();
 </script>
+<script>document.getElementById("copy-yr").textContent=new Date().getFullYear();</script>
 </body>
 </html>
