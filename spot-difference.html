@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="assets/css/tailwind.min.css">
 <link rel="stylesheet" href="assets/css/fonts.css">
 <script src="assets/img/spot-difference/data-01.js"></script>
-<!-- <script src="assets/img/spot-difference/data-02.js"></script> -->
+<script src="assets/img/spot-difference/data-02.js"></script>
 <!-- <script src="assets/img/spot-difference/data-03.js"></script> -->
 <!-- <script src="assets/img/spot-difference/data-04.js"></script> -->
 <!-- <script src="assets/img/spot-difference/data-05.js"></script> -->
@@ -48,7 +48,7 @@ body {
 .btn-dark { background: var(--ink); color: #fff8ec; }
 
 /* ── Progress dots ────────────────────────────────────── */
-#progress-dots { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.dots-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .dot {
   width: 14px; height: 14px;
   border-radius: 50%;
@@ -59,6 +59,14 @@ body {
 }
 .dot.done    { background: #16a34a; border-color: #16a34a; }
 .dot.current { background: #f59e0b; border-color: #f59e0b; transform: scale(1.2); }
+
+/* ── Score badge ──────────────────────────────────────── */
+.score-badge {
+  background: var(--ink); color: #fff8ec;
+  font-family: 'Fredoka', sans-serif; font-size: 1.05rem;
+  padding: 5px 18px; border-radius: 999px;
+  min-width: 130px; text-align: center; letter-spacing: .025em;
+}
 
 /* ── Image panels ─────────────────────────────────────── */
 .img-wrap {
@@ -78,7 +86,7 @@ body {
   -webkit-user-drag: none;
   transition: opacity .22s;
 }
-#b-wrap { cursor: crosshair; }
+.b-wrap { cursor: crosshair; }
 
 /* ── Markers ──────────────────────────────────────────── */
 .mark {
@@ -132,23 +140,26 @@ body {
 }
 .shake { animation: shake .42s ease; }
 
-/* ── Score badge ──────────────────────────────────────── */
-#score-badge {
-  background: var(--ink); color: #fff8ec;
-  font-family: 'Fredoka', sans-serif; font-size: 1.15rem;
-  padding: 7px 22px; border-radius: 999px;
-  min-width: 150px; text-align: center; letter-spacing: .025em;
+/* ── Level divider ────────────────────────────────────── */
+.level-hr {
+  border: none;
+  border-top: 3px solid var(--ink);
+  opacity: .12;
+  margin: 3rem 0;
 }
 
-/* ── Win overlay ──────────────────────────────────────── */
-#win-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.48);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 50; opacity: 0; pointer-events: none;
-  transition: opacity .3s;
+/* ── Win banner ───────────────────────────────────────── */
+.win-banner {
+  display: none;
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  text-align: center;
+  border: 3px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 6px 6px 0 0 var(--ink);
+  background: #d1fae5;
 }
-#win-overlay.show { opacity: 1; pointer-events: all; }
+.win-banner.show { display: block; }
 </style>
 </head>
 <body class="min-h-screen">
@@ -170,182 +181,151 @@ body {
     <p class="font-semibold opacity-70 text-lg">Find what changed between the two pictures!</p>
   </header>
 
-  <!-- · Score & progress · -->
-  <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-    <div id="score-badge">0 / 8 found</div>
-    <div class="flex items-center gap-3 flex-wrap">
-      <div id="progress-dots"></div>
-      <button class="btn text-sm" id="hint-btn" onclick="useHint()">
-        💡 Hint (<span id="hint-count">2</span>)
-      </button>
-      <button class="btn text-sm px-3" id="mute-btn" onclick="toggleMute()" title="Mute / Unmute">🔊</button>
-    </div>
+  <!-- · Global controls · -->
+  <div class="flex justify-end mb-6">
+    <button class="btn text-sm px-3" id="mute-btn" onclick="toggleMute()" title="Mute / Unmute">🔊</button>
   </div>
 
-  <!-- · Game area · -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <!-- · Levels (rendered by JS) · -->
+  <div id="levels-container"></div>
 
-    <div class="flex flex-col gap-2">
-      <p class="text-center font-bold text-xs uppercase tracking-widest opacity-50">Original</p>
-      <div class="img-wrap">
-        <img id="img-a" alt="Original" />
-      </div>
-    </div>
-
-    <div class="flex flex-col gap-2">
-      <p class="text-center font-bold text-xs uppercase tracking-widest opacity-50">What changed? 👆</p>
-      <div class="img-wrap" id="b-wrap">
-        <img id="img-b" alt="Find the difference" />
-      </div>
-    </div>
-
-  </div>
+  <footer class="mt-16 text-center pb-6">
+    <p class="font-semibold opacity-50 text-sm">Made with ❤️ for kids</p>
+    <p class="mt-2 text-xs opacity-40 font-semibold">Designed &amp; built by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a> &middot; &copy; <span id="copy-yr"></span></p>
+  </footer>
 
 </main>
-
-<!-- · Win overlay · -->
-<div id="win-overlay">
-  <div class="card bg-[#fff8ec] p-8 text-center mx-4 max-w-xs w-full">
-    <div class="text-6xl mb-3">🎉</div>
-    <h2 class="display text-4xl font-bold mb-2">Bravo!</h2>
-    <p id="win-msg" class="text-lg mb-6">You found all the differences!</p>
-    <div class="flex flex-col gap-3">
-      <button id="btn-next" class="btn btn-dark" onclick="nextLevel()">Next level →</button>
-      <button class="btn" onclick="replayLevel()">🔄 Play again</button>
-    </div>
-  </div>
-</div>
 
 <canvas id="cvc" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:49;display:none;"></canvas>
 
 <script>
 const LEVELS = [
   window.SPOT_LEVEL_01,
-  // window.SPOT_LEVEL_02,
+  window.SPOT_LEVEL_02,
   // window.SPOT_LEVEL_03,
   // window.SPOT_LEVEL_04,
   // window.SPOT_LEVEL_05,
 ].filter(Boolean);
 
-let lvl          = null;
-let curRound     = 0;
-let totalFound   = 0;
-let foundSet     = new Set();
-let hintsLeft    = 3;
-let hintBusy     = false;
-let active       = false;
-let transitioning = false;
-let curLvlIdx    = 0;
-let audioCtx     = null;
-let muted        = false;
+let audioCtx = null;
+let muted    = false;
 
-const imgA       = document.getElementById('img-a');
-const imgB       = document.getElementById('img-b');
-const bWrap      = document.getElementById('b-wrap');
-const scoreBadge = document.getElementById('score-badge');
-const hintCount  = document.getElementById('hint-count');
-const hintBtn    = document.getElementById('hint-btn');
-const winOverlay = document.getElementById('win-overlay');
-const btnNext    = document.getElementById('btn-next');
-const dotsEl     = document.getElementById('progress-dots');
+const games = LEVELS.map((lvl, idx) => ({
+  lvl, idx,
+  totalFound: 0,
+  foundSet: new Set(),
+  hintsLeft: 2,
+  hintBusy: false,
+  active: false,
+}));
 
-function isClassicMode() { return !!(lvl && lvl.differences); }
+function isClassic(g) { return !!(g.lvl && g.lvl.differences); }
 
-// ── Load level ─────────────────────────────────────────────────
-function loadLevel(idx) {
-  active = false;
-  curRound = 0;
-  totalFound = 0;
-  foundSet = new Set();
-  hintsLeft = 2;
-  hintBusy = false;
-  transitioning = false;
-  winOverlay.classList.remove('show');
+// ── Render all levels ──────────────────────────────────────────
+function renderLevels() {
+  const container = document.getElementById('levels-container');
+  games.forEach((g, i) => {
+    const lvl   = g.lvl;
+    const total = isClassic(g) ? lvl.differences.length : lvl.rounds.length;
 
-  lvl = LEVELS[idx];
-  if (!lvl) { scoreBadge.textContent = 'Error loading level'; return; }
+    const section = document.createElement('section');
+    section.id = `lvl-${i}`;
+    section.innerHTML = `
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="display font-bold text-xl">Level ${i + 1} <span style="opacity:.4">·</span> ${lvl.title}</span>
+          <div class="score-badge" id="score-${i}">0 / ${total} found</div>
+        </div>
+        <div class="flex items-center gap-3 flex-wrap">
+          <div class="dots-row" id="dots-${i}"></div>
+          <button class="btn text-sm" id="hint-btn-${i}" onclick="useHint(${i})">💡 Hint (<span id="hint-count-${i}">2</span>)</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-2">
+          <p class="text-center font-bold text-xs uppercase tracking-widest opacity-50">Original</p>
+          <div class="img-wrap">
+            <img id="img-a-${i}" alt="Original" src="${lvl.a}" />
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <p class="text-center font-bold text-xs uppercase tracking-widest opacity-50">What changed? 👆</p>
+          <div class="img-wrap b-wrap" id="b-wrap-${i}">
+            <img id="img-b-${i}" alt="Find the difference" src="${lvl.b}" />
+          </div>
+        </div>
+      </div>
+      <div class="win-banner" id="win-banner-${i}">
+        <div class="text-4xl mb-1">🎉</div>
+        <p class="display font-bold text-2xl">You found all ${total} differences!</p>
+      </div>
+    `;
+    container.appendChild(section);
 
-  imgA.src = lvl.a;
-  buildDots();
-  if (isClassicMode()) {
-    loadClassic();
-  } else {
-    loadRound(0);
-  }
-}
+    if (i < games.length - 1) {
+      const hr = document.createElement('hr');
+      hr.className = 'level-hr';
+      container.appendChild(hr);
+    }
 
-// ── Classic mode init ──────────────────────────────────────────
-function loadClassic() {
-  active = false;
-  transitioning = false;
-  bWrap.querySelectorAll('.mark').forEach(el => el.remove());
-  updateUI();
-  imgB.style.opacity = '0';
-  imgB.onload = () => { imgB.style.opacity = '1'; active = true; };
-  imgB.src = lvl.b;
-  if (imgB.complete && imgB.naturalWidth) { imgB.style.opacity = '1'; active = true; }
-}
+    const bWrap = document.getElementById(`b-wrap-${i}`);
+    const imgB  = document.getElementById(`img-b-${i}`);
+    imgB.onload = () => { g.active = true; };
+    if (imgB.complete && imgB.naturalWidth) g.active = true;
+    bWrap.addEventListener('pointerdown', e => e.preventDefault());
+    bWrap.addEventListener('pointerup', e => handleTap(e, i));
 
-// ── Load round ─────────────────────────────────────────────────
-function loadRound(idx) {
-  active = false;
-  transitioning = false;
-  bWrap.querySelectorAll('.mark').forEach(el => el.remove());
-  updateUI();
-
-  const r = lvl.rounds[idx];
-  imgB.style.opacity = '0';
-  imgB.onload = () => { imgB.style.opacity = '1'; active = true; };
-  imgB.src = r.b;
-  if (imgB.complete && imgB.naturalWidth) { imgB.style.opacity = '1'; active = true; }
-}
-
-// ── Dots ───────────────────────────────────────────────────────
-function buildDots() {
-  dotsEl.innerHTML = '';
-  const items = isClassicMode() ? lvl.differences : lvl.rounds;
-  items.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'dot';
-    d.id = `dot-${i}`;
-    dotsEl.appendChild(d);
+    buildDots(i);
+    updateUI(i);
   });
 }
 
-function updateDots() {
-  if (isClassicMode()) {
-    lvl.differences.forEach((_, i) => {
-      const d = document.getElementById(`dot-${i}`);
-      if (!d) return;
-      d.className = 'dot' + (i < totalFound ? ' done' : '');
-    });
-  } else {
-    lvl.rounds.forEach((_, i) => {
-      const d = document.getElementById(`dot-${i}`);
-      if (!d) return;
-      d.className = 'dot' + (i < totalFound ? ' done' : i === curRound ? ' current' : '');
-    });
-  }
+// ── Dots ───────────────────────────────────────────────────────
+function buildDots(i) {
+  const g     = games[i];
+  const el    = document.getElementById(`dots-${i}`);
+  if (!el) return;
+  const items = isClassic(g) ? g.lvl.differences : g.lvl.rounds;
+  el.innerHTML = '';
+  items.forEach((_, j) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.id = `dot-${i}-${j}`;
+    el.appendChild(d);
+  });
+}
+
+function updateDots(i) {
+  const g     = games[i];
+  const items = isClassic(g) ? g.lvl.differences : g.lvl.rounds;
+  items.forEach((_, j) => {
+    const d = document.getElementById(`dot-${i}-${j}`);
+    if (!d) return;
+    d.className = 'dot' + (j < g.totalFound ? ' done' : '');
+  });
 }
 
 // ── UI ─────────────────────────────────────────────────────────
-function updateUI() {
-  const total = lvl ? (isClassicMode() ? lvl.differences.length : lvl.rounds.length) : 0;
-  scoreBadge.textContent = `${totalFound} / ${total} found`;
-  hintCount.textContent = hintsLeft;
-  hintBtn.disabled = hintsLeft <= 0 || hintBusy || !active;
-  updateDots();
+function updateUI(i) {
+  const g       = games[i];
+  const total   = isClassic(g) ? g.lvl.differences.length : g.lvl.rounds.length;
+  const scoreEl = document.getElementById(`score-${i}`);
+  const cntEl   = document.getElementById(`hint-count-${i}`);
+  const hintBtn = document.getElementById(`hint-btn-${i}`);
+  if (scoreEl) scoreEl.textContent = `${g.totalFound} / ${total} found`;
+  if (cntEl)   cntEl.textContent   = g.hintsLeft;
+  if (hintBtn) hintBtn.disabled    = g.hintsLeft <= 0 || g.hintBusy || !g.active;
+  updateDots(i);
 }
 
-// ── Interaction ────────────────────────────────────────────────
-bWrap.addEventListener('pointerdown', e => e.preventDefault());
-bWrap.addEventListener('pointerup', handleTap);
-
-function handleTap(e) {
-  if (!active || !lvl || transitioning) return;
+// ── Tap handler ────────────────────────────────────────────────
+function handleTap(e, i) {
+  const g = games[i];
+  if (!g.active || !g.lvl) return;
   e.preventDefault();
 
-  const rect = imgB.getBoundingClientRect();
+  const imgB = document.getElementById(`img-b-${i}`);
+  const rect  = imgB.getBoundingClientRect();
   const cx = e.clientX - rect.left;
   const cy = e.clientY - rect.top;
   if (cx < 0 || cy < 0 || cx > rect.width || cy > rect.height) return;
@@ -354,82 +334,56 @@ function handleTap(e) {
   const nh = imgB.naturalHeight || 1024;
   const nx = cx / rect.width  * nw;
   const ny = cy / rect.height * nh;
+  const bWrap = document.getElementById(`b-wrap-${i}`);
 
-  if (isClassicMode()) {
+  if (isClassic(g)) {
     let foundIdx = -1;
-    for (let i = 0; i < lvl.differences.length; i++) {
-      if (foundSet.has(i)) continue;
-      const d = lvl.differences[i];
-      if (Math.hypot(nx - d.x, ny - d.y) <= d.r) { foundIdx = i; break; }
+    for (let j = 0; j < g.lvl.differences.length; j++) {
+      if (g.foundSet.has(j)) continue;
+      const d = g.lvl.differences[j];
+      if (Math.hypot(nx - d.x, ny - d.y) <= d.r) { foundIdx = j; break; }
     }
     if (foundIdx >= 0) {
-      onFoundClassic(foundIdx);
+      onFoundClassic(i, foundIdx);
     } else {
-      spawnMissMark(cx / rect.width * 100, cy / rect.height * 100);
-      doShake(bWrap.parentElement);
-      playSound(false);
-    }
-  } else {
-    const diff = lvl.rounds[curRound];
-    if (Math.hypot(nx - diff.x, ny - diff.y) <= diff.r) {
-      onFound(diff);
-    } else {
-      spawnMissMark(cx / rect.width * 100, cy / rect.height * 100);
+      spawnMissMark(bWrap, cx / rect.width * 100, cy / rect.height * 100);
       doShake(bWrap.parentElement);
       playSound(false);
     }
   }
 }
 
-// ── Found (rounds mode) ────────────────────────────────────────
-function onFound(diff) {
-  active = false;
-  transitioning = true;
-  totalFound++;
-  spawnDiffMark(diff, 'mark-found');
-  updateUI();
+// ── Found ──────────────────────────────────────────────────────
+function onFoundClassic(i, idx) {
+  const g     = games[i];
+  const bWrap = document.getElementById(`b-wrap-${i}`);
+  g.foundSet.add(idx);
+  g.totalFound = g.foundSet.size;
+  spawnDiffMark(bWrap, g.lvl.differences[idx], 'mark-found');
+  updateUI(i);
   playSound(true);
-
-  if (totalFound === lvl.rounds.length) {
-    setTimeout(showWin, 650);
-  } else {
-    setTimeout(() => {
-      curRound++;
-      loadRound(curRound);
-    }, 1100);
-  }
-}
-
-// ── Found (classic mode) ───────────────────────────────────────
-function onFoundClassic(idx) {
-  foundSet.add(idx);
-  totalFound = foundSet.size;
-  spawnDiffMark(lvl.differences[idx], 'mark-found');
-  updateUI();
-  playSound(true);
-
-  if (totalFound === lvl.differences.length) {
-    active = false;
-    setTimeout(showWin, 650);
+  if (g.totalFound === g.lvl.differences.length) {
+    g.active = false;
+    setTimeout(() => showWin(i), 650);
   }
 }
 
 // ── Markers ────────────────────────────────────────────────────
-function spawnDiffMark(d, cls, ttl) {
-  const nw = imgB.naturalWidth  || 1024;
-  const nh = imgB.naturalHeight || 1024;
-  const el = document.createElement('div');
+function spawnDiffMark(bWrap, d, cls) {
+  const imgB = bWrap.querySelector('img');
+  const nw   = imgB.naturalWidth  || 1024;
+  const nh   = imgB.naturalHeight || 1024;
+  const el   = document.createElement('div');
   el.className = `mark ${cls}`;
   el.style.left   = `${d.x / nw * 100}%`;
   el.style.top    = `${d.y / nh * 100}%`;
   el.style.width  = `${d.r * 2 / nw * 100}%`;
   el.style.height = `${d.r * 2 / nh * 100}%`;
   bWrap.appendChild(el);
-  if (ttl) setTimeout(() => el.remove(), ttl);
   return el;
 }
 
-function spawnMissMark(pctX, pctY) {
+function spawnMissMark(bWrap, pctX, pctY) {
   const el = document.createElement('div');
   el.className = 'mark mark-miss';
   el.style.left = `${pctX}%`;
@@ -447,38 +401,25 @@ function doShake(el) {
 }
 
 // ── Hint ───────────────────────────────────────────────────────
-function useHint() {
-  if (hintsLeft <= 0 || hintBusy || !lvl || !active) return;
-  hintsLeft--;
-  hintBusy = true;
-  updateUI();
-
-  let el;
-  if (isClassicMode()) {
-    const idx = lvl.differences.findIndex((_, i) => !foundSet.has(i));
-    if (idx < 0) { hintBusy = false; updateUI(); return; }
-    el = spawnDiffMark(lvl.differences[idx], 'mark-hint');
-  } else {
-    el = spawnDiffMark(lvl.rounds[curRound], 'mark-hint');
-  }
-  setTimeout(() => { el.remove(); hintBusy = false; updateUI(); }, 1750);
+function useHint(i) {
+  const g = games[i];
+  if (g.hintsLeft <= 0 || g.hintBusy || !g.active) return;
+  g.hintsLeft--;
+  g.hintBusy = true;
+  updateUI(i);
+  const bWrap = document.getElementById(`b-wrap-${i}`);
+  const idx   = g.lvl.differences.findIndex((_, j) => !g.foundSet.has(j));
+  if (idx < 0) { g.hintBusy = false; updateUI(i); return; }
+  const el = spawnDiffMark(bWrap, g.lvl.differences[idx], 'mark-hint');
+  setTimeout(() => { el.remove(); g.hintBusy = false; updateUI(i); }, 1750);
 }
 
 // ── Win ────────────────────────────────────────────────────────
-function showWin() {
-  active = false;
-  const total = isClassicMode() ? lvl.differences.length : lvl.rounds.length;
-  document.getElementById('win-msg').textContent = `You found all ${total} differences!`;
-  winOverlay.classList.add('show');
-  btnNext.disabled    = curLvlIdx >= LEVELS.length - 1;
-  btnNext.textContent = btnNext.disabled ? '🏆 Champion!' : 'Next level →';
+function showWin(i) {
+  const banner = document.getElementById(`win-banner-${i}`);
+  if (banner) banner.classList.add('show');
   launchConfetti();
 }
-
-function nextLevel() {
-  if (curLvlIdx < LEVELS.length - 1) { curLvlIdx++; loadLevel(curLvlIdx); }
-}
-function replayLevel() { loadLevel(curLvlIdx); }
 
 // ── Mute ───────────────────────────────────────────────────────
 function toggleMute() {
@@ -544,7 +485,8 @@ function launchConfetti() {
 }
 
 // ── Init ───────────────────────────────────────────────────────
-loadLevel(0);
+renderLevels();
 </script>
+<script>document.getElementById("copy-yr").textContent=new Date().getFullYear();</script>
 </body>
 </html>

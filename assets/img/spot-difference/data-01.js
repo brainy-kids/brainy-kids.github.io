@@ -1,5 +1,7 @@
 window.SPOT_LEVEL_01 = {
-  "title": "Ferma",
+  "title": "Farm",
+  "titleDE": "Bauernhof",
+  "titleSQ": "Ferma",
   "a": "assets/img/spot-difference/01-spot-the-difference-org.jpg",
   "b": "assets/img/spot-difference/01-spot-the-difference-edited.jpg",
   "differences": [
