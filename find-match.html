@@ -157,7 +157,6 @@ body {
     <button class="seg-btn"        data-diff="6"  onclick="setDiff(this,6)">Medium</button>
     <button class="seg-btn"        data-diff="8"  onclick="setDiff(this,8)">Hard</button>
     <button class="seg-btn"        data-diff="10" onclick="setDiff(this,10)">Expert</button>
-    <button class="seg-btn"        data-diff="12" onclick="setDiff(this,12)">Master</button>
   </div>
 
   <!-- · Player labels · -->
@@ -175,9 +174,10 @@ body {
     <div id="mid-controls" class="flex flex-row sm:flex-col items-center justify-between gap-x-3 sm:gap-0 w-full sm:w-auto py-2 sm:py-0 px-2 sm:px-0">
 
       <!-- · Solo score · -->
-      <div id="score-solo" class="order-1 shrink-0 card bg-white px-3 py-1.5 flex items-center justify-center gap-1.5">
-        <span class="display text-sm font-bold">Score</span>
-        <span id="score" class="display text-xl font-bold" style="color:#16a34a">0</span>
+      <div id="score-solo" class="order-1 shrink-0 card px-2 py-1 text-center" style="background:#bbf7d0">
+        <div class="display text-xs font-bold" style="color:#16a34a">P1</div>
+        <div id="score" class="display text-xl font-bold" style="color:#16a34a">0</div>
+        <div class="text-xs font-bold opacity-40">/10</div>
       </div>
 
       <!-- · 2P score · -->
@@ -200,9 +200,10 @@ body {
 
       <!-- · New Round · -->
       <button onclick="newRound()"
-        class="order-3 shrink-0 pill bg-amber-300 px-4 py-2 font-bold text-sm hover:bg-amber-400 transition-colors"
-        style="white-space: nowrap">
-        New Round ↺
+        class="order-3 shrink-0 card bg-amber-300 px-2 py-1 text-center hover:bg-amber-400 transition-colors cursor-pointer">
+        <div class="display text-xs font-bold">New</div>
+        <div class="display text-xl font-bold">↺</div>
+        <div class="text-xs font-bold opacity-40">&nbsp;</div>
       </button>
 
     </div>
@@ -380,7 +381,11 @@ function handleClick(btn, isMatch, owner) {
       soloScore++;
       document.getElementById('score').textContent = soloScore;
       setMsg('✅ Nice find!');
-      setTimeout(() => { btn.classList.remove('pop'); newRound(); }, 750);
+      if (soloScore >= WIN_SCORE) {
+        setTimeout(() => showWin(0), 750);
+      } else {
+        setTimeout(() => { btn.classList.remove('pop'); newRound(); }, 750);
+      }
 
     } else {
       const idx = owner - 1; // 0-indexed
@@ -421,9 +426,16 @@ function setMsg(text) {
 function showWin(idx) {
   if (robotTimer) { clearTimeout(robotTimer); robotTimer = null; }
   const isRobot = gameMode === 'robot' && idx === 1;
+  const winMsg = document.getElementById('win-msg');
   document.getElementById('win-emoji').textContent = isRobot ? '🤖' : '🏆';
-  const name = idx === 0 ? 'Player 1' : (isRobot ? 'Robot' : 'Player 2');
-  document.getElementById('win-msg').textContent = `${name} Wins!`;
+  if (gameMode === 'solo') {
+    winMsg.textContent = 'Wins!';
+    winMsg.style.color = '#16a34a';
+  } else {
+    const name = idx === 0 ? 'Player 1' : (isRobot ? 'Robot' : 'Player 2');
+    winMsg.textContent = `${name} Wins!`;
+    winMsg.style.color = idx === 0 ? '#2563eb' : '#dc2626';
+  }
 
   // Re-trigger animation
   const card = document.getElementById('win-card');
