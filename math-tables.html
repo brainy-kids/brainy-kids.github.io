@@ -32,17 +32,22 @@ body {
 .btn:active { transform: translate(2px,2px);   box-shadow: 1px 1px 0 0 var(--ink); }
 .btn.on { background: var(--ink); color: #fff8ec; }
 
-/* · number grid buttons · */
-.num-btn {
-  border: 2px solid var(--ink); border-radius: 12px; padding: 6px 0;
-  font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1rem;
-  cursor: pointer; background: white; color: var(--ink);
-  box-shadow: 3px 3px 0 0 var(--ink);
-  transition: transform .1s, box-shadow .1s;
+/* on mobile force Generate+Print to new row */
+.act-break { display: none; }
+@media (max-width: 639px) {
+  .act-break { display: block; width: 100%; }
 }
-.num-btn:hover  { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 0 var(--ink); }
-.num-btn:active { transform: translate(1px,1px);   box-shadow: 1px 1px 0 0 var(--ink); }
-.num-btn.on { background: var(--ink); color: #fff8ec; }
+
+/* · number input · */
+.num-input {
+  border: 3px solid var(--ink); border-radius: 999px; padding: 9px 18px;
+  font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1rem;
+  width: 72px; text-align: center; background: white; color: var(--ink);
+  box-shadow: 4px 4px 0 0 var(--ink); outline: none;
+  -moz-appearance: textfield;
+}
+.num-input::-webkit-inner-spin-button,
+.num-input::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 /* · worksheet · */
 #worksheet { display: none; }
@@ -68,23 +73,30 @@ body {
   border-bottom: 2px solid #aaa;
   padding: 4px 0 2px;
 }
-.problem .num   { min-width: 28px; text-align: right; }
-.problem .op    { min-width: 20px; text-align: center; color: #555; }
-.problem .eq    { margin-left: auto; color: #888; }
-.problem .blank { min-width: 48px; border-bottom: 2px solid #333; margin-left: 4px; }
-.problem-idx    { font-size: .75rem; color: #bbb; min-width: 20px; text-align: right; font-family: 'Nunito', sans-serif; }
+.problem .num { min-width: 28px; text-align: right; }
+.problem .op  { min-width: 20px; text-align: center; color: #555; }
+.problem .eq  { margin-left: auto; color: #888; }
+.problem-idx  { font-size: .75rem; color: #bbb; min-width: 20px; text-align: right; font-family: 'Nunito', sans-serif; }
+.ans-input {
+  width: 52px; border: none; border-bottom: 2.5px solid #333;
+  background: transparent; font-family: 'Fredoka', sans-serif;
+  font-size: 1.2rem; font-weight: 700; text-align: center;
+  padding: 2px 4px; outline: none; margin-left: 4px;
+  -moz-appearance: textfield;
+}
+.ans-input::-webkit-inner-spin-button,
+.ans-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.ans-input.correct { color: #16a34a; border-color: #16a34a; }
+.ans-input.wrong   { color: #dc2626; border-color: #dc2626; }
 
 @media print {
   body > * { display: none !important; }
-  #print-area {
-    display: block !important;
-    position: fixed; inset: 0;
-    background: white;
-    padding: 12mm 14mm;
-    box-sizing: border-box;
-  }
+  body > main { display: block !important; padding: 0 !important; }
+  main > *:not(#worksheet) { display: none !important; }
+  #worksheet { display: block !important; box-shadow: none !important; border: none !important; padding: 0 !important; }
+  .ans-input { color: #1f1147 !important; border-color: #333 !important; -webkit-appearance: none; -moz-appearance: textfield; }
+  .ans-input.correct, .ans-input.wrong { color: #1f1147 !important; border-color: #333 !important; }
 }
-#print-area { display: none; }
 </style>
 </head>
 <body class="min-h-screen">
@@ -103,8 +115,7 @@ body {
 
   <header class="text-center mb-6">
     <h1 class="display text-5xl md:text-6xl font-bold mb-1">Math Practice ✏️</h1>
-    <span style="display:inline-block;background:#bbf7d0;color:#1f1147;font-family:'Fredoka',sans-serif;font-size:.9rem;font-weight:600;padding:6px 18px;border-radius:20px;border:2.5px solid #1f1147;box-shadow:3px 3px 0 0 #1f1147;margin-bottom:8px;">🖨️ Print only</span>
-    <p class="font-semibold opacity-70">Pick your settings, generate &amp; print!</p>
+    <p class="font-semibold opacity-70">Pick your settings, solve &amp; print!</p>
   </header>
 
   <!-- · Operation · -->
@@ -118,28 +129,16 @@ body {
     </div>
   </div>
 
-  <!-- · Number · -->
-  <div class="mb-5">
-    <p class="font-bold mb-2 opacity-60 text-sm uppercase tracking-wide">Number <span id="num-hint" class="normal-case font-normal opacity-80">(table of which number?)</span></p>
-    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;" class="mb-2">
-      <button class="num-btn on" onclick="setNum(0)" style="grid-column:span 2;">🎲 Random</button>
-      <button class="num-btn" onclick="setNum(1)">1</button>
-      <button class="num-btn" onclick="setNum(2)">2</button>
-      <button class="num-btn" onclick="setNum(3)">3</button>
-      <button class="num-btn" onclick="setNum(4)">4</button>
-      <button class="num-btn" onclick="setNum(5)">5</button>
-      <button class="num-btn" onclick="setNum(6)">6</button>
-      <button class="num-btn" onclick="setNum(7)">7</button>
-      <button class="num-btn" onclick="setNum(8)">8</button>
-      <button class="num-btn" onclick="setNum(9)">9</button>
-      <button class="num-btn" onclick="setNum(10)">10</button>
+  <!-- · Number + Actions · -->
+  <div class="mb-6">
+    <p class="font-bold mb-2 opacity-60 text-sm uppercase tracking-wide">Number <span class="normal-case font-normal opacity-80">(1 – 10)</span></p>
+    <div class="flex flex-wrap items-center gap-3">
+      <input id="num-input" type="number" class="num-input" min="1" max="10" value="1" oninput="setNumDirect(+this.value)">
+      <button class="btn" onclick="setNum(0)">🎲 Random</button>
+      <div class="act-break"></div>
+      <button class="btn" style="background:#bbf7d0" onclick="generate()">Generate ↻</button>
+      <button class="btn" onclick="printSheet()">Print 🖨</button>
     </div>
-  </div>
-
-  <!-- · Actions · -->
-  <div class="flex justify-center gap-3 mb-6">
-    <button class="btn" style="background:#bbf7d0" onclick="generate()">Generate ↻</button>
-    <button class="btn" onclick="printSheet()">Print 🖨</button>
   </div>
 
   <!-- · Worksheet preview · -->
@@ -161,9 +160,6 @@ body {
 
 </main>
 
-<!-- · Print zone · -->
-<div id="print-area"></div>
-
 <script>
 let op  = 'add';
 let num = 0;   // 0 = random
@@ -180,9 +176,12 @@ function setOp(o) {
 
 function setNum(n) {
   num = n;
-  document.querySelectorAll('.num-btn').forEach(b => b.classList.remove('on'));
-  event.currentTarget.classList.add('on');
+  document.getElementById('num-input').value = '';
   generate();
+}
+
+function setNumDirect(n) {
+  if (n >= 1 && n <= 10) { num = n; generate(); }
 }
 
 
@@ -244,18 +243,21 @@ function generate() {
       `<span class="op">${p.sym}</span>` +
       `<span class="num">${p.b}</span>` +
       `<span class="eq">=</span>` +
-      `<span class="blank"></span>`;
+      `<input type="number" class="ans-input" data-ans="${p.ans}" oninput="checkAns(this)" autocomplete="off">`;
     grid.appendChild(div);
   });
 
   document.getElementById('worksheet').style.display = 'block';
 }
 
+function checkAns(inp) {
+  const val = inp.value.trim();
+  if (val === '') { inp.className = 'ans-input'; return; }
+  inp.className = +val === +inp.dataset.ans ? 'ans-input correct' : 'ans-input wrong';
+}
+
 function printSheet() {
-  const ws = document.getElementById('worksheet');
-  if (ws.style.display === 'none') { generate(); }
-  const printArea = document.getElementById('print-area');
-  printArea.innerHTML = ws.innerHTML;
+  if (document.getElementById('worksheet').style.display === 'none') { generate(); }
   window.print();
 }
 
