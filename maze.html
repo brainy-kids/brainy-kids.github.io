@@ -23,9 +23,9 @@ body {
 .card    { border: 3px solid var(--ink); border-radius: 28px; box-shadow: 6px 6px 0 0 var(--ink); }
 .pill    { border: 2px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 0 var(--ink); display: inline-block; }
 .btn {
-  border: 3px solid var(--ink); border-radius: 999px; padding: 9px 22px;
+  border: 3px solid var(--ink); border-radius: 999px; padding: 7px 18px;
   font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .9rem;
-  cursor: pointer; box-shadow: 4px 4px 0 0 var(--ink);
+  cursor: pointer; box-shadow: 4px 4px 0 0 var(--ink); white-space: nowrap;
   transition: transform .1s, box-shadow .1s; background: white; color: var(--ink);
 }
 .btn:hover  { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--ink); }
@@ -34,15 +34,15 @@ body {
 #maze-canvas { display: block; width: 100%; height: auto; }
 
 @media print {
+  @page { margin: 8mm; }
+  html, body { height: auto !important; min-height: 0 !important; background: white !important; }
   body > * { display: none !important; }
+  main, main * { display: none !important; }
   #print-area {
     display: block !important;
-    position: fixed; inset: 0;
-    background: white;
-    display: flex; align-items: center; justify-content: center; padding: 8mm;
-    box-sizing: border-box;
+    width: 100%;
   }
-  #print-area canvas { width: 100% !important; height: auto !important; max-width: none !important; }
+  #print-area canvas { display: block; width: 100% !important; height: auto !important; max-width: none !important; }
 }
 #print-area { display: none; }
 </style>
@@ -52,13 +52,8 @@ body {
 <main class="relative max-w-lg mx-auto px-5 py-8 md:py-12">
 
   <!-- · Nav · -->
-  <div class="flex items-center justify-between mb-6">
+  <div class="flex items-center mb-6">
     <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Back</a>
-    <div>
-      <strong class="pill bg-[color:var(--ink)] text-[#fff8ec] px-3 py-1 text-xs font-bold">EN</strong>
-      <a href="de/maze.html" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">DE</a>
-      <a href="sq/maze.html" class="pill bg-white px-3 py-1 text-xs font-bold ml-1">SQ</a>
-    </div>
   </div>
 
   <header class="text-center mb-6">
