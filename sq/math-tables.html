@@ -52,7 +52,8 @@ body {
 /* · worksheet · */
 #worksheet { display: none; }
 .ws-header { margin-bottom: 18px; }
-.ws-meta { display: flex; gap: 24px; margin-bottom: 8px; font-size: .9rem; font-weight: 700; }
+.ws-meta { display: flex; gap: 24px; margin-bottom: 8px; font-size: .9rem; font-weight: 700; flex-wrap: wrap; }
+@media (max-width: 480px) { .ws-meta { flex-direction: column; gap: 10px; } }
 .ws-meta span { border-bottom: 2px solid #333; min-width: 140px; padding-bottom: 2px; }
 .ws-title { font-family: 'Fredoka', sans-serif; font-size: 1.6rem; font-weight: 600; margin-bottom: 4px; }
 .problems-grid {
