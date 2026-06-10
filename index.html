@@ -74,13 +74,17 @@
 
 /* ===== BLOB GALAXY ===== */
 
+/* [BACKUP] flex-wrap galaxy — 2 per row organic */
+/* .galaxy { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 3rem 2.5rem; padding: 1rem 0 3rem; } */
 .galaxy {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(1, auto);
   justify-content: center;
-  align-items: flex-start;
   gap: 3rem 2.5rem;
   padding: 1rem 0 3rem;
+}
+@media (min-width: 700px) {
+  .galaxy { grid-template-columns: repeat(3, auto); }
 }
 
 .blob {
