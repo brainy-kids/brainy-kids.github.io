@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Letter Typer — Type the Letter | Brainy Kids</title>
+<meta name="description" content="A gentle letter game for toddlers. A big letter appears — press the key or tap it. No fail, no score, no timer. Free & ad-free.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://brainy-kids.github.io/letter-typer/">
+
+<!-- · Open Graph · -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Letter Typer — Type the Letter | Brainy Kids">
+<meta property="og:description" content="A gentle letter game for toddlers. Press the key or tap the big letter. No fail, no score, no timer.">
+<meta property="og:url" content="https://brainy-kids.github.io/letter-typer/">
+
+<!-- · Favicon · -->
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#fff8ec">
+
+<!-- · Self-hosted fonts (works on file:// too, graceful fallback) · -->
+<link rel="stylesheet" href="../assets/css/fonts.css">
+
+<style>
+/* ════════════════════════════════════════════════════════ */
+/* · LETTER TYPER · Toddler typing game — brainy-kids       */
+/* ════════════════════════════════════════════════════════ */
+
+:root {
+  --bg: #fff8ec;
+  --ink: #1f1147;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Fredoka', 'Nunito', ui-rounded, 'Segoe UI', system-ui, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+/* · 1. TOP CORNER BUTTONS (for the parent, away from center) ····· */
+
+.corner-btn {
+  position: fixed;
+  top: 14px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0 .8rem;
+  background: #fff;
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 0 var(--ink);
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  line-height: 1;
+}
+.corner-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 0 var(--ink); }
+
+#home-btn { left: 14px; }
+#mute-btn { right: 14px; }
+#case-btn { right: 84px; font-size: 1rem; letter-spacing: .03em; }
+
+/* · 2. STAGE — the giant letter ··································· */
+
+#stage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#letter {
+  font-size: clamp(8rem, 44vmin, 22rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+  transition: color .25s ease, transform .25s ease;
+  will-change: transform;
+}
+
+/* gentle nudge on wrong key — soft wobble, nothing scary */
+@keyframes nudge {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25%      { transform: translateX(-10px) rotate(-2deg); }
+  75%      { transform: translateX(10px) rotate(2deg); }
+}
+#letter.nudge { animation: nudge .3s ease; }
+
+/* pop on reward */
+@keyframes pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+#letter.pop { animation: pop .45s ease; }
+
+/* · 3. STATS PILL — gentle score for the parent ··················· */
+
+#stats {
+  position: fixed;
+  /* [BACKUP] bottom-left position */
+  /* bottom: 14px; left: 14px; */
+  top: 76px;            /* under abc + volume buttons (14px + 48px + 14px gap) */
+  right: 14px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .45rem .9rem;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 0 var(--ink);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+/* NOTE → misses stay quiet: gray, small, no red, no "X" drama */
+#stats .miss { font-size: .85rem; font-weight: 600; opacity: .45; }
+
+@keyframes statBump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+#stats .hit.bump { display: inline-block; animation: statBump .35s ease; }
+
+/* · 4. CONFETTI / EMOJI BURST ····································· */
+
+.confetti {
+  position: fixed;
+  z-index: 10;
+  font-size: 2.2rem;
+  pointer-events: none;
+  animation: fly .85s ease-out forwards;
+}
+@keyframes fly {
+  0%   { transform: translate(0, 0) scale(.6) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(1.25) rotate(var(--dr)); opacity: 0; }
+}
+
+/* · 5. REDUCED MOTION ············································· */
+
+@media (prefers-reduced-motion: reduce) {
+  #letter.nudge, #letter.pop { animation: none; }
+  .confetti { animation: none; display: none; }
+  #stats .hit.bump { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- · STAGE · giant target letter (tap = correct)        -->
+<!-- ════════════════════════════════════════════════════ -->
+
+<a id="home-btn" class="corner-btn" href="../" aria-label="Back to all games">←</a>
+<button id="case-btn" class="corner-btn" type="button" aria-label="Switch lowercase / uppercase">abc</button>
+<button id="mute-btn" class="corner-btn" type="button" aria-label="Mute sound" aria-pressed="false">🔊</button>
+
+<div id="stage">
+  <div id="letter" aria-live="polite"></div>
+</div>
+
+<!-- · Stats pill — ⭐ found, gray = missed keystrokes (per session) · -->
+<div id="stats" aria-label="Session results">
+  <span>⭐ <span class="hit" id="hit-count">0</span></span>
+  <span class="miss"><span id="miss-count">0</span> missed</span>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// · LETTER TYPER · core loop — no fail state, no score
+// ════════════════════════════════════════════════════════
+
+// · 1. STATE ·············································
+
+const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const COLORS  = ['#e11d48', '#0d9488', '#7c3aed', '#ea580c', '#2563eb', '#16a34a', '#db2777', '#ca8a04'];
+const EMOJIS  = ['🎉', '⭐', '🌈', '🎈', '💛', '✨', '🦄', '🐥', '🍭', '🌟'];
+
+const letterEl = document.getElementById('letter');
+const muteBtn  = document.getElementById('mute-btn');
+const caseBtn  = document.getElementById('case-btn');
+
+const hitEl  = document.getElementById('hit-count');
+const missEl = document.getElementById('miss-count');
+
+let target    = null;
+let muted     = localStorage.getItem('lt-muted') === '1';
+let lowercase = localStorage.getItem('lt-case') === 'abc';   // default: ABC uppercase
+let locked    = false;                                       // brief lock during reward
+let hits      = 0;                                           // NOTE → per session, resets on reload
+let misses    = 0;
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// · 2. TARGET ············································
+
+// NOTE → new target is always different from the last one
+function pickNew() {
+  let next;
+  do { next = LETTERS[Math.floor(Math.random() * LETTERS.length)]; }
+  while (next === target);
+  return next;
+}
+
+function render() {
+  letterEl.textContent = lowercase ? target.toLowerCase() : target;
+}
+
+// · 3. INPUT — keyboard + tap ····························
+
+// NOTE → no fail state; a wrong key is never punished
+document.addEventListener('keydown', (e) => {
+  if (e.key.length !== 1) return;              // ignore Shift, Arrow, F-keys etc.
+  if (!/[a-z]/i.test(e.key)) return;           // letters only
+  e.preventDefault();                          // no browser shortcuts / quick-find
+  if (locked) return;
+  if (e.key.toUpperCase() === target) reward();
+  else gentleNudge();
+});
+
+// tap/click anywhere on the stage counts as correct (tablet mode)
+document.getElementById('stage').addEventListener('pointerdown', () => {
+  if (!locked) reward();
+});
+
+// · 4. REWARD ············································
+
+function reward() {
+  locked = true;
+  hits++;
+  hitEl.textContent = hits;
+  hitEl.classList.remove('bump');
+  void hitEl.offsetWidth;
+  hitEl.classList.add('bump');
+  speak(target);
+  celebrate();
+  letterEl.style.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+  letterEl.classList.remove('pop');
+  void letterEl.offsetWidth;                   // restart animation
+  letterEl.classList.add('pop');
+
+  // NOTE → whole reaction < 1s, then fresh letter in calm ink color
+  setTimeout(() => {
+    target = pickNew();
+    letterEl.style.color = '';
+    render();
+    locked = false;
+  }, reducedMotion ? 350 : 750);
+}
+
+function gentleNudge() {
+  misses++;                       // counted quietly, no visual fuss
+  missEl.textContent = misses;
+  letterEl.classList.remove('nudge');
+  void letterEl.offsetWidth;
+  letterEl.classList.add('nudge');
+}
+
+// · 5. CONFETTI ··········································
+
+function celebrate() {
+  if (reducedMotion) return;
+  const cx = innerWidth / 2, cy = innerHeight / 2;
+  for (let i = 0; i < 10; i++) {
+    const el = document.createElement('span');
+    el.className = 'confetti';
+    el.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+    const angle = (Math.PI * 2 * i) / 10 + Math.random() * .5;
+    const dist  = 120 + Math.random() * 160;
+    el.style.left = cx + 'px';
+    el.style.top  = cy + 'px';
+    el.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+    el.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+    el.style.setProperty('--dr', (Math.random() * 180 - 90) + 'deg');
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 900);
+  }
+}
+
+// · 6. SPEECH ············································
+
+// NOTE → speechSynthesis only fires from a user gesture (keydown/tap),
+//        so the browser autoplay policy is satisfied by design.
+function speak(letter) {
+  if (muted || !('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(letter);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.15;
+  speechSynthesis.speak(u);
+}
+
+// · 7. TOGGLES (parent controls) ·························
+
+muteBtn.addEventListener('pointerdown', (e) => {
+  e.stopPropagation();
+  muted = !muted;
+  localStorage.setItem('lt-muted', muted ? '1' : '0');
+  muteBtn.textContent = muted ? '🔇' : '🔊';
+  muteBtn.setAttribute('aria-pressed', String(muted));
+  if (muted) speechSynthesis.cancel();
+});
+
+caseBtn.addEventListener('pointerdown', (e) => {
+  e.stopPropagation();
+  lowercase = !lowercase;
+  localStorage.setItem('lt-case', lowercase ? 'abc' : 'ABC');
+  caseBtn.textContent = lowercase ? 'ABC' : 'abc';
+  render();
+});
+
+// · 8. INIT ··············································
+
+muteBtn.textContent = muted ? '🔇' : '🔊';
+muteBtn.setAttribute('aria-pressed', String(muted));
+caseBtn.textContent = lowercase ? 'ABC' : 'abc';
+target = pickNew();
+render();
+</script>
+</body>
+</html>
