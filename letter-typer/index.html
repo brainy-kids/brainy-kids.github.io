@@ -79,19 +79,20 @@ html, body {
 #stage {
   position: fixed;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
 }
 
 #letter {
+  position: absolute;
   font-size: clamp(8rem, 44vmin, 22rem);
   font-weight: 700;
   line-height: 1;
   color: var(--ink);
-  transition: color .25s ease, transform .25s ease;
-  will-change: transform;
+  padding: .5rem;          /* bigger tap target for small fingers */
+  cursor: pointer;
+  transition: color .25s ease, transform .25s ease,
+              left .55s cubic-bezier(.34,1.56,.64,1),
+              top  .55s cubic-bezier(.34,1.56,.64,1);
+  will-change: transform, left, top;
 }
 
 /* gentle nudge on wrong key — soft wobble, nothing scary */
@@ -237,9 +238,15 @@ document.addEventListener('keydown', (e) => {
   else gentleNudge();
 });
 
-// tap/click anywhere on the stage counts as correct (tablet mode)
-document.getElementById('stage').addEventListener('pointerdown', () => {
+// tap THE LETTER itself = correct (mobile / tablet)
+letterEl.addEventListener('pointerdown', (e) => {
+  e.stopPropagation();
   if (!locked) reward();
+});
+
+// tap anywhere ELSE = gentle nudge (missed the letter)
+document.getElementById('stage').addEventListener('pointerdown', () => {
+  if (!locked) gentleNudge();
 });
 
 // · 4. REWARD ············································
@@ -258,11 +265,12 @@ function reward() {
   void letterEl.offsetWidth;                   // restart animation
   letterEl.classList.add('pop');
 
-  // NOTE → whole reaction < 1s, then fresh letter in calm ink color
+  // NOTE → whole reaction < 1s, then fresh letter flies to new random spot
   setTimeout(() => {
     target = pickNew();
     letterEl.style.color = '';
     render();
+    placeRandom();
     locked = false;
   }, reducedMotion ? 350 : 750);
 }
@@ -275,11 +283,28 @@ function gentleNudge() {
   letterEl.classList.add('nudge');
 }
 
-// · 5. CONFETTI ··········································
+// · 5. RANDOM PLACEMENT ··································
+
+function placeRandom() {
+  requestAnimationFrame(() => {
+    const w = letterEl.offsetWidth  || 200;
+    const h = letterEl.offsetHeight || 200;
+    const padTop  = 90;   // below corner buttons
+    const padSide = 20;
+    const maxLeft = Math.max(padSide, innerWidth  - w - padSide);
+    const maxTop  = Math.max(padTop,  innerHeight - h - padSide);
+    letterEl.style.left = (padSide + Math.random() * (maxLeft - padSide)) + 'px';
+    letterEl.style.top  = (padTop  + Math.random() * (maxTop  - padTop))  + 'px';
+  });
+}
+
+// · 6. CONFETTI ··········································
 
 function celebrate() {
   if (reducedMotion) return;
-  const cx = innerWidth / 2, cy = innerHeight / 2;
+  const rect = letterEl.getBoundingClientRect();
+  const cx = rect.left + rect.width  / 2;
+  const cy = rect.top  + rect.height / 2;
   for (let i = 0; i < 10; i++) {
     const el = document.createElement('span');
     el.className = 'confetti';
@@ -296,7 +321,7 @@ function celebrate() {
   }
 }
 
-// · 6. SPEECH ············································
+// · 7. SPEECH ············································
 
 // NOTE → speechSynthesis only fires from a user gesture (keydown/tap),
 //        so the browser autoplay policy is satisfied by design.
@@ -310,7 +335,7 @@ function speak(letter) {
   speechSynthesis.speak(u);
 }
 
-// · 7. TOGGLES (parent controls) ·························
+// · 8. TOGGLES (parent controls) ·························
 
 muteBtn.addEventListener('pointerdown', (e) => {
   e.stopPropagation();
@@ -329,13 +354,14 @@ caseBtn.addEventListener('pointerdown', (e) => {
   render();
 });
 
-// · 8. INIT ··············································
+// · 9. INIT ··············································
 
 muteBtn.textContent = muted ? '🔇' : '🔊';
 muteBtn.setAttribute('aria-pressed', String(muted));
 caseBtn.textContent = lowercase ? 'ABC' : 'abc';
 target = pickNew();
 render();
+placeRandom();   // first letter also lands at a random spot
 </script>
 </body>
 </html>
