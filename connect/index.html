@@ -119,6 +119,13 @@ body {
   stroke-linecap: round;
 }
 
+.pts {
+  fill: none;
+  stroke: #c9b48f;
+  stroke-width: .2;
+  stroke-linecap: round;
+}
+
 .line {
   fill: none;
   stroke-width: .24;
@@ -169,6 +176,7 @@ body {
   <button data-n="4">3×3</button>
   <button data-n="5">4×4</button>
   <button data-n="6">5×5</button>
+  <button data-n="7">6×6</button>
 </nav>
 
 <!-- · BOARD · -->
@@ -180,14 +188,61 @@ body {
 <script src="levels.js"></script>
 <script>
 const COLORS = ['#f5c542', '#3b8eea', '#3fbf5a', '#f2556b', '#ff8a1f', '#8e5be8'];
-const SIZES = [4, 5, 6];
 const NS = 'http://www.w3.org/2000/svg';
 const board = document.getElementById('board');
 const count = document.getElementById('count');
 const buttons = document.querySelectorAll('#bar button');
-const TIERS = SIZES.map((s) => window.CONNECT_LEVELS.filter((l) => l[0] === s));
+const SIZES = [...buttons].map((b) => +b.dataset.n);
+const GENERATED = { 7: [5, 6] };
+const FIXED = {};
+window.CONNECT_LEVELS.forEach((l) => (FIXED[l[0]] = FIXED[l[0]] || []).push(l));
 
-const saved = (s) => Math.min(+localStorage.getItem(`connect-${s}`) || 0, TIERS[SIZES.indexOf(s)].length - 1);
+const total = (s) => (FIXED[s] ? FIXED[s].length : Infinity);
+const saved = (s) => Math.min(+localStorage.getItem(`connect-${s}`) || 0, total(s) - 1);
+
+// · GENERATOR · Seeded full-grid path cut into segments; level i of a size is always the same
+function rng(seed) {
+  return () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function segments(s, i) {
+  const rnd = rng(s * 1e6 + i);
+  const rint = (a, b) => a + Math.floor(rnd() * (b - a + 1));
+  const cells = s * s;
+  const dist = (g) => Math.abs((g[0] % s) - (g[g.length - 1] % s)) + Math.abs(Math.floor(g[0] / s) - Math.floor(g[g.length - 1] / s));
+  const turns = (g) => g.reduce((t, v, k) => (k > 1 && v - g[k - 1] !== g[k - 1] - g[k - 2] ? t + 1 : t), 0);
+
+  for (;;) {
+    const p = [];
+    for (let r = 0; r < s; r++) for (let c = 0; c < s; c++) p.push(r * s + (r % 2 ? s - 1 - c : c));
+    for (let m = 0; m < 20 * cells; m++) {
+      if (rnd() < .5) p.reverse();
+      const end = p[cells - 1], r = Math.floor(end / s), c = end % s, nb = [];
+      if (r > 0) nb.push(end - s);
+      if (r < s - 1) nb.push(end + s);
+      if (c > 0) nb.push(end - 1);
+      if (c < s - 1) nb.push(end + 1);
+      const j = p.indexOf(nb[rint(0, nb.length - 1)]);
+      if (j < cells - 2) p.push(...p.splice(j + 1).reverse());
+    }
+
+    const k = rint(...GENERATED[s]);
+    const len = Array(k).fill(3);
+    for (let extra = cells - 3 * k; extra > 0; extra--) len[rint(0, k - 1)]++;
+    let at = 0;
+    const segs = len.map((l) => p.slice(at, (at += l)));
+
+    const detour = segs.reduce((t, g) => t + g.length - 1 - dist(g), 0);
+    if (detour >= s && segs.filter((g) => turns(g) >= 2).length >= 2) return segs;
+  }
+}
+
+const levelData = (s, i) => (FIXED[s] ? FIXED[s][i] : [s, segments(s, i).map((g) => [g[0], g[g.length - 1]])]);
 
 let size = SIZES.includes(+localStorage.getItem('connect-size')) ? +localStorage.getItem('connect-size') : SIZES[0];
 let level = saved(size);
@@ -206,9 +261,8 @@ function el(tag, attrs, parent) {
 
 function load() {
   clearTimeout(timer);
-  const tier = TIERS[SIZES.indexOf(size)];
-  [n, dots] = tier[level];
-  count.textContent = `${level + 1}/${tier.length}`;
+  [n, dots] = levelData(size, level);
+  count.textContent = total(size) === Infinity ? level + 1 : `${level + 1}/${total(size)}`;
   buttons.forEach((b) => b.classList.toggle('on', +b.dataset.n === size));
   dotOf = Array(n * n).fill(-1);
   dots.forEach((pair, k) => pair.forEach((i) => (dotOf[i] = k)));
@@ -225,6 +279,9 @@ function load() {
   let d = '';
   for (let i = 0; i < n; i++) d += `M0 ${i}H${n - 1}M${i} 0V${n - 1}`;
   el('path', { d, class: 'grid' }, art);
+  let pts = '';
+  for (let i = 0; i < n * n; i++) pts += `M${xy(i).join(' ')}h.001`;
+  el('path', { d: pts, class: 'pts' }, art);
   lines = dots.map((_, k) => el('polyline', { class: 'line', stroke: COLORS[k] }, art));
   dots.forEach((pair, k) => pair.forEach((i) => {
     const [cx, cy] = xy(i);
@@ -247,7 +304,7 @@ function win() {
   locked = true;
   active = -1;
   board.classList.add('won');
-  level = (level + 1) % TIERS[SIZES.indexOf(size)].length;
+  level = (level + 1) % total(size);
   localStorage.setItem(`connect-${size}`, level);
   timer = setTimeout(load, 900);
 }
@@ -261,10 +318,17 @@ buttons.forEach((b) => b.addEventListener('click', () => {
 
 board.addEventListener('pointerdown', (e) => {
   if (locked) return;
-  const c = nearest(e, .5);
-  if (c < 0 || dotOf[c] < 0) return;
-  active = dotOf[c];
-  paths[active] = [c];
+  const c = nearest(e, .7);
+  if (c < 0) return;
+  let k = dotOf[c];
+  if (k >= 0) {
+    paths[k] = [c];
+  } else {
+    k = paths.findIndex((q) => q.includes(c));
+    if (k < 0) return;
+    paths[k].length = paths[k].indexOf(c) + 1;
+  }
+  active = k;
   board.setPointerCapture(e.pointerId);
   draw();
 });
@@ -272,7 +336,7 @@ board.addEventListener('pointerdown', (e) => {
 board.addEventListener('pointermove', (e) => {
   if (active < 0) return;
   const p = paths[active];
-  const c = nearest(e, .4);
+  const c = nearest(e, .5);
   if (c < 0 || c === p[p.length - 1] || !adjacent(c, p[p.length - 1])) return;
 
   const back = p.indexOf(c);
@@ -286,7 +350,7 @@ board.addEventListener('pointermove', (e) => {
     p.push(c);
   }
   draw();
-  if (paths.every((_, k) => complete(k))) win();
+  if (paths.every((_, k) => complete(k)) && paths.reduce((t, q) => t + q.length, 0) === n * n) win();
 });
 
 const release = () => { active = -1; };

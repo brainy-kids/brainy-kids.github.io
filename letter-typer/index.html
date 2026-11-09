@@ -95,6 +95,21 @@ html, body {
   will-change: transform, left, top;
 }
 
+/* hidden field that opens the on-screen keyboard on phones and tablets */
+#kb {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  border: 0;
+  font-size: 16px;
+  pointer-events: none;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
 /* gentle nudge on wrong key — soft wobble, nothing scary */
 @keyframes nudge {
   0%, 100% { transform: translateX(0) rotate(0deg); }
@@ -180,6 +195,8 @@ html, body {
   <div id="letter" aria-live="polite"></div>
 </div>
 
+<input id="kb" type="text" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Type the letter">
+
 <!-- · Stats pill — ⭐ found, gray = missed keystrokes (per session) · -->
 <div id="stats" aria-label="Session results">
   <span>⭐ <span class="hit" id="hit-count">0</span></span>
@@ -198,6 +215,7 @@ const COLORS  = ['#e11d48', '#0d9488', '#7c3aed', '#ea580c', '#2563eb', '#16a34a
 const EMOJIS  = ['🎉', '⭐', '🌈', '🎈', '💛', '✨', '🦄', '🐥', '🍭', '🌟'];
 
 const letterEl = document.getElementById('letter');
+const kbEl     = document.getElementById('kb');
 const muteBtn  = document.getElementById('mute-btn');
 const caseBtn  = document.getElementById('case-btn');
 
@@ -229,13 +247,24 @@ function render() {
 // · 3. INPUT — keyboard + tap ····························
 
 // NOTE → no fail state; a wrong key is never punished
+function press(key) {
+  if (locked) return;
+  if (key.toUpperCase() === target) reward();
+  else gentleNudge();
+}
+
 document.addEventListener('keydown', (e) => {
   if (e.key.length !== 1) return;              // ignore Shift, Arrow, F-keys etc.
   if (!/[a-z]/i.test(e.key)) return;           // letters only
   e.preventDefault();                          // no browser shortcuts / quick-find
-  if (locked) return;
-  if (e.key.toUpperCase() === target) reward();
-  else gentleNudge();
+  press(e.key);
+});
+
+// on-screen keyboards report letters as input, not keydown
+kbEl.addEventListener('input', () => {
+  const ch = kbEl.value.slice(-1);
+  kbEl.value = '';
+  if (/[a-z]/i.test(ch)) press(ch);
 });
 
 // tap THE LETTER itself = correct (mobile / tablet)
@@ -248,6 +277,9 @@ letterEl.addEventListener('pointerdown', (e) => {
 document.getElementById('stage').addEventListener('pointerdown', () => {
   if (!locked) gentleNudge();
 });
+
+// a tap opens the on-screen keyboard (browsers only allow it from a tap)
+document.getElementById('stage').addEventListener('click', () => kbEl.focus());
 
 // · 4. REWARD ············································
 
@@ -291,8 +323,9 @@ function placeRandom() {
     const h = letterEl.offsetHeight || 200;
     const padTop  = 90;   // below corner buttons
     const padSide = 20;
-    const maxLeft = Math.max(padSide, innerWidth  - w - padSide);
-    const maxTop  = Math.max(padTop,  innerHeight - h - padSide);
+    const viewH   = window.visualViewport ? visualViewport.height : innerHeight;   // shrinks while the keyboard is open
+    const maxLeft = Math.max(padSide, innerWidth - w - padSide);
+    const maxTop  = Math.max(padTop,  viewH - h - padSide);
     letterEl.style.left = (padSide + Math.random() * (maxLeft - padSide)) + 'px';
     letterEl.style.top  = (padTop  + Math.random() * (maxTop  - padTop))  + 'px';
   });
@@ -362,6 +395,7 @@ caseBtn.textContent = lowercase ? 'ABC' : 'abc';
 target = pickNew();
 render();
 placeRandom();   // first letter also lands at a random spot
+(window.visualViewport || window).addEventListener('resize', placeRandom);   // keep the letter above the keyboard
 </script>
 </body>
 </html>
