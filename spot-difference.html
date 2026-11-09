@@ -182,8 +182,16 @@ body {
   .level.cur { display: block; }
 
   .level .lvl-bar { flex-wrap: nowrap; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
-  .level .lvl-bar > div { flex-wrap: nowrap; gap: 6px; }
-  .level .lvl-bar .btn { padding: 4px 12px; box-shadow: 3px 3px 0 0 var(--ink); }
+  .level .lvl-bar > div { display: contents; }
+  .level .lvl-bar .score-badge { order: 1; }
+  .level .lvl-bar [id^="hint-btn"] { order: 2; }
+  .level .lvl-bar .lvl-switch { order: 3; margin-left: auto; }
+  #ctl .btn, .level .lvl-bar .btn {
+    padding: 5px 12px; border-width: 2px; border-radius: 999px;
+    font-size: .875rem; line-height: 1.25;
+    box-shadow: 2px 2px 0 0 var(--ink);
+  }
+  .level .lvl-bar .btn:disabled { opacity: .35; box-shadow: none !important; }
   .score-badge { min-width: 0; padding: 4px 12px; font-size: .95rem; }
   .lvl-word { display: none; }
   .lvl-switch { display: flex; align-items: center; gap: 6px; font-weight: 800; }
