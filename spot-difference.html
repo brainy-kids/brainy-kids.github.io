@@ -160,13 +160,59 @@ body {
   background: #d1fae5;
 }
 .win-banner.show { display: block; }
+
+/* ── Level switch (phones only) ───────────────────────── */
+.lvl-switch { display: none; }
+
+/* ── Phones: one level per screen, no scrolling ───────── */
+@media (max-width: 639.98px) {
+  html, body { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; }
+  #app {
+    height: 100vh; height: 100dvh;
+    padding: 8px 12px;
+    display: flex; flex-wrap: wrap; align-content: flex-start; align-items: center;
+    gap: 8px;
+  }
+  #app > header, #app > footer, .lvl-title, .lvl-label, .dots-row, .level-hr { display: none; }
+  #nav { flex: 1 1 0; min-width: 0; margin: 0; }
+  #ctl { flex: none; margin: 0; }
+  #levels-container { flex: 1 0 100%; min-height: 0; }
+
+  .level { display: none; }
+  .level.cur { display: block; }
+
+  .level .lvl-bar { flex-wrap: nowrap; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
+  .level .lvl-bar > div { flex-wrap: nowrap; gap: 6px; }
+  .level .lvl-bar .btn { padding: 4px 12px; box-shadow: 3px 3px 0 0 var(--ink); }
+  .score-badge { min-width: 0; padding: 4px 12px; font-size: .95rem; }
+  .lvl-word { display: none; }
+  .lvl-switch { display: flex; align-items: center; gap: 6px; font-weight: 800; }
+
+  .lvl-grid { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .lvl-grid > div { width: 100%; align-items: center; }
+  .img-wrap {
+    width: min(100%, calc((100vh - 160px) / 2));
+    width: min(100%, calc((100dvh - 160px) / 2));
+    border-radius: 16px;
+    box-shadow: 3px 3px 0 0 var(--ink);
+  }
+
+  .win-banner.show {
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+    position: fixed; left: 16px; right: 16px; bottom: 12px; z-index: 45;
+    margin: 0; padding: .5rem 1rem;
+    pointer-events: none;
+  }
+  .win-banner .text-4xl { font-size: 1.5rem; margin: 0; }
+  .win-banner .text-2xl { font-size: 1.05rem; }
+}
 </style>
 </head>
 <body class="min-h-screen">
-<main class="relative max-w-4xl mx-auto px-4 py-8 md:py-12">
+<main id="app" class="relative max-w-4xl mx-auto px-4 py-8 md:py-12">
 
   <!-- · Nav · -->
-  <div class="flex items-center justify-between mb-6">
+  <div id="nav" class="flex items-center justify-between mb-6">
     <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold hover:bg-[color:var(--ink)] hover:text-[#fff8ec] transition-colors">← Back</a>
     <div>
       <strong class="pill bg-[color:var(--ink)] text-[#fff8ec] px-3 py-1 text-xs font-bold">EN</strong>
@@ -182,7 +228,7 @@ body {
   </header>
 
   <!-- · Global controls · -->
-  <div class="flex justify-end mb-6">
+  <div id="ctl" class="flex justify-end mb-6">
     <button class="btn text-sm px-3" id="mute-btn" onclick="toggleMute()" title="Mute / Unmute">🔊</button>
   </div>
 
@@ -230,26 +276,32 @@ function renderLevels() {
 
     const section = document.createElement('section');
     section.id = `lvl-${i}`;
+    section.className = 'level';
     section.innerHTML = `
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <div class="lvl-bar flex flex-wrap items-center justify-between gap-3 mb-4">
         <div class="flex items-center gap-3 flex-wrap">
-          <span class="display font-bold text-xl">Level ${i + 1} <span style="opacity:.4">·</span> ${lvl.title}</span>
-          <div class="score-badge" id="score-${i}">0 / ${total} found</div>
+          <span class="lvl-title display font-bold text-xl">Level ${i + 1} <span style="opacity:.4">·</span> ${lvl.title}</span>
+          <div class="score-badge" id="score-${i}">0 / ${total}<span class="lvl-word"> found</span></div>
         </div>
         <div class="flex items-center gap-3 flex-wrap">
+          ${games.length > 1 ? `<div class="lvl-switch">
+            <button class="btn" onclick="showLevel(${i - 1})" aria-label="Previous level" ${i === 0 ? 'disabled' : ''}>‹</button>
+            <span>${i + 1}/${games.length}</span>
+            <button class="btn" onclick="showLevel(${i + 1})" aria-label="Next level" ${i === games.length - 1 ? 'disabled' : ''}>›</button>
+          </div>` : ''}
           <div class="dots-row" id="dots-${i}"></div>
           <button class="btn text-sm" id="hint-btn-${i}" onclick="useHint(${i})">💡 Hint (<span id="hint-count-${i}">2</span>)</button>
         </div>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="lvl-grid grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div class="flex flex-col gap-2">
-          <p class="text-center font-bold text-xs uppercase tracking-widest opacity-50">Original</p>
+          <p class="lvl-label text-center font-bold text-xs uppercase tracking-widest opacity-50">Original</p>
           <div class="img-wrap">
             <img id="img-a-${i}" alt="Original" src="${lvl.a}" />
           </div>
         </div>
         <div class="flex flex-col gap-2">
-          <p class="text-center font-bold text-xs uppercase tracking-widest opacity-50">What changed? 👆</p>
+          <p class="lvl-label text-center font-bold text-xs uppercase tracking-widest opacity-50">What changed? 👆</p>
           <div class="img-wrap b-wrap" id="b-wrap-${i}">
             <img id="img-b-${i}" alt="Find the difference" src="${lvl.b}" />
           </div>
@@ -312,7 +364,7 @@ function updateUI(i) {
   const scoreEl = document.getElementById(`score-${i}`);
   const cntEl   = document.getElementById(`hint-count-${i}`);
   const hintBtn = document.getElementById(`hint-btn-${i}`);
-  if (scoreEl) scoreEl.textContent = `${g.totalFound} / ${total} found`;
+  if (scoreEl) scoreEl.innerHTML   = `${g.totalFound} / ${total}<span class="lvl-word"> found</span>`;
   if (cntEl)   cntEl.textContent   = g.hintsLeft;
   if (hintBtn) hintBtn.disabled    = g.hintsLeft <= 0 || g.hintBusy || !g.active;
   updateDots(i);
@@ -419,6 +471,18 @@ function showWin(i) {
   const banner = document.getElementById(`win-banner-${i}`);
   if (banner) banner.classList.add('show');
   launchConfetti();
+  if (phone.matches && i < games.length - 1) setTimeout(() => { if (current === i) showLevel(i + 1); }, 2600);
+}
+
+// ── Level switch (phones show one level at a time) ─────────────
+const phone = matchMedia('(max-width: 639.98px)');
+let current = 0;
+function showLevel(i) {
+  current = i;
+  document.querySelectorAll('.level').forEach((s, k) => {
+    s.classList.toggle('cur', k === i);
+    if (k !== i) s.querySelector('.win-banner').classList.remove('show');
+  });
 }
 
 // ── Mute ───────────────────────────────────────────────────────
@@ -486,6 +550,7 @@ function launchConfetti() {
 
 // ── Init ───────────────────────────────────────────────────────
 renderLevels();
+showLevel(0);
 </script>
 <script>document.getElementById("copy-yr").textContent=new Date().getFullYear();</script>
 </body>
