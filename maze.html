@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Maze — Kids Games 🎈</title>
-<meta name="description" content="Generate and print mazes for kids. Easy, Medium, Hard." />
+<meta name="description" content="Play and print mazes for kids. Easy, Medium, Hard." />
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/css/tailwind.min.css">
 <link rel="stylesheet" href="assets/css/fonts.css">
@@ -31,7 +31,7 @@ body {
 .btn:hover  { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--ink); }
 .btn:active { transform: translate(2px,2px);   box-shadow: 1px 1px 0 0 var(--ink); }
 .btn.on { background: var(--ink); color: #fff8ec; }
-#maze-canvas { display: block; width: 100%; height: auto; }
+#maze-canvas { display: block; width: 100%; height: auto; touch-action: none; user-select: none; -webkit-user-select: none; }
 
 @media print {
   @page { margin: 8mm; }
@@ -58,7 +58,7 @@ body {
 
   <header class="text-center mb-6">
     <h1 class="display text-5xl md:text-6xl font-bold mb-1">Maze 🌀</h1>
-<p class="font-semibold opacity-70">Find the way from <span style="color:#16a34a">●</span> to <span style="color:#ea580c">★</span> — then print it!</p>
+<p class="font-semibold opacity-70">Find the way from <span style="color:#16a34a">●</span> to <span style="color:#ea580c">★</span></p>
   </header>
 
   <!-- · Difficulty · -->
@@ -107,6 +107,7 @@ const PAD     = 36;
 
 let COLS = 10, ROWS = 10;
 let walls, solution, showSol = false;
+let path = [[0,0]], dragging = false, won = false, winTimer = null;
 
 /* ── helpers ───────────────────────────────────── */
 function shuffle(a) {
@@ -169,10 +170,13 @@ function solvePath(w) {
 }
 
 /* ── rendering ─────────────────────────────────── */
-function render(targetCtx, targetCanvas, w, sol, drawSol) {
+function geom() {
   const cs = Math.floor((SZ - PAD*2) / Math.max(COLS, ROWS));
-  const ox = Math.floor((SZ - cs*COLS) / 2);
-  const oy = Math.floor((SZ - cs*ROWS) / 2);
+  return { cs, ox: Math.floor((SZ - cs*COLS) / 2), oy: Math.floor((SZ - cs*ROWS) / 2) };
+}
+
+function render(targetCtx, targetCanvas, w, sol, drawSol, trail) {
+  const { cs, ox, oy } = geom();
   const hw = Math.max(2, Math.round(cs * 0.1));  // half-wall thickness
 
   targetCanvas.width  = SZ;
@@ -207,6 +211,20 @@ function render(targetCtx, targetCanvas, w, sol, drawSol) {
     targetCtx.lineJoin    = 'round';
     targetCtx.beginPath();
     sol.forEach(([x,y], i) => {
+      const px = ox+(x+.5)*cs, py = oy+(y+.5)*cs;
+      i===0 ? targetCtx.moveTo(px,py) : targetCtx.lineTo(px,py);
+    });
+    targetCtx.stroke();
+  }
+
+  // Player trail
+  if (trail && trail.length > 1) {
+    targetCtx.strokeStyle = 'rgba(59,130,246,.65)';
+    targetCtx.lineWidth   = Math.max(3, cs * 0.38);
+    targetCtx.lineCap     = 'round';
+    targetCtx.lineJoin    = 'round';
+    targetCtx.beginPath();
+    trail.forEach(([x,y], i) => {
       const px = ox+(x+.5)*cs, py = oy+(y+.5)*cs;
       i===0 ? targetCtx.moveTo(px,py) : targetCtx.lineTo(px,py);
     });
@@ -250,14 +268,27 @@ function generate() {
   walls    = buildMaze();
   solution = solvePath(walls);
   showSol  = false;
+  path     = [[0,0]];
+  dragging = false;
+  won      = false;
+  clearTimeout(winTimer);
   document.getElementById('btn-sol').classList.remove('on');
-  render(ctx, C, walls, solution, false);
+  draw();
+}
+
+function draw() {
+  render(ctx, C, walls, solution, showSol, path);
+  if (won) {
+    ctx.font = '150px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🎉', SZ/2, SZ/2 + 52);
+  }
 }
 
 function toggleSolution() {
   showSol = !showSol;
   document.getElementById('btn-sol').classList.toggle('on', showSol);
-  render(ctx, C, walls, solution, showSol);
+  draw();
 }
 
 function printMaze() {
@@ -266,6 +297,68 @@ function printMaze() {
   render(pctx, pc, walls, solution, false); // never print solution
   window.print();
 }
+
+/* ── play (touch / mouse) ──────────────────────── */
+const inPath = (x, y) => path.findIndex(c => c[0]===x && c[1]===y);
+
+function pointerPos(e) {
+  const r = C.getBoundingClientRect();
+  return [(e.clientX - r.left) * SZ / r.width, (e.clientY - r.top) * SZ / r.height];
+}
+
+function follow(px, py) {
+  const { cs, ox, oy } = geom();
+  const tx = Math.max(0, Math.min(COLS-1, Math.floor((px - ox) / cs)));
+  const ty = Math.max(0, Math.min(ROWS-1, Math.floor((py - oy) / cs)));
+  const i = inPath(tx, ty);
+  if (i >= 0) { path.length = i + 1; return; }
+  const dist = (x, y) => Math.hypot(ox + (x+.5)*cs - px, oy + (y+.5)*cs - py);
+  const DIRS = [[0,-1,0],[1,0,1],[0,1,2],[-1,0,3]];
+  for (let n = 0; n < COLS*ROWS; n++) {
+    const [x, y] = path[path.length-1];
+    let best = null, bd = dist(x, y);
+    for (const [dx, dy, wi] of DIRS) {
+      const nx = x+dx, ny = y+dy;
+      if (nx<0 || nx>=COLS || ny<0 || ny>=ROWS || walls[y][x][wi] || inPath(nx, ny) >= 0) continue;
+      const d = dist(nx, ny);
+      if (d < bd) { bd = d; best = [nx, ny]; }
+    }
+    if (!best) break;
+    path.push(best);
+  }
+}
+
+function checkWin() {
+  const [x, y] = path[path.length-1];
+  if (x !== COLS-1 || y !== ROWS-1) return;
+  won = true;
+  dragging = false;
+  winTimer = setTimeout(generate, 1500);
+}
+
+C.addEventListener('pointerdown', e => {
+  if (won) return;
+  const [px, py] = pointerPos(e);
+  const { cs, ox, oy } = geom();
+  const cx = Math.floor((px - ox) / cs), cy = Math.floor((py - oy) / cs);
+  const [ex, ey] = path[path.length-1];
+  if (inPath(cx, cy) < 0 && Math.max(Math.abs(cx-ex), Math.abs(cy-ey)) > 1) return;
+  dragging = true;
+  C.setPointerCapture(e.pointerId);
+  follow(px, py);
+  draw();
+  checkWin();
+});
+
+C.addEventListener('pointermove', e => {
+  if (!dragging) return;
+  const [px, py] = pointerPos(e);
+  follow(px, py);
+  draw();
+  checkWin();
+});
+
+['pointerup', 'pointercancel'].forEach(t => C.addEventListener(t, () => { dragging = false; }));
 
 // Init
 generate();
