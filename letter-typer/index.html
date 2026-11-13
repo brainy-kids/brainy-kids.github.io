@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Letter Typer — Type the Letter | Brainy Kids</title>
-<meta name="description" content="A gentle letter game for toddlers. A big letter appears — press the key or tap it. No fail, no score, no timer. Free & ad-free.">
+<meta name="description" content="A gentle letter game for toddlers. A big letter appears — press the key or tap it. It gets faster as you go. Free & ad-free.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://brainy-kids.github.io/letter-typer/">
 
 <!-- · Open Graph · -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Letter Typer — Type the Letter | Brainy Kids">
-<meta property="og:description" content="A gentle letter game for toddlers. Press the key or tap the big letter. No fail, no score, no timer.">
+<meta property="og:description" content="A gentle letter game for toddlers. Press the key or tap the big letter. It gets faster as you go.">
 <meta property="og:url" content="https://brainy-kids.github.io/letter-typer/">
 
 <!-- · Favicon · -->
@@ -93,6 +93,18 @@ html, body {
               left .55s cubic-bezier(.34,1.56,.64,1),
               top  .55s cubic-bezier(.34,1.56,.64,1);
   will-change: transform, left, top;
+}
+
+/* time bar: shrinks while the letter waits */
+#time {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  z-index: 20;
+  background: #0d9488;
+  transform-origin: left;
 }
 
 /* hidden field that opens the on-screen keyboard on phones and tablets */
@@ -191,11 +203,13 @@ html, body {
 <button id="case-btn" class="corner-btn" type="button" aria-label="Switch lowercase / uppercase">abc</button>
 <button id="mute-btn" class="corner-btn" type="button" aria-label="Mute sound" aria-pressed="false">🔊</button>
 
+<div id="time"></div>
+
 <div id="stage">
   <div id="letter" aria-live="polite"></div>
 </div>
 
-<input id="kb" type="text" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Type the letter">
+<input id="kb" type="text" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Type the letter">
 
 <!-- · Stats pill — ⭐ found, gray = missed keystrokes (per session) · -->
 <div id="stats" aria-label="Session results">
@@ -205,7 +219,7 @@ html, body {
 
 <script>
 // ════════════════════════════════════════════════════════
-// · LETTER TYPER · core loop — no fail state, no score
+// · LETTER TYPER · core loop
 // ════════════════════════════════════════════════════════
 
 // · 1. STATE ·············································
@@ -224,7 +238,7 @@ const missEl = document.getElementById('miss-count');
 
 let target    = null;
 let muted     = localStorage.getItem('lt-muted') === '1';
-let lowercase = localStorage.getItem('lt-case') === 'abc';   // default: ABC uppercase
+let lowercase = localStorage.getItem('lt-case') !== 'ABC';   // default: abc lowercase
 let locked    = false;                                       // brief lock during reward
 let hits      = 0;                                           // NOTE → per session, resets on reload
 let misses    = 0;
@@ -244,11 +258,56 @@ function render() {
   letterEl.textContent = lowercase ? target.toLowerCase() : target;
 }
 
+// · 2b. TIMER — 5 letters at 5s, 5 at 3s, then 2s ·······
+
+const timeEl = document.getElementById('time');
+let timer   = null;
+let started = false;                                         // waits for the first key or tap
+
+function limit() {
+  return hits < 5 ? 5000 : hits < 10 ? 3000 : 2000;
+}
+
+function startTimer() {
+  clearTimeout(timer);
+  if (!started) return;
+  const ms = limit();
+  timeEl.style.transition = 'none';
+  timeEl.style.transform  = 'scaleX(1)';
+  void timeEl.offsetWidth;
+  timeEl.style.transition = `transform ${ms}ms linear`;
+  timeEl.style.transform  = 'scaleX(0)';
+  timer = setTimeout(timeUp, ms);
+}
+
+function stopTimer() {
+  clearTimeout(timer);
+  timeEl.style.transform  = getComputedStyle(timeEl).transform;
+  timeEl.style.transition = 'none';
+}
+
+function begin() {
+  if (started) return;
+  started = true;
+  startTimer();
+}
+
+// time ran out: counts as missed, next letter
+function timeUp() {
+  misses++;
+  missEl.textContent = misses;
+  target = pickNew();
+  render();
+  placeRandom();
+  startTimer();
+}
+
 // · 3. INPUT — keyboard + tap ····························
 
 // NOTE → no fail state; a wrong key is never punished
 function press(key) {
   if (locked) return;
+  begin();
   if (key.toUpperCase() === target) reward();
   else gentleNudge();
 }
@@ -270,12 +329,12 @@ kbEl.addEventListener('input', () => {
 // tap THE LETTER itself = correct (mobile / tablet)
 letterEl.addEventListener('pointerdown', (e) => {
   e.stopPropagation();
-  if (!locked) reward();
+  if (!locked) { begin(); reward(); }
 });
 
 // tap anywhere ELSE = gentle nudge (missed the letter)
 document.getElementById('stage').addEventListener('pointerdown', () => {
-  if (!locked) gentleNudge();
+  if (!locked) { begin(); gentleNudge(); }
 });
 
 // a tap opens the on-screen keyboard (browsers only allow it from a tap)
@@ -285,6 +344,7 @@ document.getElementById('stage').addEventListener('click', () => kbEl.focus());
 
 function reward() {
   locked = true;
+  stopTimer();
   hits++;
   hitEl.textContent = hits;
   hitEl.classList.remove('bump');
@@ -304,6 +364,7 @@ function reward() {
     render();
     placeRandom();
     locked = false;
+    startTimer();
   }, reducedMotion ? 350 : 750);
 }
 
@@ -384,6 +445,7 @@ caseBtn.addEventListener('pointerdown', (e) => {
   lowercase = !lowercase;
   localStorage.setItem('lt-case', lowercase ? 'abc' : 'ABC');
   caseBtn.textContent = lowercase ? 'ABC' : 'abc';
+  kbEl.autocapitalize = lowercase ? 'off' : 'characters';
   render();
 });
 
@@ -392,6 +454,7 @@ caseBtn.addEventListener('pointerdown', (e) => {
 muteBtn.textContent = muted ? '🔇' : '🔊';
 muteBtn.setAttribute('aria-pressed', String(muted));
 caseBtn.textContent = lowercase ? 'ABC' : 'abc';
+kbEl.autocapitalize = lowercase ? 'off' : 'characters';
 target = pickNew();
 render();
 placeRandom();   // first letter also lands at a random spot
