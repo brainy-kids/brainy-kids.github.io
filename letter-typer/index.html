@@ -238,7 +238,8 @@ const missEl = document.getElementById('miss-count');
 
 let target    = null;
 let muted     = localStorage.getItem('lt-muted') === '1';
-let lowercase = localStorage.getItem('lt-case') !== 'ABC';   // default: abc lowercase
+const savedCase = localStorage.getItem('lt-case');
+let lowercase = savedCase ? savedCase === 'abc' : matchMedia('(pointer: coarse)').matches;   // default: abc on touch, ABC on desktop
 let locked    = false;                                       // brief lock during reward
 let hits      = 0;                                           // NOTE → per session, resets on reload
 let misses    = 0;
