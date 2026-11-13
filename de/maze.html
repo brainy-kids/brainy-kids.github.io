@@ -1,0 +1,369 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Labyrinth — Spiele für Kinder 🎈</title>
+<meta name="description" content="Spiele und drucke Labyrinthe für Kinder. Leicht, Mittel, Schwer." />
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/tailwind.min.css">
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<style>
+:root { --bg: #fff8ec; --ink: #1f1147; }
+html, body { background: var(--bg); color: var(--ink); }
+body {
+  font-family: 'Nunito', system-ui, sans-serif;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(255,200,87,.25) 0, transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(120,200,255,.25) 0, transparent 35%),
+    radial-gradient(circle at 80% 90%, rgba(255,130,160,.22) 0, transparent 35%),
+    radial-gradient(circle at 15% 85%, rgba(150,230,170,.25) 0, transparent 35%);
+}
+.display { font-family: 'Fredoka', system-ui, sans-serif; letter-spacing: -0.02em; }
+.card    { border: 3px solid var(--ink); border-radius: 28px; box-shadow: 6px 6px 0 0 var(--ink); }
+.pill    { border: 2px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 0 var(--ink); display: inline-block; }
+.btn {
+  border: 3px solid var(--ink); border-radius: 999px; padding: 7px 18px;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .9rem;
+  cursor: pointer; box-shadow: 4px 4px 0 0 var(--ink); white-space: nowrap;
+  transition: transform .1s, box-shadow .1s; background: white; color: var(--ink);
+}
+.btn:hover  { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--ink); }
+.btn:active { transform: translate(2px,2px);   box-shadow: 1px 1px 0 0 var(--ink); }
+.btn.on { background: var(--ink); color: #fff8ec; }
+#maze-canvas { display: block; width: 100%; height: auto; touch-action: none; user-select: none; -webkit-user-select: none; }
+
+@media print {
+  @page { margin: 8mm; }
+  html, body { height: auto !important; min-height: 0 !important; background: white !important; }
+  body > * { display: none !important; }
+  main, main * { display: none !important; }
+  #print-area {
+    display: block !important;
+    width: 100%;
+  }
+  #print-area canvas { display: block; width: 100% !important; height: auto !important; max-width: none !important; }
+}
+#print-area { display: none; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<main class="relative max-w-lg mx-auto px-5 py-8 md:py-12">
+
+  <!-- · Nav · -->
+  <div class="flex items-center mb-6">
+    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Zurück</a>
+  </div>
+
+  <header class="text-center mb-6">
+    <h1 class="display text-5xl md:text-6xl font-bold mb-1">Labyrinth 🌀</h1>
+<p class="font-semibold opacity-70">Finde den Weg von <span style="color:#16a34a">●</span> zu <span style="color:#ea580c">★</span></p>
+  </header>
+
+  <!-- · Difficulty · -->
+  <div class="flex justify-center gap-3 mb-4">
+    <button class="btn on" id="btn-easy"   onclick="setSize('easy')">Leicht</button>
+    <button class="btn"    id="btn-medium" onclick="setSize('medium')">Mittel</button>
+    <button class="btn"    id="btn-hard"   onclick="setSize('hard')">Schwer</button>
+  </div>
+
+  <!-- · Actions · -->
+  <div class="flex justify-center gap-3 mb-5">
+    <button class="btn" style="background:#bbf7d0" onclick="generate()">Neu</button>
+    <button class="btn" id="btn-sol" onclick="toggleSolution()">Lösung</button>
+    <button onclick="printMaze()" class="btn" style="background:#fcd34d;display:inline-flex;align-items:center;gap:6px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" style="width:20px;height:20px;flex-shrink:0"><path fill="#40bdff" d="M236,84.62H25a8,8,0,0,0-8,8v70.77a8,8,0,0,0,8,8H51.87V145.13H39.5a2,2,0,0,1,0-4h177a2,2,0,0,1,0,4H204.13v26.26H236a8,8,0,0,0,8-8V92.62A8,8,0,0,0,236,84.62Z"/><path fill="#eb5639" d="M45.69,96.62H30.56a5.56,5.56,0,0,0,0,11.13H45.69a5.56,5.56,0,0,0,0-11.13Z"/><path fill="#effafe" d="M68.87,231.9H192.13a8,8,0,0,0,8-8V145.13H60.87V223.9A8,8,0,0,0,68.87,231.9Z"/><path fill="#effafe" d="M200.13,32.1a8,8,0,0,0-8-8H68.87a8,8,0,0,0-8,8V80.62H200.13Z"/><path fill="#263238" d="M236,80.12H204.63v-48a12.51,12.51,0,0,0-12.5-12.5H63.87a12.51,12.51,0,0,0-12.5,12.5v48H20A12.51,12.51,0,0,0,7.5,92.62v70.77A12.51,12.51,0,0,0,20,175.88H51.37v48a12.51,12.51,0,0,0,12.5,12.5H192.13a12.51,12.51,0,0,0,12.5-12.5v-48H236a12.51,12.51,0,0,0,12.5-12.5V92.62A12.51,12.51,0,0,0,236,80.12ZM56.37,32.1a7.51,7.51,0,0,1,7.5-7.5H192.13a7.51,7.51,0,0,1,7.5,7.5v48H56.37ZM199.63,223.9a7.51,7.51,0,0,1-7.5,7.5H63.87a7.51,7.51,0,0,1-7.5-7.5V145.63H199.63Zm43.87-60.51a7.51,7.51,0,0,1-7.5,7.5H204.63V145.63H216.5a2.5,2.5,0,0,0,0-5H39.5a2.5,2.5,0,0,0,0,5H51.37v25.26H20a7.51,7.51,0,0,1-7.5-7.5V92.62a7.51,7.51,0,0,1,7.5-7.5H236a7.51,7.51,0,0,1,7.5,7.5Z"/><path fill="#263238" d="M45.69,92.12H30.56a10.06,10.06,0,0,0,0,20.13H45.69a10.06,10.06,0,0,0,0-20.13Zm0,15.13H30.56a5.06,5.06,0,0,1,0-10.13H45.69a5.06,5.06,0,0,1,0,10.13Z"/><path fill="#fd0" d="M23,196H19v-4a1,1,0,0,0-2,0v4H13a1,1,0,0,0,0,2h4v4a1,1,0,0,0,2,0v-4h4a1,1,0,0,0,0-2Z"/></svg>
+      Drucken
+    </button>
+  </div>
+
+  <!-- · Canvas · -->
+  <div class="mb-6">
+    <div class="card overflow-hidden" style="background:white">
+      <canvas id="maze-canvas"></canvas>
+    </div>
+  </div>
+
+  <footer class="mt-10 text-center pb-6">
+    <p class="font-semibold opacity-50 text-sm">Mit ❤️ für Kinder gemacht</p>
+    <p class="mt-2 text-xs opacity-40 font-semibold">Designed &amp; built by <a href="https://shkelzenbaftijari.gitlab.io/" target="_blank" rel="noopener" class="underline hover:opacity-80">Shkelzen Baftijari</a> &middot; &copy; <span id="copy-yr"></span></p>
+  </footer>
+
+</main>
+
+<!-- · Print zone · -->
+<div id="print-area">
+  <canvas id="print-canvas"></canvas>
+</div>
+
+<script>
+const C = document.getElementById('maze-canvas');
+const ctx = C.getContext('2d');
+
+const SIZES   = { easy: [10,10], medium: [14,14], hard: [20,20] };
+const SZ      = 700;  // internal canvas pixels
+const PAD     = 36;
+
+let COLS = 10, ROWS = 10;
+let walls, solution, showSol = false;
+let path = [[0,0]], dragging = false, won = false, winTimer = null;
+
+/* ── helpers ───────────────────────────────────── */
+function shuffle(a) {
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+/* ── generation (iterative DFS) ────────────────── */
+function buildMaze() {
+  // w[y][x] = [top, right, bottom, left]
+  const w = Array.from({length:ROWS}, () =>
+    Array.from({length:COLS}, () => [true,true,true,true])
+  );
+  const vis = Array.from({length:ROWS}, () => Array(COLS).fill(false));
+  const DIRS = [[0,-1,0,2],[1,0,1,3],[0,1,2,0],[-1,0,3,1]];
+  const stack = [[0,0]];
+  vis[0][0] = true;
+
+  while (stack.length) {
+    const [x,y] = stack[stack.length-1];
+    const nb = shuffle(DIRS.filter(([dx,dy]) => {
+      const nx=x+dx, ny=y+dy;
+      return nx>=0 && nx<COLS && ny>=0 && ny<ROWS && !vis[ny][nx];
+    }));
+    if (!nb.length) { stack.pop(); continue; }
+    const [dx,dy,wf,wt] = nb[0];
+    const nx=x+dx, ny=y+dy;
+    w[y][x][wf] = false;
+    w[ny][nx][wt] = false;
+    vis[ny][nx] = true;
+    stack.push([nx,ny]);
+  }
+
+  w[0][0][0] = false;                  // entry: open top of (0,0)
+  w[ROWS-1][COLS-1][2] = false;        // exit:  open bottom of last cell
+  return w;
+}
+
+/* ── solving (BFS) ─────────────────────────────── */
+function solvePath(w) {
+  const DIRS = [[0,-1,0],[1,0,1],[0,1,2],[-1,0,3]];
+  const vis = Array.from({length:ROWS}, () => Array(COLS).fill(false));
+  const queue = [[0,0,[[0,0]]]];
+  vis[0][0] = true;
+  while (queue.length) {
+    const [x,y,path] = queue.shift();
+    if (x===COLS-1 && y===ROWS-1) return path;
+    for (const [dx,dy,wi] of DIRS) {
+      const nx=x+dx, ny=y+dy;
+      if (nx>=0 && nx<COLS && ny>=0 && ny<ROWS && !vis[ny][nx] && !w[y][x][wi]) {
+        vis[ny][nx] = true;
+        queue.push([nx,ny,[...path,[nx,ny]]]);
+      }
+    }
+  }
+  return [];
+}
+
+/* ── rendering ─────────────────────────────────── */
+function geom() {
+  const cs = Math.floor((SZ - PAD*2) / Math.max(COLS, ROWS));
+  return { cs, ox: Math.floor((SZ - cs*COLS) / 2), oy: Math.floor((SZ - cs*ROWS) / 2) };
+}
+
+function render(targetCtx, targetCanvas, w, sol, drawSol, trail) {
+  const { cs, ox, oy } = geom();
+  const hw = Math.max(2, Math.round(cs * 0.1));  // half-wall thickness
+
+  targetCanvas.width  = SZ;
+  targetCanvas.height = SZ;
+
+  // Page background
+  targetCtx.fillStyle = 'white';
+  targetCtx.fillRect(0, 0, SZ, SZ);
+
+  // Maze block: fill ink, then carve white cells
+  targetCtx.fillStyle = '#1f1147';
+  targetCtx.fillRect(ox - hw, oy - hw, cs*COLS + hw*2, cs*ROWS + hw*2);
+
+  for (let y = 0; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
+      const px = ox + x*cs, py = oy + y*cs;
+      const cell = w[y][x];
+      targetCtx.fillStyle = 'white';
+      targetCtx.fillRect(px+hw, py+hw, cs-hw*2, cs-hw*2);
+      if (!cell[0]) targetCtx.fillRect(px+hw,    py-hw,     cs-hw*2, hw*2  ); // top
+      if (!cell[1]) targetCtx.fillRect(px+cs-hw, py+hw,     hw*2,    cs-hw*2); // right
+      if (!cell[2]) targetCtx.fillRect(px+hw,    py+cs-hw,  cs-hw*2, hw*2  ); // bottom
+      if (!cell[3]) targetCtx.fillRect(px-hw,    py+hw,     hw*2,    cs-hw*2); // left
+    }
+  }
+
+  // Solution path
+  if (drawSol && sol && sol.length) {
+    targetCtx.strokeStyle = 'rgba(239,68,68,.55)';
+    targetCtx.lineWidth   = Math.max(3, cs * 0.38);
+    targetCtx.lineCap     = 'round';
+    targetCtx.lineJoin    = 'round';
+    targetCtx.beginPath();
+    sol.forEach(([x,y], i) => {
+      const px = ox+(x+.5)*cs, py = oy+(y+.5)*cs;
+      i===0 ? targetCtx.moveTo(px,py) : targetCtx.lineTo(px,py);
+    });
+    targetCtx.stroke();
+  }
+
+  // Player trail
+  if (trail && trail.length > 1) {
+    targetCtx.strokeStyle = 'rgba(59,130,246,.65)';
+    targetCtx.lineWidth   = Math.max(3, cs * 0.38);
+    targetCtx.lineCap     = 'round';
+    targetCtx.lineJoin    = 'round';
+    targetCtx.beginPath();
+    trail.forEach(([x,y], i) => {
+      const px = ox+(x+.5)*cs, py = oy+(y+.5)*cs;
+      i===0 ? targetCtx.moveTo(px,py) : targetCtx.lineTo(px,py);
+    });
+    targetCtx.stroke();
+  }
+
+  // Entry dot (green, inside first cell)
+  targetCtx.fillStyle = '#16a34a';
+  targetCtx.beginPath();
+  targetCtx.arc(ox+cs*.5, oy+cs*.5, cs*.22, 0, Math.PI*2);
+  targetCtx.fill();
+
+  // Exit star (orange, inside last cell)
+  const ex = ox+cs*(COLS-.5), ey = oy+cs*(ROWS-.5), sr = cs*.25;
+  targetCtx.fillStyle = '#ea580c';
+  drawStar(targetCtx, ex, ey, 5, sr, sr*.45);
+  targetCtx.fill();
+}
+
+function drawStar(targetCtx, cx, cy, pts, outer, inner) {
+  targetCtx.beginPath();
+  for (let i = 0; i < pts*2; i++) {
+    const r = i%2===0 ? outer : inner;
+    const a = (i*Math.PI/pts) - Math.PI/2;
+    i===0 ? targetCtx.moveTo(cx+r*Math.cos(a), cy+r*Math.sin(a))
+          : targetCtx.lineTo(cx+r*Math.cos(a), cy+r*Math.sin(a));
+  }
+  targetCtx.closePath();
+}
+
+/* ── controls ──────────────────────────────────── */
+function setSize(s) {
+  [COLS,ROWS] = SIZES[s];
+  ['easy','medium','hard'].forEach(k =>
+    document.getElementById('btn-'+k).classList.toggle('on', k===s)
+  );
+  generate();
+}
+
+function generate() {
+  walls    = buildMaze();
+  solution = solvePath(walls);
+  showSol  = false;
+  path     = [[0,0]];
+  dragging = false;
+  won      = false;
+  clearTimeout(winTimer);
+  document.getElementById('btn-sol').classList.remove('on');
+  draw();
+}
+
+function draw() {
+  render(ctx, C, walls, solution, showSol, path);
+  if (won) {
+    ctx.font = '150px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🎉', SZ/2, SZ/2 + 52);
+  }
+}
+
+function toggleSolution() {
+  showSol = !showSol;
+  document.getElementById('btn-sol').classList.toggle('on', showSol);
+  draw();
+}
+
+function printMaze() {
+  const pc   = document.getElementById('print-canvas');
+  const pctx = pc.getContext('2d');
+  render(pctx, pc, walls, solution, false); // never print solution
+  window.print();
+}
+
+/* ── play (touch / mouse) ──────────────────────── */
+const inPath = (x, y) => path.findIndex(c => c[0]===x && c[1]===y);
+
+function pointerPos(e) {
+  const r = C.getBoundingClientRect();
+  return [(e.clientX - r.left) * SZ / r.width, (e.clientY - r.top) * SZ / r.height];
+}
+
+function follow(px, py) {
+  const { cs, ox, oy } = geom();
+  const tx = Math.max(0, Math.min(COLS-1, Math.floor((px - ox) / cs)));
+  const ty = Math.max(0, Math.min(ROWS-1, Math.floor((py - oy) / cs)));
+  const i = inPath(tx, ty);
+  if (i >= 0) { path.length = i + 1; return; }
+  const dist = (x, y) => Math.hypot(ox + (x+.5)*cs - px, oy + (y+.5)*cs - py);
+  const DIRS = [[0,-1,0],[1,0,1],[0,1,2],[-1,0,3]];
+  for (let n = 0; n < COLS*ROWS; n++) {
+    const [x, y] = path[path.length-1];
+    let best = null, bd = dist(x, y);
+    for (const [dx, dy, wi] of DIRS) {
+      const nx = x+dx, ny = y+dy;
+      if (nx<0 || nx>=COLS || ny<0 || ny>=ROWS || walls[y][x][wi] || inPath(nx, ny) >= 0) continue;
+      const d = dist(nx, ny);
+      if (d < bd) { bd = d; best = [nx, ny]; }
+    }
+    if (!best) break;
+    path.push(best);
+  }
+}
+
+function checkWin() {
+  const [x, y] = path[path.length-1];
+  if (x !== COLS-1 || y !== ROWS-1) return;
+  won = true;
+  dragging = false;
+  winTimer = setTimeout(generate, 1500);
+}
+
+C.addEventListener('pointerdown', e => {
+  if (won) return;
+  const [px, py] = pointerPos(e);
+  const { cs, ox, oy } = geom();
+  const cx = Math.floor((px - ox) / cs), cy = Math.floor((py - oy) / cs);
+  const [ex, ey] = path[path.length-1];
+  if (inPath(cx, cy) < 0 && Math.max(Math.abs(cx-ex), Math.abs(cy-ey)) > 1) return;
+  dragging = true;
+  C.setPointerCapture(e.pointerId);
+  follow(px, py);
+  draw();
+  checkWin();
+});
+
+C.addEventListener('pointermove', e => {
+  if (!dragging) return;
+  const [px, py] = pointerPos(e);
+  follow(px, py);
+  draw();
+  checkWin();
+});
+
+['pointerup', 'pointercancel'].forEach(t => C.addEventListener(t, () => { dragging = false; }));
+
+// Init
+generate();
+</script>
+
+<script>document.getElementById("copy-yr").textContent=new Date().getFullYear();</script>
+</body>
+</html>

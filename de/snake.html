@@ -54,7 +54,8 @@ body {
   display: block;
   background: #d1fae5;
 }
-canvas { display: block; }
+canvas { display: block; touch-action: none; }
+@media (pointer: coarse) { .dpad { display: none; } }
 
 /* ---- Game-over overlay ---- */
 #game-over {
@@ -107,7 +108,7 @@ canvas { display: block; }
 
   <!-- · Nav · -->
   <div class="flex items-center justify-between mb-6">
-    <a href="../" class="pill bg-white px-4 py-1 text-sm font-bold">← Zurück</a>
+    <a href="./" class="pill bg-white px-4 py-1 text-sm font-bold">← Zurück</a>
     <div>
       <a href="../snake.html" class="pill bg-white px-3 py-1 text-xs font-bold">EN</a>
       <strong class="pill bg-[color:var(--ink)] text-[#fff8ec] px-3 py-1 text-xs font-bold ml-1">DE</strong>
@@ -117,7 +118,7 @@ canvas { display: block; }
 
   <header class="text-center mb-5">
     <h1 class="display text-5xl md:text-6xl font-bold mb-1">Snake 🐍</h1>
-    <p class="font-semibold opacity-70">Friss, wachse — nicht an die Wand abstürzen!</p>
+    <p id="sub" class="font-semibold opacity-70">Friss, wachse — nicht an die Wand abstürzen!</p>
   </header>
 
   <!-- · Score row · -->
@@ -173,10 +174,13 @@ const ctx    = canvas.getContext('2d');
 let cellSize = 18;
 let snake, dir, nextDir, food, score, loopId;
 let gameRunning = false;
+const touchMode = window.matchMedia('(pointer: coarse)').matches;
+let target = null;
 let gridCanvas = null;
 let hiScore = parseInt(localStorage.getItem('snake-hi') || '0', 10);
 
 document.getElementById('hi-disp').textContent = hiScore;
+if (touchMode) document.getElementById('sub').textContent = 'Tippe dorthin, wo die Schlange hin soll. Friss die Äpfel!';
 
 function resize() {
   const maxW = Math.min(window.innerWidth - 48, 360);
@@ -212,6 +216,7 @@ function startGame() {
   dir     = {x:1, y:0};
   nextDir = {x:1, y:0};
   score   = 0;
+  target  = null;
   gameRunning = true;
   document.getElementById('game-over').classList.remove('show');
   document.getElementById('score-disp').textContent = 0;
@@ -222,15 +227,20 @@ function startGame() {
 }
 
 function getSpeed() {
+  if (touchMode) return Math.max(260, 420 - Math.floor(score / 5) * 20);
   return Math.max(120, 300 - Math.floor(score / 5) * 18);
 }
 
 function loop() {
   if (!gameRunning) return;
+  if (touchMode) steer();
   dir = { ...nextDir };
   const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
 
-  if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS
+  if (touchMode) {
+    head.x = (head.x + COLS) % COLS;
+    head.y = (head.y + ROWS) % ROWS;
+  } else if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS
       || snake.some(s => s.x === head.x && s.y === head.y)) {
     endGame();
     return;
@@ -351,22 +361,40 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// Touch swipe on canvas
-let touchStart = null;
-canvas.addEventListener('touchstart', e => {
-  touchStart = {x: e.touches[0].clientX, y: e.touches[0].clientY};
-}, {passive: true});
-canvas.addEventListener('touchend', e => {
-  if (!touchStart) return;
-  const dx = e.changedTouches[0].clientX - touchStart.x;
-  const dy = e.changedTouches[0].clientY - touchStart.y;
-  if (Math.abs(dx) > Math.abs(dy)) {
-    changeDir(dx > 0 ? 1 : -1, 0);
-  } else {
-    changeDir(0, dy > 0 ? 1 : -1);
+// Touch: the snake steers toward the touched cell, wraps through walls and never dies
+function steer() {
+  if (!target) return;
+  const h  = snake[0];
+  const dx = target.x - h.x, dy = target.y - h.y;
+  if (!dx && !dy) return;
+  const sx = Math.sign(dx), sy = Math.sign(dy);
+  const cand = Math.abs(dx) >= Math.abs(dy) ? [[sx, 0], [0, sy]] : [[0, sy], [sx, 0]];
+  for (const [x, y] of cand) {
+    if ((!x && !y) || (x === -dir.x && y === -dir.y)) continue;
+    nextDir = {x, y};
+    return;
   }
-  touchStart = null;
-}, {passive: true});
+  nextDir = dir.x ? {x: 0, y: dy || 1} : {x: dx || 1, y: 0};
+}
+
+function setTarget(e) {
+  const r = canvas.getBoundingClientRect();
+  target = {
+    x: Math.max(0, Math.min(COLS - 1, Math.floor((e.clientX - r.left) / r.width * COLS))),
+    y: Math.max(0, Math.min(ROWS - 1, Math.floor((e.clientY - r.top) / r.height * ROWS))),
+  };
+}
+
+let touching = false;
+canvas.addEventListener('pointerdown', e => {
+  if (!touchMode) return;
+  touching = true;
+  canvas.setPointerCapture(e.pointerId);
+  if (!gameRunning) startGame();
+  setTarget(e);
+});
+canvas.addEventListener('pointermove', e => { if (touchMode && touching) setTarget(e); });
+['pointerup', 'pointercancel'].forEach(t => canvas.addEventListener(t, () => { touching = false; }));
 
 resize();
 </script>
